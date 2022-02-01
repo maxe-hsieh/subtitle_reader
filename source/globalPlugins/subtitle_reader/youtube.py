@@ -17,13 +17,10 @@ class Youtube(SubtitleAlg):
 		根據元件 id 找出 Youtube 影片撥放器
 		'''
 		o = self.main.focusObject
-		while o.__class__.__name__ != 'Desktop':
-			try:
-				if o.IA2Attributes.get('id') == 'movie_player':
-					return o
-				
-			except:
-				pass
+		while o:
+			if o.IA2Attributes.get('id') == 'movie_player':
+				return o
+			
 			o = o.parent
 		
 	
@@ -40,7 +37,6 @@ class Youtube(SubtitleAlg):
 		self.promptInfoCard()
 		
 		subtitle = str()
-		
 		# 根據瀏覽器，分別處理取得字幕的方式。
 		browser = self.main.videoPlayer.appModule.appName
 		subtitle = getattr(self, browser + 'GetSubtitle')()
@@ -98,6 +94,12 @@ class Youtube(SubtitleAlg):
 			subtitle += '\r\n'
 			obj = obj.next
 		return subtitle
+	
+	def msedgeGetSubtitle(self):
+		return self.chromeGetSubtitle()
+	
+	def braveGetSubtitle(self):
+		return self.chromeGetSubtitle()
 	
 	def promptInfoCard(self):
 		if not conf['infoCardPrompt']:

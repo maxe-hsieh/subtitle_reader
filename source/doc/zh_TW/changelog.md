@@ -1,5 +1,26 @@
 # 更新日誌
 
+## V2.1, 2022.02.01
+
+### 新增項目
+
+1. 新增 Brave 瀏覽器支援（感謝 Kevin Lin 的提案）。
+P.S 我真的把他給忘了。
+2. 在 github 建立[專案](https://github.com/maxe-hsieh/subtitle_reader)。
+
+### 修改項目
+
+1. 更換自動更新的 server 端。
+P.S 之前的 server 端很不穩定，如果下載失敗的話，請手動到 [NVDA 台灣](https://www.nvda.tw) 下載。
+2. 補充 readme 檔案內容。
+
+### 修正巷木
+
+1. 修正 Edge 不獨字幕的問題。
+P.S 沒有人發現，真是太棒了！
+
+---
+
 ## V2.0, 2022.01.26
 
 ### 新增項目

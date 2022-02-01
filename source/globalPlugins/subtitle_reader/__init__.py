@@ -30,7 +30,7 @@ class GlobalPlugin(GlobalPlugin):
 			u'Disney+ | 影片播放器': DisneyPlus(self),
 		}
 		self.subtitleAlg = None
-		self.supportedBrowserAppNames = ('chrome', 'firefox', 'msedge')
+		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
 		self.focusObject = None
 		self.videoPlayer = None
 		self.subtitleContainer = None

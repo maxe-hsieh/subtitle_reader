@@ -11,7 +11,11 @@ class SubtitleAlg(object):
 		raise NotImplementedError
 	
 	def msedgeGetSubtitleContainer(self):
-		# Edge 取得字幕的方式，通常與 Chrome 相同，故實做一個通用方法。
+		# Edge 取得字幕容器的方式，通常與 Chrome 相同，故實做一個通用方法。
+		return self.chromeGetSubtitleContainer()
+	
+	def braveGetSubtitleContainer(self):
+		# Brave 取得字幕容器的方法也與 Chrome 相同。
 		return self.chromeGetSubtitleContainer()
 	
 	def getSubtitle(self):

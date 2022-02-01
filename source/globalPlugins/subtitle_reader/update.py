@@ -1,6 +1,7 @@
 #coding=utf-8
 
 import os
+import re
 from sys import version_info
 if version_info.major == 2:
 	from urllib import quote_plus, urlopen, urlretrieve as downloadFile
@@ -12,16 +13,20 @@ from threading import Thread
 
 from nvwave import playWaveFile as play
 
+from .version import version
 from .config import conf
 from .gui import UpdateDialog, wx
 
 soundPath = os.path.dirname(__file__) + r'\sounds'
-version = '2.0'
-url = quote_plus('https://eq6dzg4xczwqkxoh2ak5qa-on.drv.tw/Maxe/公開檔案/subtitle_reader', ':/.')
+sourceUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/source'
+assetUrl = 'https://github.com/maxe-hsieh/subtitle_reader/releases/latest/download'
 tempDir = os.getenv('temp')
 
 class Update:
 	def __init__(self):
+		self.checkThreadObj = None
+		self.dialog = None
+		self.downloadThreadObj = None
 		self.checkOnStartup()
 	
 	def checkOnStartup(self):
@@ -43,8 +48,14 @@ class Update:
 		item.Check(status)
 	
 	def execute(self, onStartup=False):
-		self.thread = Thread(target=self.checkThread, kwargs={'onStartup': onStartup})
-		self.thread.start()
+		if self.checkThreadObj and self.checkThreadObj.is_alive():
+			return
+		
+		if self.dialog:
+			return
+		
+		self.checkThreadObj = Thread(target=self.checkThread, kwargs={'onStartup': onStartup})
+		self.checkThreadObj.start()
 	
 	def checkThread(self, onStartup=False):
 		info = self.newVersion = self.getNewVersion()
@@ -69,19 +80,25 @@ class Update:
 	def getNewVersion(self):
 		info = {'version': 0, 'changelog': '', 'error': None}
 		try:
-			res = urlopen(url + '/version.set')
+			res = urlopen(sourceUrl + '/manifest.ini')
+			text = res.read().decode('utf-8')
+			res.close()
+			
 			if res.getcode() != 200:
 				info['error'] = True
 				return info
 			
-			newVersion = res.read().decode()
+			newVersion = re.findall(r'version ?= ?(.+)\r?', text)[0]
 			if newVersion == version:
 				return
 			
 			info['version'] = newVersion
 			
-			res = urlopen(url + '/doc/zh_TW/changelog.md').read().decode('utf-8')
-			info['changelog'] = res
+			res = urlopen(sourceUrl + '/doc/zh_TW/changelog.md')
+			text = res.read().decode('utf-8')
+			res.close()
+			
+			info['changelog'] = text
 			return info
 		except:
 			info['error'] = True
@@ -100,12 +117,16 @@ class Update:
 		dlg.updateNow.Bind(wx.EVT_BUTTON, self.updateNow)
 		dlg.skipVersion.Bind(wx.EVT_BUTTON, self.skipVersion)
 		dlg.later.Bind(wx.EVT_BUTTON, self.later)
+		dlg.Bind(wx.EVT_CLOSE, self.onClose)
 		dlg.Show()
 	
 	def updateNow(self, event):
+		if self.downloadThreadObj and self.downloadThreadObj.is_alive():
+			return
+		
 		play(soundPath + r'\updating.wav')
-		self.thread = Thread(target=self.downloadThread)
-		self.thread.start()
+		self.downloadThreadObj = Thread(target=self.downloadThread)
+		self.downloadThreadObj.start()
 	
 	def downloadThread(self):
 		filename = 'subtitle_reader.nvda-addon'
@@ -113,7 +134,7 @@ class Update:
 			pass
 		
 		try:
-			file = downloadFile(url + '/' + filename, tempDir + '\\' + filename, reporthook=self.updateProgress)
+			file = downloadFile(assetUrl + '/' + filename, tempDir + '\\' + filename, reporthook=self.updateProgress)
 			play(soundPath + r'\downloadCompleted.wav')
 			self.dialog.Close()
 			os.system('start ' + file[0])
@@ -137,4 +158,8 @@ class Update:
 	def later(self, event):
 		play(soundPath + r'\closeDialog.wav')
 		self.dialog.Close()
+	
+	def onClose(self, event):
+		self.dialog.Destroy()
+		self.dialog = None
 	
