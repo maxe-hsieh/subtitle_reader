@@ -24,8 +24,8 @@ class Menu(wx.Menu):
 	
 
 class UpdateDialog(wx.Dialog):
-	def __init__(self):
-		super(UpdateDialog, self).__init__(gui.mainFrame, title='字幕閱讀器新版資訊')
+	def __init__(self, version):
+		super(UpdateDialog, self).__init__(gui.mainFrame, title='字幕閱讀器 V' + str(version) + ' 新版資訊')
 		self.sizer = wx.BoxSizer(wx.VERTICAL)
 		self.changeLogLabel = wx.StaticText(self, label='更新日誌')
 		self.changelogText = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY, size=(700, -1))

@@ -112,7 +112,7 @@ class Update:
 		wx.MessageBox(u'檢查更新失敗', '錯誤', style=wx.ICON_ERROR)
 	
 	def showDialog(self):
-		dlg = self.dialog = UpdateDialog()
+		dlg = self.dialog = UpdateDialog(self.newVersion['version'])
 		dlg.changelogText.SetValue(self.newVersion['changelog'])
 		dlg.updateNow.Bind(wx.EVT_BUTTON, self.updateNow)
 		dlg.skipVersion.Bind(wx.EVT_BUTTON, self.skipVersion)

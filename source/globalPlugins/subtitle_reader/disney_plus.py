@@ -1,6 +1,7 @@
 #coding=utf-8
 
 from .subtitle_alg import SubtitleAlg
+from .object_finder import find
 
 class DisneyPlus(SubtitleAlg):
 	def getVideoPlayer(self):
@@ -21,26 +22,20 @@ class DisneyPlus(SubtitleAlg):
 		return getattr(self, appName + 'GetSubtitleContainer')()
 	
 	def chromeGetSubtitleContainer(self):
-		try:
-			obj = self.main.videoPlayer.firstChild.firstChild.firstChild.firstChild
-			obj = obj.next
-			obj = obj.firstChild.firstChild.firstChild.firstChild
-			obj = obj.next
-			if obj.IA2Attributes.get('class') == 'dss-hls-subtitle-overlay':
-				return obj
-			
-		except:
-			return
+		obj = self.main.videoPlayer
+		obj = find(obj, 'firstChild', 'class', 'sc-dRaagA jGncCY')
+		obj = obj.next
+		obj = obj.firstChild.firstChild.firstChild.firstChild
+		obj = obj.next
+		if obj.IA2Attributes.get('class') == 'dss-hls-subtitle-overlay':
+			return obj
 		
 	
 	def firefoxGetSubtitleContainer(self):
-		try:
-			obj = self.main.videoPlayer.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild
-			obj = obj.next
-			if obj.IA2Attributes.get('class') == 'dss-hls-subtitle-overlay':
-				return obj
-			
-		except:
-			return
+		obj = self.main.videoPlayer
+		obj = find(obj, 'firstChild', 'role', 56)
+		obj = obj.next
+		if obj.IA2Attributes.get('class') == 'dss-hls-subtitle-overlay':
+			return obj
 		
 	

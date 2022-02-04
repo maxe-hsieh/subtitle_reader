@@ -4,11 +4,13 @@
 # 作者：謝福恩 <maxe@mail.batol.net>
 # 版本： 1.0
 
+import re
+import ui
+import time
+
 from globalPluginHandler import GlobalPlugin
 from globalVars import appArgs
-import ui
 from nvwave import playWaveFile
-import time
 from . import gui
 from .config import conf
 from .youtube import Youtube
@@ -25,9 +27,9 @@ class GlobalPlugin(GlobalPlugin):
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
-			' - YouTube': Youtube(self),
-			'MARUMARU': MaruMaru(self),
-			u'Disney+ | 影片播放器': DisneyPlus(self),
+			'.+ - YouTube': Youtube(self),
+			'.+-MARUMARU': MaruMaru(self),
+			'^Disney\+ \| ': DisneyPlus(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
@@ -111,7 +113,7 @@ class GlobalPlugin(GlobalPlugin):
 	def getSubtitleAlg(self):
 		window = self.focusObject.objectInForeground().name
 		for alg in self.subtitleAlgs:
-			if alg in window:
+			if re.match(alg, window):
 				return self.subtitleAlgs[alg]
 			
 		
