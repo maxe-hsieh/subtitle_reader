@@ -19,8 +19,8 @@ class Menu(wx.Menu):
 		
 		self.checkForUpdate = self.Append(wx.ID_ANY, u'立即檢查更新(&C)')
 		
-		self.checkUpdateOnStartup = self.AppendCheckItem(wx.ID_ANY, u'啟動時檢查更新(&A)')
-		self.checkUpdateOnStartup.Check(True)
+		self.checkUpdateAutomatic = self.AppendCheckItem(wx.ID_ANY, u'啟動時檢查更新(&A)')
+		self.checkUpdateAutomatic.Check(True)
 	
 
 class UpdateDialog(wx.Dialog):

@@ -7,7 +7,7 @@ class Config(dict):
 	def load(self, fileName):
 		self.fileName = fileName
 		# 讓預設值為 True
-		self.update({'switch': True, 'infoCardPrompt': True, 'checkUpdateOnStartup': True, 'skipVersion': '0'})
+		self.update({'switch': True, 'infoCardPrompt': True, 'checkUpdateAutomatic': True, 'skipVersion': '0'})
 		# 從使用者設定檔取得開關狀態
 		try:
 			with codecs.open(fileName) as file:

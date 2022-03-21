@@ -16,6 +16,7 @@ from .config import conf
 from .youtube import Youtube
 from .maru_maru import MaruMaru
 from .disney_plus import DisneyPlus
+from .netflix import Netflix
 from .update import Update
 
 wx = gui.wx
@@ -30,6 +31,7 @@ class GlobalPlugin(GlobalPlugin):
 			'.+ - YouTube': Youtube(self),
 			'.+-MARUMARU': MaruMaru(self),
 			'^Disney\+ \| ': DisneyPlus(self),
+			'^Netflix': Netflix(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
@@ -50,10 +52,10 @@ class GlobalPlugin(GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.script_toggleSwitch, menu.switch)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleInfoCardPrompt, menu.infoCardPrompt)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.manualCheck, menu.checkForUpdate)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckOnStartup, menu.checkUpdateOnStartup)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
 		menu.switch.Check(conf['switch'])
 		menu.infoCardPrompt.Check(conf['infoCardPrompt'])
-		menu.checkUpdateOnStartup.Check(conf['checkUpdateOnStartup'])
+		menu.checkUpdateAutomatic.Check(conf['checkUpdateAutomatic'])
 	
 	def terminate(self):
 		# 關閉 NVDA 時，儲存開關狀態到使用者設定檔。

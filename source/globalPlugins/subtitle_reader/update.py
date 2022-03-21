@@ -24,56 +24,60 @@ tempDir = os.getenv('temp')
 
 class Update:
 	def __init__(self):
+		self.new = {}
 		self.checkThreadObj = None
 		self.dialog = None
 		self.downloadThreadObj = None
-		self.checkOnStartup()
+		self.checkAutomatic()
 	
-	def checkOnStartup(self):
-		if not conf['checkUpdateOnStartup']:
+	def checkAutomatic(self):
+		if not conf['checkUpdateAutomatic']:
 			return
 		
-		self.execute(onStartup=True)
+		self.execute(automatic=True)
+		self.automaticTimer = wx.PyTimer(self.checkAutomatic)
+		self.automaticTimer.StartOnce(1000*60*60*24)
 	
 	def manualCheck(self, event):
 		conf['skipVersion'] = '0'
 		play(soundPath + r'\updateChecking.wav')
 		self.execute()
 	
-	def toggleCheckOnStartup(self, event):
+	def toggleCheckAutomatic(self, event):
 		menu = event.GetEventObject()
 		id = menu.FindItem(u'啟動時檢查更新(&A)')
 		item = menu.FindItemById(id)
-		status = conf['checkUpdateOnStartup'] = not conf['checkUpdateOnStartup']
+		status = conf['checkUpdateAutomatic'] = not conf['checkUpdateAutomatic']
 		item.Check(status)
 	
-	def execute(self, onStartup=False):
+	def execute(self, automatic=False):
 		if self.checkThreadObj and self.checkThreadObj.is_alive():
 			return
 		
 		if self.dialog:
 			return
 		
-		self.checkThreadObj = Thread(target=self.checkThread, kwargs={'onStartup': onStartup})
+		self.checkThreadObj = Thread(target=self.checkThread, kwargs={'automatic': automatic})
 		self.checkThreadObj.start()
 	
-	def checkThread(self, onStartup=False):
-		info = self.newVersion = self.getNewVersion()
+	def checkThread(self, automatic=False):
+		info = self.getNewVersion()
 		if not info:
-			if not onStartup:
+			if not automatic:
 				wx.CallAfter(self.isLatestVersion)
 			
 			return
 		
 		if info['error']:
-			if not onStartup:
+			if not automatic:
 				wx.CallAfter(self.checkError)
 			
 			return
 		
-		if onStartup and info['version'] == conf['skipVersion']:
+		if automatic and (info['version'] == conf['skipVersion'] or self.new.get('version') == info['version']):
 			return
 		
+		self.new = info
 		play(soundPath + r'\newVersionFound.wav')
 		wx.CallAfter(self.showDialog)
 	
@@ -112,8 +116,8 @@ class Update:
 		wx.MessageBox(u'檢查更新失敗', '錯誤', style=wx.ICON_ERROR)
 	
 	def showDialog(self):
-		dlg = self.dialog = UpdateDialog(self.newVersion['version'])
-		dlg.changelogText.SetValue(self.newVersion['changelog'])
+		dlg = self.dialog = UpdateDialog(self.new['version'])
+		dlg.changelogText.SetValue(self.new['changelog'])
 		dlg.updateNow.Bind(wx.EVT_BUTTON, self.updateNow)
 		dlg.skipVersion.Bind(wx.EVT_BUTTON, self.skipVersion)
 		dlg.later.Bind(wx.EVT_BUTTON, self.later)
@@ -152,7 +156,7 @@ class Update:
 	
 	def skipVersion(self, event):
 		play(soundPath + r'\skipVersion.wav')
-		conf['skipVersion'] = self.newVersion['version']
+		conf['skipVersion'] = self.new['version']
 		self.dialog.Close()
 	
 	def later(self, event):
