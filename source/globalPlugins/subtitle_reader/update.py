@@ -110,7 +110,7 @@ class Update:
 		
 	
 	def isLatestVersion(self):
-		wx.MessageBox(u'您已升級到最新版本，祝您關穎愉快！', '恭喜', style=wx.ICON_EXCLAMATION)
+		wx.MessageBox(u'您已升級到最新版本，祝您觀影愉快！', '恭喜', style=wx.ICON_EXCLAMATION)
 	
 	def checkError(self):
 		wx.MessageBox(u'檢查更新失敗', '錯誤', style=wx.ICON_ERROR)
