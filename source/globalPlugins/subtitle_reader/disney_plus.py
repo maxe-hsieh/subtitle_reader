@@ -2,12 +2,13 @@
 
 from .subtitle_alg import SubtitleAlg
 from .object_finder import find
+from .compatible import role
 
 class DisneyPlus(SubtitleAlg):
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		try:
-			while obj and obj.role != 52:
+			while obj and obj.role != role('document'):
 				obj = obj.parent
 			
 		

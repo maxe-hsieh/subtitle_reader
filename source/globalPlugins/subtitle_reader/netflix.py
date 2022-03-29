@@ -2,11 +2,12 @@
 
 from .subtitle_alg import SubtitleAlg
 from .object_finder import find
+from .compatible import role
 
 class Netflix(SubtitleAlg):
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
-		return find(obj, 'parent', 'role', 52)
+		return find(obj, 'parent', 'role', role('document'))
 	
 	def getSubtitleContainer(self):
 		videoPlayer = self.main.videoPlayer
@@ -15,12 +16,12 @@ class Netflix(SubtitleAlg):
 	
 	def chromeGetSubtitleContainer(self):
 		obj = self.main.videoPlayer
-		obj = find(obj, 'firstChild', 'role', 56)
+		obj = find(obj, 'firstChild', 'role', role('grouping'))
 		return obj
 	
 	def firefoxGetSubtitleContainer(self):
 		obj = self.main.videoPlayer
-		obj = find(obj, 'firstChild', 'role', 56)
+		obj = find(obj, 'firstChild', 'role', role('grouping'))
 		return obj
 	
 	def getSubtitle(self):

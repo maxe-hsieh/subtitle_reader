@@ -3,6 +3,7 @@
 # 由於 Marumaru 是使用欠入 Youtube 頁框的方式，所以大部分與取得 Youtube 字幕的演算法相同。
 
 from .youtube import Youtube as YoutubeAlg
+from .compatible import role
 
 class MaruMaru(YoutubeAlg):
 	def getSubtitleContainer(self):
@@ -10,7 +11,7 @@ class MaruMaru(YoutubeAlg):
 		subtitleContainer = None
 		obj = self.main.videoPlayer
 		try:
-			while obj.role != 115:
+			while obj.role != role('internalframe'):
 				obj = obj.parent
 			
 			while obj.IA2Attributes.get('id') != 'divLyrics':
