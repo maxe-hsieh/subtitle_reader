@@ -2,7 +2,7 @@
 
 import os
 import re
-from nvwave import playWaveFile
+from .sound import play
 from .config import conf
 from .subtitle_alg import SubtitleAlg
 
@@ -111,7 +111,7 @@ class Youtube(SubtitleAlg):
 		
 		if ce != self.ce and self.ce in ce:
 			# 當資訊卡內容增加時才播放音效
-			playWaveFile(os.path.dirname(__file__) + r'\sounds\ce.wav')
+			play(os.path.dirname(__file__) + r'\sounds\ce.ogg')
 		
 		self.ce = ce
 	

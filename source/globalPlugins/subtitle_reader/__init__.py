@@ -10,7 +10,7 @@ import time
 
 from globalPluginHandler import GlobalPlugin
 from globalVars import appArgs
-from nvwave import playWaveFile
+from . import sound
 from . import gui
 from .config import conf
 from .youtube import Youtube
@@ -31,7 +31,7 @@ class GlobalPlugin(GlobalPlugin):
 			'.+ - YouTube': Youtube(self),
 			'.+-MARUMARU': MaruMaru(self),
 			'^Disney\+ \| ': DisneyPlus(self),
-			'^Netflix': Netflix(self),
+			'.*?Netflix': Netflix(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
@@ -42,6 +42,8 @@ class GlobalPlugin(GlobalPlugin):
 		self.emptySubTitleTime = 0
 		# 使用 wx.PyTimer 不斷執行函數
 		self.read_subtitle_timer = wx.PyTimer(self.read_subtitle)
+		
+		sound.init()
 		
 		self.update = Update()
 		# 初始化選單
@@ -60,6 +62,9 @@ class GlobalPlugin(GlobalPlugin):
 	def terminate(self):
 		# 關閉 NVDA 時，儲存開關狀態到使用者設定檔。
 		conf.write()
+		gui.toolsMenu.Remove(self.menu.menuItem.Id)
+		self.menu.Destroy()
+		sound.free()
 	
 	def stopReadSubtitle(self):
 		self.read_subtitle_timer.Stop()
@@ -133,24 +138,27 @@ class GlobalPlugin(GlobalPlugin):
 		subtitle = subtitle.strip()
 		if subtitle == self.subtitle:
 			return
+		
 		if not subtitle:
 			# 沒有字幕超過一秒鐘才清除字幕緩衝區。
 			if not self.emptySubTitleTime:
 				self.emptySubTitleTime = time.time()
-			elif time.time() - self.emptySubTitleTime >= 1000:
+			elif time.time() - self.emptySubTitleTime >= 1:
 				self.subtitle = ''
 				self.emptySubTitleTime = 0
 			
 			return
-		if subtitle:
-			msg = subtitle
-			# 若新的字幕開頭為前一字幕的內容，則只報讀填充的部分。
-			n = subtitle.find(self.subtitle)
-			if self.subtitle and n == 0:
-				msg = subtitle.replace(self.subtitle, '', 1)
-			
-			ui.message(msg)
 		
+		msg = subtitle
+		# 若新的字幕內容是前一字幕開頭的一部分，則不報讀。
+		if self.subtitle.find(subtitle) == 0 and subtitle in self.subtitle:
+			msg = None
+		
+		# 若新的字幕開頭為前一字幕的內容，則只報讀填充的部分。
+		if self.subtitle and subtitle.find(self.subtitle) == 0 and self.subtitle in subtitle:
+			msg = subtitle.replace(self.subtitle, '', 1)
+		
+		ui.message(msg)
 		self.subtitle = subtitle
 	
 	def toggleInfoCardPrompt(self, evt):

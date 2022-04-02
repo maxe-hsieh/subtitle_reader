@@ -11,7 +11,7 @@ else:
 
 from threading import Thread
 
-from nvwave import playWaveFile as play
+from .sound import play, music
 
 from .version import version
 from .config import conf
@@ -40,7 +40,7 @@ class Update:
 	
 	def manualCheck(self, event):
 		conf['skipVersion'] = '0'
-		play(soundPath + r'\updateChecking.wav')
+		play(soundPath + r'\updateChecking.ogg')
 		self.execute()
 	
 	def toggleCheckAutomatic(self, event):
@@ -78,7 +78,7 @@ class Update:
 			return
 		
 		self.new = info
-		play(soundPath + r'\newVersionFound.wav')
+		play(soundPath + r'\newVersionFound.ogg')
 		wx.CallAfter(self.showDialog)
 	
 	def getNewVersion(self):
@@ -110,6 +110,7 @@ class Update:
 		
 	
 	def isLatestVersion(self):
+		play(soundPath + r'\isLatestVersion.ogg')
 		wx.MessageBox(u'您已升級到最新版本，祝您觀影愉快！', '恭喜', style=wx.ICON_EXCLAMATION)
 	
 	def checkError(self):
@@ -121,6 +122,7 @@ class Update:
 		dlg.updateNow.Bind(wx.EVT_BUTTON, self.updateNow)
 		dlg.skipVersion.Bind(wx.EVT_BUTTON, self.skipVersion)
 		dlg.later.Bind(wx.EVT_BUTTON, self.later)
+		dlg.Bind(wx.EVT_CHAR_HOOK, self.onKeyDown)
 		dlg.Bind(wx.EVT_CLOSE, self.onClose)
 		dlg.Show()
 	
@@ -128,7 +130,8 @@ class Update:
 		if self.downloadThreadObj and self.downloadThreadObj.is_alive():
 			return
 		
-		play(soundPath + r'\updating.wav')
+		play(soundPath + r'\updating.ogg')
+		self.dialog.changelogText.SetFocus()
 		self.downloadThreadObj = Thread(target=self.downloadThread)
 		self.downloadThreadObj.start()
 	
@@ -139,7 +142,7 @@ class Update:
 		
 		try:
 			file = downloadFile(assetUrl + '/' + filename, tempDir + '\\' + filename, reporthook=self.updateProgress)
-			play(soundPath + r'\downloadCompleted.wav')
+			play(soundPath + r'\downloadCompleted.ogg')
 			self.dialog.Close()
 			os.system('start ' + file[0])
 		except:
@@ -151,19 +154,24 @@ class Update:
 		wx.CallAfter(self.dialog.progress.SetValue, percent)
 	
 	def downloadError(self):
-		play(soundPath + r'\downloadError.wav')
+		play(soundPath + r'\downloadError.ogg')
 		wx.MessageBox(u'下載更新失敗', '錯誤', style=wx.ICON_ERROR, parent=self.dialog)
 	
 	def skipVersion(self, event):
-		play(soundPath + r'\skipVersion.wav')
+		play(soundPath + r'\skipVersion.ogg')
 		conf['skipVersion'] = self.new['version']
 		self.dialog.Close()
 	
 	def later(self, event):
-		play(soundPath + r'\closeDialog.wav')
+		play(soundPath + r'\closeDialog.ogg')
 		self.dialog.Close()
+	
+	def onKeyDown(self, event):
+		event.Skip()
+		music('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.mp3')
 	
 	def onClose(self, event):
 		self.dialog.Destroy()
 		self.dialog = None
+		music()
 	

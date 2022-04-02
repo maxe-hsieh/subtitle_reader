@@ -7,7 +7,11 @@ from .compatible import role
 class Netflix(SubtitleAlg):
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
-		return find(obj, 'parent', 'role', role('document'))
+		videoPlayer = find(obj, 'parent', 'role', role('dialog'))
+		if not videoPlayer:
+			videoPlayer = find(obj, 'parent', 'role', role('document'))
+		
+		return videoPlayer
 	
 	def getSubtitleContainer(self):
 		videoPlayer = self.main.videoPlayer
@@ -35,11 +39,16 @@ class Netflix(SubtitleAlg):
 				obj = None
 			
 		
+		pobj = obj
 		while obj:
 			if obj.name:
 				subtitle += obj.name + '\r\n'
 			
+			pobj = obj
 			obj = obj.next
+		
+		if not pobj.name:
+			return
 		
 		return subtitle
 	
