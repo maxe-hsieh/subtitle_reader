@@ -17,18 +17,18 @@ def play(filename=None):
 		return
 	
 	if filename.find('http') == 0:
-		sound = BASS_StreamCreateURL(filename, 0, BASS_STREAM_AUTOFREE, None, None)
+		sound = BASS_StreamCreateURL(filename.encode('utf-8'), 0, BASS_STREAM_AUTOFREE, None, None)
 	else:
-		sound = BASS_StreamCreateFile(False, filename, 0, 0, BASS_STREAM_AUTOFREE)
+		sound = BASS_StreamCreateFile(False, filename.encode('utf-8'), 0, 0, BASS_STREAM_AUTOFREE)
 	
 	BASS_ChannelPlay(sound, True)
 
 def music(filename=None):
+	global musicFile
+	global musicFilename
 	if filename and filename == musicFilename:
 		return
 	
-	global musicFile
-	global musicFilename
 	musicFilename = filename
 	if musicFile:
 		BASS_StreamFree(musicFile)
@@ -38,9 +38,9 @@ def music(filename=None):
 		return
 	
 	if filename.find('http') == 0:
-		musicFile = BASS_StreamCreateURL(filename, 0, BASS_SAMPLE_LOOP, None, None)
+		musicFile = BASS_StreamCreateURL(filename.encode('utf-8'), 0, BASS_SAMPLE_LOOP, None, None)
 	else:
-		musicFile = BASS_StreamCreateFile(False, filename, 0, 0, BASS_SAMPLE_LOOP)
+		musicFile = BASS_StreamCreateFile(False, filename.encode('utf-8'), 0, 0, BASS_SAMPLE_LOOP)
 	
 	BASS_ChannelPlay(musicFile, True)
 
