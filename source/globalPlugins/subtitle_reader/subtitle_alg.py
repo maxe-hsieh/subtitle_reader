@@ -1,6 +1,6 @@
 #coding=utf-8
 
-from compatible import role
+from .compatible import role
 
 class SubtitleAlg(object):
 	def __init__(self, main):
