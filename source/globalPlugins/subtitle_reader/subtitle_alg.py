@@ -1,5 +1,7 @@
 #coding=utf-8
 
+from compatible import role
+
 class SubtitleAlg(object):
 	def __init__(self, main):
 		self.main = main
@@ -18,9 +20,11 @@ class SubtitleAlg(object):
 		# Brave 取得字幕容器的方法也與 Chrome 相同。
 		return self.chromeGetSubtitleContainer()
 	
-	def getSubtitle(self):
+	def getSubtitle(self, obj=None):
 		subtitle = ''
-		obj = self.main.subtitleContainer
+		if obj is None:
+			obj = self.main.subtitleContainer
+		
 		while obj and not obj.name:
 			try:
 				obj = obj.firstChild
@@ -28,11 +32,16 @@ class SubtitleAlg(object):
 				obj = None
 			
 		
+		pobj = obj
 		while obj:
 			if obj.name:
 				subtitle += obj.name + '\r\n'
 			
+			pobj = obj
 			obj = obj.next
+		
+		if pobj.role == role('unknown'):
+			return
 		
 		return subtitle
 	

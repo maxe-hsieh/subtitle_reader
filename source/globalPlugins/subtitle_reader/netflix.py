@@ -29,26 +29,8 @@ class Netflix(SubtitleAlg):
 		return obj
 	
 	def getSubtitle(self):
-		subtitle = ''
+		
 		obj = self.main.subtitleContainer
 		obj = obj.next
-		while obj and not obj.name:
-			try:
-				obj = obj.firstChild
-			except:
-				obj = None
-			
-		
-		pobj = obj
-		while obj:
-			if obj.name:
-				subtitle += obj.name + '\r\n'
-			
-			pobj = obj
-			obj = obj.next
-		
-		if not pobj.name:
-			return
-		
-		return subtitle
+		return super(Netflix, self).getSubtitle(obj)
 	

@@ -133,6 +133,9 @@ class GlobalPlugin(GlobalPlugin):
 			return
 		
 		subtitle = self.subtitleAlg.getSubtitle()
+		if subtitle is None:
+			return
+		
 		# 刪除用於渲染字幕效果的符號
 		subtitle = subtitle.replace(u'​', '')
 		subtitle = subtitle.strip()
