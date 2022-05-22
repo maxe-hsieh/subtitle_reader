@@ -16,6 +16,7 @@ from .sound import play, music
 from .version import version
 from .config import conf
 from .gui import UpdateDialog, wx
+from globalVars import appArgs
 
 soundPath = os.path.dirname(__file__) + r'\sounds'
 sourceUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/source'
@@ -42,6 +43,10 @@ class Update:
 		conf['skipVersion'] = '0'
 		play(soundPath + r'\updateChecking.ogg')
 		self.execute()
+	
+	def openChangeLog(self, event):
+		filePath = appArgs.configPath + r'\addons\subtitle_reader\doc\zh_TW\changelog.md'
+		os.system('start ' + filePath)
 	
 	def toggleCheckAutomatic(self, event):
 		menu = event.GetEventObject()

@@ -19,6 +19,8 @@ class Menu(wx.Menu):
 		
 		self.checkForUpdate = self.Append(wx.ID_ANY, u'立即檢查更新(&C)')
 		
+		self.openChangeLog = self.Append(wx.ID_ANY, u'開啟更新日至(&O)')
+		
 		self.checkUpdateAutomatic = self.AppendCheckItem(wx.ID_ANY, u'自動檢查更新(&A)')
 		self.checkUpdateAutomatic.Check(True)
 	

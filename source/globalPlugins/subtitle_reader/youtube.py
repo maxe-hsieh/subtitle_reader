@@ -64,10 +64,10 @@ class Youtube(SubtitleAlg):
 			return ''
 		
 		subtitle = ''
-		obj = obj.firstChild
-		while obj is not None and 'caption-window-' in str(obj.IA2Attributes.get('id')):
+		obj = obj.firstChild.firstChild
+		while obj is not None:
 			# 取得多行字幕
-			if obj.name.strip() != subtitle.strip():
+			if obj.name.strip():
 				subtitle += obj.name + '\r\n'
 			
 			obj = obj.next
