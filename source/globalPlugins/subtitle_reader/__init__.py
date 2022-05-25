@@ -17,6 +17,7 @@ from .youtube import Youtube
 from .maru_maru import MaruMaru
 from .disney_plus import DisneyPlus
 from .netflix import Netflix
+from .wkMediaCommons import WKMediaCommons
 from .update import Update
 
 wx = gui.wx
@@ -32,6 +33,7 @@ class GlobalPlugin(GlobalPlugin):
 			'.+-MARUMARU': MaruMaru(self),
 			'^Disney\+ \| ': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
+			'.+ - Wikimedia Commons': WKMediaCommons(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
