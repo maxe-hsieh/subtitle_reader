@@ -64,13 +64,16 @@ class Youtube(SubtitleAlg):
 			return ''
 		
 		subtitle = ''
-		obj = obj.firstChild.firstChild
+		
+		obj = getattr(obj, 'firstChild', None)
+		obj = getattr(obj, 'firstChild', None)
 		while obj is not None:
 			# 取得多行字幕
 			if obj.name.strip():
 				subtitle += obj.name + '\r\n'
 			
 			obj = obj.next
+		
 		return subtitle
 	
 	def firefoxGetSubtitle(self):
