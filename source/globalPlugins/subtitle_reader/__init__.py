@@ -41,7 +41,7 @@ class GlobalPlugin(GlobalPlugin):
 		self.videoPlayer = None
 		self.subtitleContainer = None
 		self.subtitle = str()
-		self.emptySubTitleTime = 0
+		self.emptySubtitleTime = 0
 		# 使用 wx.PyTimer 不斷執行函數
 		self.read_subtitle_timer = wx.PyTimer(self.read_subtitle)
 		
@@ -147,87 +147,44 @@ class GlobalPlugin(GlobalPlugin):
 		
 		if not subtitle:
 			# 沒有字幕超過一秒鐘才清除字幕緩衝區。
-			if not self.emptySubTitleTime:
-				self.emptySubTitleTime = time.time()
-			elif time.time() - self.emptySubTitleTime >= 1:
+			if not self.emptySubtitleTime:
+				self.emptySubtitleTime = time.time()
+			elif time.time() - self.emptySubtitleTime >= 1:
 				self.subtitle = ''
-				self.emptySubTitleTime = 0
 			
 			return
+		
+		self.emptySubtitleTime = 0
 		
 		msg = subtitle
 		
 		# 若新的字幕內容是前一字幕的一部分，則不報讀。
 		if subtitle in self.subtitle:
-			msg = None
+			msg = ''
 		
 		# 若新的字幕包含前一字幕的內容，則只報讀填充的部分。
 		if self.subtitle and self.subtitle in subtitle:
 			msg = subtitle.replace(self.subtitle, '', 1)
 		
-		split = self.subtitle.split('\r\n')
+		# 使用換行符號來忽略兩次字幕之間相同的內容
+		split = subtitle.split('\r\n')
 		for part in split:
-			if part in msg:
+			part = part.strip()
+			count = msg.count(part)
+			if count > 1:
+				msg = msg.replace(part, '', count -1)
+			
+			if part in self.subtitle:
 				msg = msg.replace(part, '')
 			
 		
+		msg = msg.strip()
+		
+		if not msg:
+			msg = None
+		
 		ui.message(msg)
 		self.subtitle = subtitle
-	
-	def getStartOrEndSameStr(self, a, b):
-		def getStartSameStr(a, b):
-			same = []
-			for i in range(0, len(a)):
-				if a[i] != b[i:i+1]:
-					break
-				
-				same.append(a[i])
-			
-			return ''.join(same)
-		
-		sameStr = ['', '', '', '']
-		maxLen = 0
-		maxLenIndex = -1
-		if a[0:1] == b[0:1]:
-			s = getStartSameStr(a, b)
-			sameStr[0] = s
-			maxLen = len(s)
-			maxLenIndex = 0
-		
-		n = a.rfind(b[-1:])
-		if n >= 0:
-			if a[:n+1] == b[n*-1-1:]:
-				sameStr[1] = a[:n+1]
-				if len(sameStr[1]) > maxLen:
-					maxLen = len(sameStr[1])
-					maxLenIndex = 1
-				
-			
-		
-		a = a[::-1]
-		b = b[::-1]
-		
-		if a[0:1] == b[0:1]:
-			s = getStartSameStr(a, b)
-			sameStr[2] = s[::-1]
-			if len(sameStr[2]) > maxLen:
-				maxLen = len(s)
-				maxLenIndex = 0
-			
-		n = a.find(b[-1:])
-		if n >= 0:
-			if a[:n+1] == b[n*-1-1:]:
-				sameStr[3] = a[:n+1:-1][::-1]
-				if len(sameStr[1]) > maxLen:
-					maxLen = len(sameStr[1])
-					maxLenIndex = 1
-				
-			
-		
-		if maxLenIndex == -1:
-			return ''
-		
-		return sameStr[maxLenIndex]
 	
 	def toggleInfoCardPrompt(self, evt):
 		conf['infoCardPrompt'] = not conf['infoCardPrompt']

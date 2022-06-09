@@ -5,6 +5,7 @@ import re
 from .sound import play
 from .config import conf
 from .subtitle_alg import SubtitleAlg
+from .object_finder import find
 
 class Youtube(SubtitleAlg):
 	def __init__(self, *args, **kwargs):
@@ -16,13 +17,8 @@ class Youtube(SubtitleAlg):
 		'''
 		根據元件 id 找出 Youtube 影片撥放器
 		'''
-		o = self.main.focusObject
-		while o:
-			if o.IA2Attributes.get('id') == 'movie_player':
-				return o
-			
-			o = o.parent
-		
+		obj = self.main.focusObject
+		return find(obj, 'parent', 'id', ['movie_player', 'c4-player'])
 	
 	def getSubtitleContainer(self):
 		# 由於 Youtube 的字幕容器是不停變動的，所以改為在每次取得字幕時一併取得容器，在此方法回傳 True 作為假的字幕容器。
@@ -65,14 +61,19 @@ class Youtube(SubtitleAlg):
 		
 		subtitle = ''
 		
-		obj = getattr(obj, 'firstChild', None)
-		obj = getattr(obj, 'firstChild', None)
-		while obj is not None:
-			# 取得多行字幕
-			if obj.name.strip():
-				subtitle += obj.name + '\r\n'
+		line = getattr(obj, 'firstChild', None)
+		# 變例每一行字幕
+		while line is not None:
+			part = line.firstChild
+			# 處理一行當中被切成多個部分的字幕
+			while part is not None:
+				text = getattr(part, 'name', '').strip()
+				if text:
+					subtitle += text + '\r\n'
+				
+				part = part.next
 			
-			obj = obj.next
+			line = line.next
 		
 		return subtitle
 	
@@ -84,18 +85,21 @@ class Youtube(SubtitleAlg):
 		subtitle = ''
 		obj = obj.firstChild
 		while obj is not None and 'caption-window-' in str(obj.IA2Attributes.get('id')):
-			# 取得多行字幕
-			char_obj = obj.firstChild.firstChild
-			for i in range(char_obj.parent.childCount):
-				try:
+			try:
+				# 取得多行字幕
+				char_obj = obj.firstChild.firstChild
+				for i in range(char_obj.parent.childCount):
 					# 處理一個元素只放一個字的狀況
-					subtitle += char_obj.firstChild.firstChild.name
-				except:
-					return ''
+					subtitle += char_obj.firstChild.firstChild.name + '\r\n'
+					
+					char_obj = char_obj.next
 				
-				char_obj = char_obj.next
-			subtitle += '\r\n'
-			obj = obj.next
+				obj = obj.next
+			
+			except:
+				return
+			
+		
 		return subtitle
 	
 	def msedgeGetSubtitle(self):

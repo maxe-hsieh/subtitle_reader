@@ -11,6 +11,10 @@ def find(obj, nextAttr, attrName, attrValue):
 				pass
 			
 		
+		if isinstance(attrValue, list) and value in attrValue:
+			log.debug(attrName + ' = ' + str(value) + ' found in the list. ')
+			return o
+		
 		if value == attrValue:
 			log.debug(attrName + ' = ' + str(attrValue) + ' found. ')
 			return o
