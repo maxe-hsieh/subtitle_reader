@@ -1,5 +1,21 @@
 # 更新日誌
 
+## V2.44, 2022.7.10
+
+版本代號：旭日微光
+
+李李鈴蘭畢業典禮，就在今天QAQ
+
+### 修正巷木
+
+1. Chrome 瀏覽器，嘗試修正 Disney Plus 每次改版就不讀字幕的錯誤。
+現在開始，下次 Disney Plus 改版，嘗試讓字幕閱讀器不會找不到字幕。
+測試影片：[SPY×FAMILY](https://www.disneyplus.com/zh-hant/series/spyfamily/fet1h9jqmrAM)
+
+P.S 還以為只有 Netflix 有這部動畫，這下可以繼續追了。
+
+---
+
 ## V2.43, 2022.6.9
 
 版本代號： Raising Heart

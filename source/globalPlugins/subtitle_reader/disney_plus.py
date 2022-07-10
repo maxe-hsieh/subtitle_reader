@@ -24,7 +24,13 @@ class DisneyPlus(SubtitleAlg):
 	
 	def chromeGetSubtitleContainer(self):
 		obj = self.main.videoPlayer
-		obj = find(obj, 'firstChild', 'class', 'sc-dREXXX iclAaF')
+		o = None
+		while obj:
+			o = obj
+			obj = obj.firstChild
+		
+		obj = o
+		
 		obj = obj.next
 		obj = obj.firstChild.firstChild.firstChild.firstChild
 		obj = obj.next
