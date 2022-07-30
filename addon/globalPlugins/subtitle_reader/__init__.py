@@ -8,6 +8,7 @@ import re
 import ui
 import time
 
+import addonHandler
 from globalPluginHandler import GlobalPlugin
 from globalVars import appArgs
 from . import sound
@@ -20,12 +21,14 @@ from .netflix import Netflix
 from .wkMediaCommons import WKMediaCommons
 from .update import Update
 
+addonHandler.initTranslation()
+
 wx = gui.wx
 
 conf.load(appArgs.configPath + r'\subtitle_reader.json')
 
 class GlobalPlugin(GlobalPlugin):
-	scriptCategory = u'字幕閱讀器'
+	scriptCategory = _(u'字幕閱讀器')
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
@@ -74,14 +77,14 @@ class GlobalPlugin(GlobalPlugin):
 		self.videoPlayer = None
 	
 	def script_toggleSwitch(self, gesture):
-		u'閱讀器開關'
+		_(u'閱讀器開關')
 		switch = conf['switch'] = not conf['switch']
 		if switch:
 			self.read_subtitle_timer.Start(100)
-			ui.message(u'開始閱讀字幕')
+			ui.message(_(u'開始閱讀字幕'))
 		else:
 			self.read_subtitle_timer.Stop()
-			ui.message(u'停止閱讀字幕')
+			ui.message(_(u'停止閱讀字幕'))
 		
 		self.menu.switch.Check(switch)
 	

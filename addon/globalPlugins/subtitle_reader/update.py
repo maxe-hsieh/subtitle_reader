@@ -50,7 +50,7 @@ class Update:
 	
 	def toggleCheckAutomatic(self, event):
 		menu = event.GetEventObject()
-		id = menu.FindItem(u'啟動時檢查更新(&A)')
+		id = menu.FindItem(_(u'啟動時檢查更新(&A)'))
 		item = menu.FindItemById(id)
 		status = conf['checkUpdateAutomatic'] = not conf['checkUpdateAutomatic']
 		item.Check(status)
@@ -116,10 +116,10 @@ class Update:
 	
 	def isLatestVersion(self):
 		play(soundPath + r'\isLatestVersion.ogg')
-		wx.MessageBox(u'您已升級到最新版本，祝您觀影愉快！', '恭喜', style=wx.ICON_EXCLAMATION)
+		wx.MessageBox(_(u'您已升級到最新版本，祝您觀影愉快！'), _(u'恭喜'), style=wx.ICON_EXCLAMATION)
 	
 	def checkError(self):
-		wx.MessageBox(u'檢查更新失敗', '錯誤', style=wx.ICON_ERROR)
+		wx.MessageBox(_(u'檢查更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR)
 	
 	def showDialog(self):
 		dlg = self.dialog = UpdateDialog(self.new['version'])
@@ -160,7 +160,7 @@ class Update:
 	
 	def downloadError(self):
 		play(soundPath + r'\downloadError.ogg')
-		wx.MessageBox(u'下載更新失敗', '錯誤', style=wx.ICON_ERROR, parent=self.dialog)
+		wx.MessageBox(_(u'下載更新失敗', _(u'錯誤'), style=wx.ICON_ERROR, parent=self.dialog)
 	
 	def skipVersion(self, event):
 		play(soundPath + r'\skipVersion.ogg')
