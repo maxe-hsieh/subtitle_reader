@@ -2,7 +2,7 @@ addon/doc/*.css
 addon/doc/zh-TW/
 *_docHandler.py
 *.html
-*.ini
+
 *.mo
 *.pot
 *.py[co]
