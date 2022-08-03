@@ -144,6 +144,7 @@ class GlobalPlugin(GlobalPlugin):
 		
 		# 刪除用於渲染字幕效果的符號
 		subtitle = subtitle.replace(u'​', '')
+		subtitle = self.filterSameLine(subtitle)
 		subtitle = subtitle.strip()
 		if subtitle == self.subtitle:
 			return
@@ -173,10 +174,6 @@ class GlobalPlugin(GlobalPlugin):
 		split = subtitle.split('\r\n')
 		for part in split:
 			part = part.strip()
-			count = msg.count(part)
-			if count > 1:
-				msg = msg.replace(part, '', count -1)
-			
 			if part in self.subtitle:
 				msg = msg.replace(part, '')
 			
@@ -188,6 +185,22 @@ class GlobalPlugin(GlobalPlugin):
 		
 		ui.message(msg)
 		self.subtitle = subtitle
+	
+	def filterSameLine(self, subtitle):
+		lines = subtitle.split('\r\n')
+		newLines = []
+		for line in lines:
+			line = line.strip()
+			if any(s for s in newLines if line in s):
+				continue
+			
+			matchLine = [s for s in newLines if s in line]
+			if matchLine:
+				newLines.remove(matchLine[0])
+			
+			newLines.append(line)
+		
+		return '\r\n'.join(newLines)
 	
 	def toggleInfoCardPrompt(self, evt):
 		conf['infoCardPrompt'] = not conf['infoCardPrompt']

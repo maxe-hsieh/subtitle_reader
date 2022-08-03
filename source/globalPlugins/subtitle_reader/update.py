@@ -5,21 +5,23 @@ import re
 from sys import version_info
 if version_info.major == 2:
 	from urllib import quote_plus, urlopen, urlretrieve as downloadFile
+	from codecs import open
 else:
 	from urllib.request import urlopen, urlretrieve as downloadFile
 	from urllib.parse import quote_plus
 
 from threading import Thread
 
-from .sound import play, music
+from .sound import play, music, getPos
 
 from .version import version
 from .config import conf
 from .gui import UpdateDialog, wx
 from globalVars import appArgs
+import ui
 
 soundPath = os.path.dirname(__file__) + r'\sounds'
-sourceUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/source'
+sourceUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/addon'
 assetUrl = 'https://github.com/maxe-hsieh/subtitle_reader/releases/latest/download'
 tempDir = os.getenv('temp')
 
@@ -29,6 +31,9 @@ class Update:
 		self.checkThreadObj = None
 		self.dialog = None
 		self.downloadThreadObj = None
+		self.bgm = None
+		self.lastPos = 0
+		self.readLyricsTimer = None
 		self.checkAutomatic()
 	
 	def checkAutomatic(self):
@@ -119,10 +124,11 @@ class Update:
 		wx.MessageBox(_(u'您已升級到最新版本，祝您觀影愉快！'), _(u'恭喜'), style=wx.ICON_EXCLAMATION)
 	
 	def checkError(self):
-		wx.MessageBox(_(u'檢查更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR)
+		wx.MessageBox(u_('檢查更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR)
 	
 	def showDialog(self):
 		dlg = self.dialog = UpdateDialog(self.new['version'])
+		dlg.isVisited = False
 		dlg.changelogText.SetValue(self.new['changelog'])
 		dlg.updateNow.Bind(wx.EVT_BUTTON, self.updateNow)
 		dlg.skipVersion.Bind(wx.EVT_BUTTON, self.skipVersion)
@@ -160,7 +166,7 @@ class Update:
 	
 	def downloadError(self):
 		play(soundPath + r'\downloadError.ogg')
-		wx.MessageBox(_(u'下載更新失敗', _(u'錯誤'), style=wx.ICON_ERROR, parent=self.dialog)
+		wx.MessageBox(_(u'下載更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR, parent=self.dialog)
 	
 	def skipVersion(self, event):
 		play(soundPath + r'\skipVersion.ogg')
@@ -173,10 +179,59 @@ class Update:
 	
 	def onKeyDown(self, event):
 		event.Skip()
-		music('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.mp3')
+		if self.dialog.isVisited:
+			return
+		
+		self.dialog.isVisited = True
+		self.bgm = music('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.mp3')
+		try:
+			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.ly')
+			if res.code != 200:
+				return
+			
+			lyrics = res.read().decode('utf-8')
+			res.close()
+		
+		except:
+			return
+		
+		lyricsObj = []
+		for line in lyrics.split('\n'):
+			obj = {}
+			match = re.match(r'^\[(\d{1,2}):(\d{1,2}(?:\.\d+)?)\](.+)$', line)
+			if not match:
+				continue
+			
+			obj['time'] = int(match.group(1)) * 60 + float(match.group(2))
+			obj['text'] = match.group(3)
+			lyricsObj.append(obj)
+		
+		self.lyrics = lyricsObj
+		self.readLyricsTimer = wx.PyTimer(self.readLyrics)
+		self.readLyricsTimer.Start(0)
+	
+	def readLyrics(self):
+		second = round(getPos(self.bgm), 3)
+		lyrics = ''
+		if self.lastPos < second:
+			for obj in self.lyrics:
+				if self.lastPos <= obj['time'] < second:
+					lyrics += obj['text'] + '\r\n'
+				
+			
+		
+		self.lastPos = second
+		if lyrics:
+			ui.message(lyrics)
+		
 	
 	def onClose(self, event):
+		if self.readLyricsTimer is not None:
+			self.readLyricsTimer.Stop()
+			self.readLyricsTimer = None
+		
 		self.dialog.Destroy()
 		self.dialog = None
 		music()
+		self.bgm = None
 	
