@@ -43,6 +43,10 @@ def music(filename=None):
 		musicFile = BASS_StreamCreateFile(False, filename.encode('utf-8'), 0, 0, BASS_SAMPLE_LOOP)
 	
 	BASS_ChannelPlay(musicFile, True)
+	return musicFile
+
+def getPos(file):
+	return BASS_ChannelBytes2Seconds(file, BASS_ChannelGetPosition(file, BASS_POS_BYTE))
 
 def free():
 	BASS_Free()

@@ -11,7 +11,7 @@ class Menu(wx.Menu):
 	def __init__(self):
 		super(Menu, self).__init__()
 		self.menuItem = toolsMenu.AppendSubMenu(self, _(u'字幕閱讀器 (&R)'))
-		self.switch = self.AppendCheckItem(wx.ID_ANY, u_('閱讀器開關 (&S)'))
+		self.switch = self.AppendCheckItem(wx.ID_ANY, _(u'閱讀器開關 (&S)'))
 		self.switch.Check(True)
 		
 		self.infoCardPrompt = self.AppendCheckItem(wx.ID_ANY, _(u'資訊卡提示(&I)'))

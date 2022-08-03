@@ -124,7 +124,8 @@ class Update:
 		wx.MessageBox(_(u'您已升級到最新版本，祝您觀影愉快！'), _(u'恭喜'), style=wx.ICON_EXCLAMATION)
 	
 	def checkError(self):
-		wx.MessageBox(u_('檢查更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR)
+		play(soundPath + r'\downloadError.ogg')
+		wx.MessageBox(_(u'檢查更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR)
 	
 	def showDialog(self):
 		dlg = self.dialog = UpdateDialog(self.new['version'])
