@@ -46,7 +46,7 @@ class GlobalPlugin(GlobalPlugin):
 		self.subtitle = str()
 		self.emptySubtitleTime = 0
 		# 使用 wx.PyTimer 不斷執行函數
-		self.read_subtitle_timer = wx.PyTimer(self.read_subtitle)
+		self.readSubtitleTimer = wx.PyTimer(self.readSubtitle)
 		
 		sound.init()
 		
@@ -72,18 +72,20 @@ class GlobalPlugin(GlobalPlugin):
 		self.menu.Destroy()
 		sound.free()
 	
+	def startReadSubtitle(self):
+		self.readSubtitleTimer.Start(5, wx.TIMER_CONTINUOUS)
+	
 	def stopReadSubtitle(self):
-		self.read_subtitle_timer.Stop()
-		self.videoPlayer = None
+		self.readSubtitleTimer.Stop()
 	
 	def script_toggleSwitch(self, gesture):
 		_(u'閱讀器開關')
 		switch = conf['switch'] = not conf['switch']
 		if switch:
-			self.read_subtitle_timer.Start(100)
+			self.startReadSubtitle()
 			ui.message(_(u'開始閱讀字幕'))
 		else:
-			self.read_subtitle_timer.Stop()
+			self.stopReadSubtitle()
 			ui.message(_(u'停止閱讀字幕'))
 		
 		self.menu.switch.Check(switch)
@@ -103,6 +105,7 @@ class GlobalPlugin(GlobalPlugin):
 			return
 		
 		self.stopReadSubtitle()
+		self.videoPlayer = None
 		if not conf['switch']:
 			return
 		
@@ -121,7 +124,7 @@ class GlobalPlugin(GlobalPlugin):
 		if not container:
 			return
 		
-		self.read_subtitle_timer.Start(100)
+		self.startReadSubtitle()
 	
 	def getSubtitleAlg(self):
 		window = self.focusObject.objectInForeground().name
@@ -131,7 +134,7 @@ class GlobalPlugin(GlobalPlugin):
 			
 		
 	
-	def read_subtitle(self):
+	def readSubtitle(self):
 		'''
 		尋找並閱讀字幕，必須不斷執行。
 		'''

@@ -16,7 +16,7 @@ from .sound import play, music, getPos
 
 from .version import version
 from .config import conf
-from .gui import UpdateDialog, wx
+from .gui import UpdateDialog, wx, gui as nvdaGui
 from globalVars import appArgs
 import ui
 
@@ -41,7 +41,7 @@ class Update:
 			return
 		
 		self.execute(automatic=True)
-		self.automaticTimer = wx.PyTimer(self.checkAutomatic)
+		self.automaticTimer = nvdaGui.NonReEntrantTimer(self.checkAutomatic)
 		self.automaticTimer.StartOnce(1000*60*60*24)
 	
 	def manualCheck(self, event):
@@ -208,8 +208,8 @@ class Update:
 			lyricsObj.append(obj)
 		
 		self.lyrics = lyricsObj
-		self.readLyricsTimer = wx.PyTimer(self.readLyrics)
-		self.readLyricsTimer.Start(0)
+		self.readLyricsTimer = nvdaGui.NonReEntrantTimer(self.readLyrics)
+		self.readLyricsTimer.Start(5, wx.TIMER_CONTINUOUS)
 	
 	def readLyrics(self):
 		second = round(getPos(self.bgm), 3)
@@ -222,8 +222,17 @@ class Update:
 			
 		
 		self.lastPos = second
-		if lyrics:
-			ui.message(lyrics)
+		if not lyrics:
+			return
+		
+		
+		if conf['switch'] is False:
+			return
+		
+		if not self.dialog.IsActive():
+			return
+		
+		ui.message(lyrics)
 		
 	
 	def onClose(self, event):
