@@ -68,13 +68,20 @@ class Youtube(SubtitleAlg):
 			# 處理一行當中被切成多個部分的字幕
 			while part is not None:
 				text = getattr(part, 'name', '')
-				if isinstance(text, str):
-					text = text.strip()
+				if text is None:
+					return
 				
-				if text:
-					subtitle += text + '\r\n'
+				if isinstance(text, (str, unicode)):
+					text = text.replace(u'​', '').strip()
+					
+					if text:
+						subtitle += text + ' | '
+					
 				
 				part = part.next
+			
+			if subtitle:
+				subtitle += '\r\n'
 			
 			line = line.next
 		

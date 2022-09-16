@@ -11,6 +11,7 @@ import time
 import addonHandler
 from globalPluginHandler import GlobalPlugin
 from globalVars import appArgs
+from logHandler import log
 from . import sound
 from . import gui
 from .config import conf
@@ -20,6 +21,8 @@ from .disney_plus import DisneyPlus
 from .netflix import Netflix
 from .wkMediaCommons import WKMediaCommons
 from .update import Update
+
+nvdaGui = gui.gui
 
 addonHandler.initTranslation()
 
@@ -46,7 +49,7 @@ class GlobalPlugin(GlobalPlugin):
 		self.subtitle = str()
 		self.emptySubtitleTime = 0
 		# 使用 wx.PyTimer 不斷執行函數
-		self.readSubtitleTimer = wx.PyTimer(self.readSubtitle)
+		self.readSubtitleTimer = nvdaGui.NonReEntrantTimer(self.readSubtitle)
 		
 		sound.init()
 		
@@ -73,7 +76,7 @@ class GlobalPlugin(GlobalPlugin):
 		sound.free()
 	
 	def startReadSubtitle(self):
-		self.readSubtitleTimer.Start(5, wx.TIMER_CONTINUOUS)
+		self.readSubtitleTimer.Start(100, wx.TIMER_CONTINUOUS)
 	
 	def stopReadSubtitle(self):
 		self.readSubtitleTimer.Stop()
@@ -146,11 +149,9 @@ class GlobalPlugin(GlobalPlugin):
 			return
 		
 		# 刪除用於渲染字幕效果的符號
-		subtitle = subtitle.replace(u'​', '')
-		subtitle = self.filterSameLine(subtitle)
-		subtitle = subtitle.strip()
-		if subtitle == self.subtitle:
-			return
+		subtitle = subtitle.replace(u'​', '').replace(u' ', '')
+		log.debug('original subtitle = ' + subtitle)
+		subtitle = self.filterSamePart(subtitle)
 		
 		if not subtitle:
 			# 沒有字幕超過一秒鐘才清除字幕緩衝區。
@@ -163,47 +164,55 @@ class GlobalPlugin(GlobalPlugin):
 		
 		self.emptySubtitleTime = 0
 		
-		msg = subtitle
+		if subtitle == self.subtitle:
+			return
+		
+		lastSubtitle = self.subtitle
+		lastSubtitleText = lastSubtitle.replace(' | ', '')
+		subtitleText = subtitle.replace(' | ', '')
+		self.subtitle = subtitle
+		
+		msg = subtitleText
 		
 		# 若新的字幕內容是前一字幕的一部分，則不報讀。
-		if subtitle in self.subtitle:
+		if subtitleText in lastSubtitleText:
 			msg = ''
 		
 		# 若新的字幕包含前一字幕的內容，則只報讀填充的部分。
-		if self.subtitle and self.subtitle in subtitle:
-			msg = subtitle.replace(self.subtitle, '', 1)
+		if lastSubtitleText and lastSubtitleText in subtitleText:
+			msg = subtitleText.replace(lastSubtitleText, '', 1)
 		
-		# 使用換行符號來忽略兩次字幕之間相同的內容
-		split = subtitle.split('\r\n')
+		# 使用分隔符號來忽略兩次字幕之間相同的內容
+		split = subtitle.split(' | ')
 		for part in split:
-			part = part.strip()
-			if part in self.subtitle:
+			part = part.replace(' | ', '')
+			if part in lastSubtitleText:
 				msg = msg.replace(part, '')
 			
 		
-		msg = msg.strip()
+		log.debug('subtitle = ' + subtitle)
+		log.debug('last subtitle = ' + lastSubtitle)
+		log.debug('msg = ' + msg)
 		
 		if not msg:
 			msg = None
 		
 		ui.message(msg)
-		self.subtitle = subtitle
 	
-	def filterSameLine(self, subtitle):
-		lines = subtitle.split('\r\n')
-		newLines = []
-		for line in lines:
-			line = line.strip()
-			if any(s for s in newLines if line in s):
+	def filterSamePart(self, subtitle):
+		parts = subtitle.split(' | ')
+		newParts = []
+		for part in parts:
+			if any(s for s in newParts if part.strip() in s.strip() or part.strip() == s.strip()):
 				continue
 			
-			matchLine = [s for s in newLines if s in line]
-			if matchLine:
-				newLines.remove(matchLine[0])
+			matchPart = [s for s in newParts if s.strip() in part.strip()]
+			if matchPart:
+				newParts.remove(matchPart[0])
 			
-			newLines.append(line)
+			newParts.append(part)
 		
-		return '\r\n'.join(newLines)
+		return ' | '.join(newParts)
 	
 	def toggleInfoCardPrompt(self, evt):
 		conf['infoCardPrompt'] = not conf['infoCardPrompt']
