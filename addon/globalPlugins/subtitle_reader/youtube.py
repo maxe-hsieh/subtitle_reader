@@ -71,12 +71,11 @@ class Youtube(SubtitleAlg):
 				if text is None:
 					return
 				
-				if isinstance(text, (str, unicode)):
-					text = text.replace(u'​', '').strip()
-					
-					if text:
-						subtitle += text + ' | '
-					
+				text = str(text)
+				text = text.replace(u'​', '').strip()
+				
+				if text:
+					subtitle += text + ' | '
 				
 				part = part.next
 			
