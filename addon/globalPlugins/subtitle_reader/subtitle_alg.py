@@ -26,12 +26,7 @@ class SubtitleAlg(object):
 			obj = self.main.subtitleContainer
 		
 		while obj and not obj.name:
-			try:
-				obj = obj.firstChild
-			except:
-				obj = None
-			
-		
+			obj = obj.firstChild
 		pobj = obj
 		while obj:
 			if obj.name:
@@ -40,7 +35,7 @@ class SubtitleAlg(object):
 			pobj = obj
 			obj = obj.next
 		
-		if pobj.role == role('unknown'):
+		if not pobj or pobj.role == role('unknown'):
 			return
 		
 		return subtitle

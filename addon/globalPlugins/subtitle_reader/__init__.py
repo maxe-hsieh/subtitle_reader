@@ -20,6 +20,7 @@ from .maru_maru import MaruMaru
 from .disney_plus import DisneyPlus
 from .netflix import Netflix
 from .wkMediaCommons import WKMediaCommons
+from .kktv import Kktv
 from .update import Update
 
 nvdaGui = gui.gui
@@ -40,6 +41,7 @@ class GlobalPlugin(GlobalPlugin):
 			'^Disney\+ \| ': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
+			'.+ \| KKTV': Kktv(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')

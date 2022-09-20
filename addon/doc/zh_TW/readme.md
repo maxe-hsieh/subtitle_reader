@@ -15,7 +15,7 @@
 
 ##### 特色
 
-* 支援 Netflix, Disney+, Youtube, MaruMaru 等網站
+* 支援 Netflix, Disney+, Youtube, KKTV, MaruMaru 等網站
 * 支援常用瀏覽器。
 * 自動尋找網頁上的 CC 字幕。
 * 語音與點字回饋。
