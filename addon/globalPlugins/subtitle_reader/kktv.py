@@ -24,7 +24,10 @@ class Kktv(SubtitleAlg):
 	
 	def chromeGetSubtitle(self):
 		obj = self.main.videoPlayer
-		obj = obj.firstChild.firstChild.firstChild.firstChild.firstChild.next.next
+		obj = find(obj, 'firstChild', 'class', 'kktv-player__wrapper')
+		if not obj:
+			return
+		obj = obj.next.next
 		return super(Kktv, self).getSubtitle(obj)
 	
 	def firefoxGetSubtitle(self):
