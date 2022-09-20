@@ -11,21 +11,27 @@ class Kktv(SubtitleAlg):
 		return videoPlayer
 	
 	def getSubtitleContainer(self):
+		return True
+	
 		videoPlayer = self.main.videoPlayer
 		appName = videoPlayer.appModule.appName
 		return getattr(self, appName + 'GetSubtitleContainer')()
 	
-	def chromeGetSubtitleContainer(self):
+	def getSubtitle(self):
+		videoPlayer = self.main.videoPlayer
+		appName = videoPlayer.appModule.appName
+		return getattr(self, appName + 'GetSubtitle')()
+	
+	def chromeGetSubtitle(self):
 		obj = self.main.videoPlayer
 		obj = obj.firstChild.firstChild.firstChild.firstChild.firstChild.next.next
-		return obj
+		return super(Kktv, self).getSubtitle(obj)
 	
-	def firefoxGetSubtitleContainer(self):
+	def firefoxGetSubtitle(self):
 		obj = self.main.videoPlayer
-		obj = find(obj, 'firstChild', 'role', role('grouping'))
-		return obj
-	
-	def getSubtitle(self):
-		obj = self.main.subtitleContainer
+		obj = obj.firstChild.firstChild.firstChild.next.next
+		if 'subtitle' not in obj.IA2Attributes.get('class'):
+			return ''
+		
 		return super(Kktv, self).getSubtitle(obj)
 	
