@@ -50,8 +50,3 @@ def getPos(file):
 
 def free():
 	BASS_Free()
-	import win32api
-	win32api.FreeLibrary(bass_module._handle)
-	del bass_module
-	from . import pybass
-	del pybass.bass_module

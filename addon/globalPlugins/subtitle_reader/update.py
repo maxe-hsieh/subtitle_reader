@@ -42,7 +42,7 @@ class Update:
 		
 		self.execute(automatic=True)
 		self.automaticTimer = nvdaGui.NonReEntrantTimer(self.checkAutomatic)
-		self.automaticTimer.StartOnce(1000*60*60*24)
+		self.automaticTimer.StartOnce(1000*60*60*2)
 	
 	def manualCheck(self, event):
 		conf['skipVersion'] = '0'
@@ -55,7 +55,7 @@ class Update:
 	
 	def toggleCheckAutomatic(self, event):
 		menu = event.GetEventObject()
-		id = menu.FindItem(_(u'啟動時檢查更新(&A)'))
+		id = menu.FindItem(_(u'自動檢查更新(&A)'))
 		item = menu.FindItemById(id)
 		status = conf['checkUpdateAutomatic'] = not conf['checkUpdateAutomatic']
 		item.Check(status)
