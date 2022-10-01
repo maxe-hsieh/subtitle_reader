@@ -25,7 +25,7 @@ addon_info = {
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description": _("當焦點位於網頁上的影片播放器時，讓 NVDA 讀出字幕。"),
 	# version
-	"addon_version": "2.53",
+	"addon_version": "2.54",
 	# Author(s)
 	"addon_author": "福恩 <maxe@mail.batol.net>",
 	# URL for the add-on documentation support
