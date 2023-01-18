@@ -9,6 +9,8 @@ import ui
 import time
 
 import addonHandler
+addonHandler.initTranslation()
+
 from globalPluginHandler import GlobalPlugin
 from globalVars import appArgs
 from logHandler import log
@@ -25,7 +27,6 @@ from .update import Update
 
 nvdaGui = gui.gui
 
-addonHandler.initTranslation()
 
 wx = gui.wx
 
@@ -74,6 +75,7 @@ class GlobalPlugin(GlobalPlugin):
 		# 關閉 NVDA 時，儲存開關狀態到使用者設定檔。
 		conf.write()
 		gui.toolsMenu.Remove(self.menu.menuItem.Id)
+		self.menu.menuItem.Destroy()
 		self.menu.Destroy()
 		sound.free()
 	

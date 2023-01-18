@@ -1,6 +1,10 @@
 #encoding=utf-8
 
 from __future__ import absolute_import
+
+import addonHandler
+addonHandler.initTranslation()
+
 import wx
 import gui
 
@@ -19,7 +23,7 @@ class Menu(wx.Menu):
 		
 		self.checkForUpdate = self.Append(wx.ID_ANY, _(u'立即檢查更新(&C)'))
 		
-		self.openChangeLog = self.Append(wx.ID_ANY, _(u'開啟更新日至(&O)'))
+		self.openChangeLog = self.Append(wx.ID_ANY, _(u'開啟更新日誌(&O)'))
 		
 		self.checkUpdateAutomatic = self.AppendCheckItem(wx.ID_ANY, _(u'自動檢查更新(&A)'))
 		self.checkUpdateAutomatic.Check(True)

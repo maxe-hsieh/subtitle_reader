@@ -1,5 +1,8 @@
 #coding=utf-8
 
+import addonHandler
+addonHandler.initTranslation()
+
 import os
 import re
 from sys import version_info
@@ -50,7 +53,7 @@ class Update:
 		self.execute()
 	
 	def openChangeLog(self, event):
-		filePath = appArgs.configPath + r'\addons\subtitle_reader\doc\zh_TW\changelog.md'
+		filePath = appArgs.configPath + r'\addons\subtitle_reader\doc\zh_TW\changelog.html'
 		os.system('start ' + filePath)
 	
 	def toggleCheckAutomatic(self, event):
