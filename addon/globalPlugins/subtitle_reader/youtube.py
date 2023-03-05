@@ -2,6 +2,10 @@
 
 import os
 import re
+
+import ui
+from logHandler import log
+
 from .sound import play
 from .config import conf
 from .subtitle_alg import SubtitleAlg
@@ -119,7 +123,11 @@ class Youtube(SubtitleAlg):
 		if not conf['infoCardPrompt']:
 			return
 		
-		ce = self.get_ce()
+		try:
+			ce = self.get_ce()
+		except Exception as e:
+			log.error(e)
+		
 		if ce is None:
 			return
 		
@@ -139,7 +147,7 @@ class Youtube(SubtitleAlg):
 		ce = ''
 		obj = self.main.videoPlayer.firstChild
 		while obj:
-			class_name = obj.IA2Attributes.get('class')
+			class_name = obj.IA2Attributes.get('class', '')
 			if 'ytp-ce' in class_name and 'ytp-ce-shadow' not in class_name:
 				ce += 'ce\n'
 			elif ce:
@@ -148,7 +156,11 @@ class Youtube(SubtitleAlg):
 		return ce
 	
 	def speakChapter(self):
-		text = self.getChapter()
+		try:
+			text = self.getChapter()
+		except Exception as e:
+			log.error(e)
+		
 		if not text:
 			return
 		
@@ -163,7 +175,7 @@ class Youtube(SubtitleAlg):
 		if not obj or obj.IA2Attributes.get('class') != 'ytp-progress-bar-container':
 			return ''
 		
-		text = obj.firstChild.next.value
-		text = re.sub(u' ?(\\d+ 天 )?(\\d+ 小時 )?(\\d+ 分鐘 )?\\d+ 秒，共 (\\d+ 天 )?(\\d+ 小時 )?(\\d+ 分鐘 )?\\d+ 秒$', '', text)
+		text = obj.firstChild.value
+		text = re.sub(u'\d+.+$', '', text)
 		return text
 	

@@ -58,6 +58,7 @@ class Update:
 	
 	def toggleCheckAutomatic(self, event):
 		menu = event.GetEventObject()
+		# Translators: This is Menu item that can toggle automatic check for update on Subtitle Reader is start
 		id = menu.FindItem(_(u'自動檢查更新(&A)'))
 		item = menu.FindItemById(id)
 		status = conf['checkUpdateAutomatic'] = not conf['checkUpdateAutomatic']
@@ -124,10 +125,12 @@ class Update:
 	
 	def isLatestVersion(self):
 		play(soundPath + r'\isLatestVersion.ogg')
+		# Translators: This is a prompt to confirm that the reader is the latest version
 		wx.MessageBox(_(u'您已升級到最新版本，祝您觀影愉快！'), _(u'恭喜'), style=wx.ICON_EXCLAMATION)
 	
 	def checkError(self):
 		play(soundPath + r'\downloadError.ogg')
+		# Translators: This is the prompt when checking for updates fails
 		wx.MessageBox(_(u'檢查更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR)
 	
 	def showDialog(self):
@@ -170,6 +173,7 @@ class Update:
 	
 	def downloadError(self):
 		play(soundPath + r'\downloadError.ogg')
+		# Translators: This is the prompt when downloading updates fails
 		wx.MessageBox(_(u'下載更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR, parent=self.dialog)
 	
 	def skipVersion(self, event):
@@ -187,9 +191,9 @@ class Update:
 			return
 		
 		self.dialog.isVisited = True
-		self.bgm = music('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.mp3')
+		self.bgm = music('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.mp3')
 		try:
-			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.ly')
+			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.ly')
 			if res.code != 200:
 				return
 			

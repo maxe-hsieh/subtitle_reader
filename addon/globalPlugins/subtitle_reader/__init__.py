@@ -33,6 +33,7 @@ wx = gui.wx
 conf.load(appArgs.configPath + r'\subtitle_reader.json')
 
 class GlobalPlugin(GlobalPlugin):
+	# Translators: Script category for Subtitle Reader
 	scriptCategory = _(u'字幕閱讀器')
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
@@ -86,13 +87,16 @@ class GlobalPlugin(GlobalPlugin):
 		self.readSubtitleTimer.Stop()
 	
 	def script_toggleSwitch(self, gesture):
+		# Translators: Reader's toggle switch
 		_(u'閱讀器開關')
 		switch = conf['switch'] = not conf['switch']
 		if switch:
 			self.startReadSubtitle()
+			# Translators: This will be displayed when the reader switch is turned on
 			ui.message(_(u'開始閱讀字幕'))
 		else:
 			self.stopReadSubtitle()
+			# Translators: This will be displayed when the reader switch is turned off
 			ui.message(_(u'停止閱讀字幕'))
 		
 		self.menu.switch.Check(switch)
