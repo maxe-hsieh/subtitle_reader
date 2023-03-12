@@ -64,20 +64,25 @@ class GlobalPlugin(GlobalPlugin):
 	def initMenu(self):
 		menu = self.menu = gui.Menu()
 		gui.tray.Bind(gui.wx.EVT_MENU, self.script_toggleSwitch, menu.switch)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChat, menu.readChat)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleOmitChatGraphic, menu.omitChatGraphic)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleInfoCardPrompt, menu.infoCardPrompt)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChapter, menu.readChapter)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.manualCheck, menu.checkForUpdate)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openChangeLog, menu.openChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
 		menu.switch.Check(conf['switch'])
+		menu.readChat.Check(conf['readChat'])
+		menu.omitChatGraphic.Check(conf['omitChatGraphic'])
 		menu.infoCardPrompt.Check(conf['infoCardPrompt'])
+		menu.readChapter.Check(conf['readChapter'])
 		menu.checkUpdateAutomatic.Check(conf['checkUpdateAutomatic'])
 	
 	def terminate(self):
 		# 關閉 NVDA 時，儲存開關狀態到使用者設定檔。
 		conf.write()
-		gui.toolsMenu.Remove(self.menu.menuItem.Id)
-		self.menu.menuItem.Destroy()
-		self.menu.Destroy()
+		gui.toolsMenu.DestroyItem(self.menu.menuItem.Id)
+		
 		sound.free()
 	
 	def startReadSubtitle(self):
@@ -91,7 +96,7 @@ class GlobalPlugin(GlobalPlugin):
 		_(u'閱讀器開關')
 		switch = conf['switch'] = not conf['switch']
 		if switch:
-			self.startReadSubtitle()
+			self.executeSubtitleAlg()
 			# Translators: This will be displayed when the reader switch is turned on
 			ui.message(_(u'開始閱讀字幕'))
 		else:
@@ -222,9 +227,21 @@ class GlobalPlugin(GlobalPlugin):
 		
 		return ' | '.join(newParts)
 	
+	def toggleReadChat(self, evt):
+		conf['readChat'] = not conf['readChat']
+		self.menu.readChat.Check(conf['readChat'])
+	
+	def toggleOmitChatGraphic(self, evt):
+		conf['omitChatGraphic'] = not conf['omitChatGraphic']
+		self.menu.omitChatGraphic.Check(conf['omitChatGraphic'])
+	
 	def toggleInfoCardPrompt(self, evt):
 		conf['infoCardPrompt'] = not conf['infoCardPrompt']
 		self.menu.infoCardPrompt.Check(conf['infoCardPrompt'])
+	
+	def toggleReadChapter(self, evt):
+		conf['readChapter'] = not conf['readChapter']
+		self.menu.readChapter.Check(conf['readChapter'])
 	
 	__gestures = {
 		'kb:nvda+y': 'toggleSwitch',

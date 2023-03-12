@@ -22,3 +22,32 @@ def find(obj, nextAttr, attrName, attrValue):
 		o = getattr(o, nextAttr)
 	
 	log.debug(attrName + ' = ' + str(attrValue) + ' not found. ')
+
+def search(obj, condition, next=True, child=True):
+	if obj is None:
+		return
+	
+	try:
+		if condition(obj):
+			return obj
+		
+	
+	except:
+		pass
+	
+	try:
+		if child:
+			res = search(obj.firstChild, condition, child, next)
+			if res:
+				return res
+			
+		
+	except:
+		pass
+	
+	if next:
+		res = search(obj.next, condition, child, next)
+		if res:
+			return res
+		
+	

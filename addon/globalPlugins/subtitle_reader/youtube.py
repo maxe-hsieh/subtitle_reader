@@ -9,32 +9,57 @@ from logHandler import log
 from .sound import play
 from .config import conf
 from .subtitle_alg import SubtitleAlg
-from .object_finder import find
+from .object_finder import find, search
+from .compatible import role
 
 class Youtube(SubtitleAlg):
 	def __init__(self, *args, **kwargs):
 		super(Youtube, self).__init__(*args, **kwargs)
 		self.chapter = ''
 		self.ce = str() # 資訊卡
+		self.chatContainer = None
+		self.chat = ''
 	
 	def getVideoPlayer(self):
 		'''
 		根據元件 id 找出 Youtube 影片撥放器
 		'''
 		obj = self.main.focusObject
-		return find(obj, 'parent', 'id', ['movie_player', 'c4-player'])
+		return find(obj, 'parent', 'id', ['movie_player', 'c4-player', 'player-container'])
 	
 	def getSubtitleContainer(self):
+		self.chatContainer = self.getChatContainer()
+		
 		# 由於 Youtube 的字幕容器是不停變動的，所以改為在每次取得字幕時一併取得容器，在此方法回傳 True 作為假的字幕容器。
 		return True
+	
+	def getChatContainer(self):
+		if not conf['readChat']:
+			return
+		
+		if self.chatContainer and self.chatContainer.firstChild:
+			return self.chatContainer
+		
+		try:
+			obj = next(self.main.videoPlayer.treeInterceptor._iterNodesByType('frame')).obj
+		except:
+			obj = None
+		
+		obj = search(obj, lambda obj: 'yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items')
+		if not obj:
+			log.debug('chat container not found')
+		
+		return obj
 	
 	def getSubtitle(self):
 		'''
 		取得字幕
 		'''
-		self.speakChapter()
+		self.readChapter()
 		
 		self.promptInfoCard()
+		
+		self.readChat()
 		
 		subtitle = str()
 		# 根據瀏覽器，分別處理取得字幕的方式。
@@ -47,16 +72,7 @@ class Youtube(SubtitleAlg):
 		根據元件 id 從 Youtube 影片撥放器找出第一個字幕元件
 		'''
 		obj = self.main.videoPlayer.firstChild
-		while obj:
-			try:
-				if 'caption-window-' in str(obj.IA2Attributes.get('id')):
-					return obj
-				
-			except AttributeError:
-				pass
-			
-			obj = obj.next
-		
+		return search(obj, lambda obj: 'caption-window-' in obj.IA2Attributes.get('id'))
 	
 	def chromeGetSubtitle(self):
 		obj = self.get_subtitle_object()
@@ -126,7 +142,7 @@ class Youtube(SubtitleAlg):
 		try:
 			ce = self.get_ce()
 		except Exception as e:
-			log.error(e)
+			log.debug(e)
 		
 		if ce is None:
 			return
@@ -155,11 +171,15 @@ class Youtube(SubtitleAlg):
 			obj = obj.next
 		return ce
 	
-	def speakChapter(self):
+	def readChapter(self):
+		if not conf['readChapter']:
+			return
+		
+		text = ''
 		try:
 			text = self.getChapter()
 		except Exception as e:
-			log.error(e)
+			log.debug(e)
 		
 		if not text:
 			return
@@ -178,4 +198,34 @@ class Youtube(SubtitleAlg):
 		text = obj.firstChild.value
 		text = re.sub(u'\d+.+$', '', text)
 		return text
+	
+	def readChat(self):
+		if not self.chatContainer:
+			return
+		
+		text = ''
+		chat = search(self.chatContainer.lastChild, lambda obj: obj.IA2Attributes.get('id') == 'message' and 'ytd-sponsorships-live-chat-gift-redemption-announcement-renderer' not in obj.IA2Attributes.get('class'))
+		chat = getattr(chat, 'firstChild', None)
+		if not chat:
+			return log.debug('chat item not found')
+		
+		loopingChat = chat
+		while loopingChat:
+			chat = loopingChat
+			loopingChat = loopingChat.next
+			if conf['omitChatGraphic'] and chat.role == role('graphic'):
+				continue
+			
+			text += chat.name if chat.name else ''
+			
+		
+		if not text:
+			return
+		
+		if text == self.chat:
+			return
+		
+		self.chat = text
+		ui.message(text)
+		
 	

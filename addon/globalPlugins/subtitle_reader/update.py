@@ -44,7 +44,7 @@ class Update:
 			return
 		
 		self.execute(automatic=True)
-		self.automaticTimer = nvdaGui.NonReEntrantTimer(self.checkAutomatic)
+		self.automaticTimer = nvdaGui.NonReEntrantTimer(run=self.checkAutomatic)
 		self.automaticTimer.StartOnce(1000*60*60*2)
 	
 	def manualCheck(self, event):
@@ -88,7 +88,7 @@ class Update:
 			
 			return
 		
-		if automatic and (info['version'] == conf['skipVersion'] or self.new.get('version') == info['version']):
+		if automatic and info['version'] == conf['skipVersion']:
 			return
 		
 		self.new = info
@@ -191,9 +191,9 @@ class Update:
 			return
 		
 		self.dialog.isVisited = True
-		self.bgm = music('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.mp3')
+		self.bgm = music('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.mp3')
 		try:
-			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.ly')
+			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/bgm.ly')
 			if res.code != 200:
 				return
 			
