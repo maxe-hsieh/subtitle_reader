@@ -9,7 +9,10 @@ class Config(dict):
 		# 讓預設值為 True
 		self.update({
 			'switch': True,
+			'backgroundReading': True,
 			'readChat': True,
+			'readChatSender': False,
+			'readChatGiftSponser': True,
 			'omitChatGraphic': True,
 			'infoCardPrompt': True,
 			'readChapter': True,

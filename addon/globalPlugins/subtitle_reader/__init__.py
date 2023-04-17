@@ -1,8 +1,8 @@
 #coding=utf-8
 
 # 字幕閱讀器
-# 作者：謝福恩 <maxe@mail.batol.net>
-# 版本： 1.0
+# 作者：福恩 <maxe@mail.batol.net>
+
 
 import re
 import ui
@@ -23,6 +23,7 @@ from .disney_plus import DisneyPlus
 from .netflix import Netflix
 from .wkMediaCommons import WKMediaCommons
 from .kktv import Kktv
+from .bilibili import Bilibili
 from .update import Update
 
 nvdaGui = gui.gui
@@ -38,12 +39,13 @@ class GlobalPlugin(GlobalPlugin):
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
-			'.+ - YouTube': Youtube(self),
+			'.+ - YouTube': Youtube(self, onFoundSubtitle=self.processSubtitle),
 			'.+-MARUMARU': MaruMaru(self),
 			'^Disney\+ \| ': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
 			'.+ \| KKTV': Kktv(self),
+			'.+_哔哩哔哩_bilibili': Bilibili(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
@@ -54,6 +56,7 @@ class GlobalPlugin(GlobalPlugin):
 		self.emptySubtitleTime = 0
 		# 使用 wx.PyTimer 不斷執行函數
 		self.readSubtitleTimer = nvdaGui.NonReEntrantTimer(self.readSubtitle)
+		self.startReadSubtitleTime = 0
 		
 		sound.init()
 		
@@ -64,7 +67,10 @@ class GlobalPlugin(GlobalPlugin):
 	def initMenu(self):
 		menu = self.menu = gui.Menu()
 		gui.tray.Bind(gui.wx.EVT_MENU, self.script_toggleSwitch, menu.switch)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleBackgroundReading, menu.backgroundReading)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChat, menu.readChat)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChatSender, menu.readChatSender)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChatGiftSponser, menu.readChatGiftSponser)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleOmitChatGraphic, menu.omitChatGraphic)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleInfoCardPrompt, menu.infoCardPrompt)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChapter, menu.readChapter)
@@ -72,7 +78,10 @@ class GlobalPlugin(GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openChangeLog, menu.openChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
 		menu.switch.Check(conf['switch'])
+		menu.backgroundReading.Check(conf['backgroundReading'])
 		menu.readChat.Check(conf['readChat'])
+		menu.readChatSender.Check(conf['readChatSender'])
+		menu.readChatGiftSponser.Check(conf['readChatGiftSponser'])
 		menu.omitChatGraphic.Check(conf['omitChatGraphic'])
 		menu.infoCardPrompt.Check(conf['infoCardPrompt'])
 		menu.readChapter.Check(conf['readChapter'])
@@ -86,14 +95,12 @@ class GlobalPlugin(GlobalPlugin):
 		sound.free()
 	
 	def startReadSubtitle(self):
-		self.readSubtitleTimer.Start(100, wx.TIMER_CONTINUOUS)
+		self.readSubtitleTimer.Start(0, wx.TIMER_CONTINUOUS)
 	
 	def stopReadSubtitle(self):
 		self.readSubtitleTimer.Stop()
 	
 	def script_toggleSwitch(self, gesture):
-		# Translators: Reader's toggle switch
-		_(u'閱讀器開關')
 		switch = conf['switch'] = not conf['switch']
 		if switch:
 			self.executeSubtitleAlg()
@@ -106,11 +113,15 @@ class GlobalPlugin(GlobalPlugin):
 		
 		self.menu.switch.Check(switch)
 	
+	# Translators: Reader's toggle switch
+	script_toggleSwitch.__doc__ = _(u'閱讀器開關')
+	
 	def event_gainFocus(self, obj, call_to_skip_event):
 		'''
 		取得新焦點時，重新取得字幕演算法。
 		'''
 		call_to_skip_event()
+		
 		self.focusObject = obj
 		self.executeSubtitleAlg()
 	
@@ -120,17 +131,21 @@ class GlobalPlugin(GlobalPlugin):
 			# 嵌入的 Youtube 頁框，在開始播放約 5 秒之後，會將焦點拉到一個不明的物件上，且 NVDA 無法查看其相鄰的物件，故將他跳過。
 			return
 		
-		self.stopReadSubtitle()
-		self.videoPlayer = None
+		if not conf['backgroundReading']:
+			self.stopReadSubtitle()
+			self.videoPlayer = None
+		
 		if not conf['switch']:
 			return
 		
 		if obj.appModule.appName not in self.supportedBrowserAppNames:
 			return
 		
-		alg = self.subtitleAlg = self.getSubtitleAlg()
+		alg = self.getSubtitleAlg()
 		if not alg:
 			return
+		
+		self.subtitleAlg = alg
 		
 		videoPlayer = self.videoPlayer = alg.getVideoPlayer()
 		if not videoPlayer:
@@ -157,10 +172,21 @@ class GlobalPlugin(GlobalPlugin):
 		if not conf['switch'] or not self.subtitleContainer:
 			return
 		
+		if not self.videoPlayer or not self.videoPlayer.role:
+			return
+		
+		elapsedTime = time.time() - self.startReadSubtitleTime
+		if elapsedTime < 0.1:
+			return
+		
+		self.startReadSubtitleTime = time.time()
 		subtitle = self.subtitleAlg.getSubtitle()
 		if subtitle is None:
 			return
 		
+		self.processSubtitle(subtitle)
+	
+	def processSubtitle(self, subtitle):
 		# 刪除用於渲染字幕效果的符號
 		subtitle = subtitle.replace(u'​', '').replace(u' ', '')
 		log.debug('original subtitle = ' + subtitle)
@@ -227,9 +253,21 @@ class GlobalPlugin(GlobalPlugin):
 		
 		return ' | '.join(newParts)
 	
+	def toggleBackgroundReading(self, evt):
+		conf['backgroundReading'] = not conf['backgroundReading']
+		self.menu.backgroundReading.Check(conf['backgroundReading'])
+	
 	def toggleReadChat(self, evt):
 		conf['readChat'] = not conf['readChat']
 		self.menu.readChat.Check(conf['readChat'])
+	
+	def toggleReadChatSender(self, evt):
+		conf['readChatSender'] = not conf['readChatSender']
+		self.menu.readChatSender.Check(conf['readChatSender'])
+	
+	def toggleReadChatGiftSponser(self, evt):
+		conf['readChatGiftSponser'] = not conf['readChatGiftSponser']
+		self.menu.readChatGiftSponser.Check(conf['readChatGiftSponser'])
 	
 	def toggleOmitChatGraphic(self, evt):
 		conf['omitChatGraphic'] = not conf['omitChatGraphic']

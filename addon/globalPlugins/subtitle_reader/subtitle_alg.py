@@ -3,8 +3,10 @@
 from .compatible import role
 
 class SubtitleAlg(object):
-	def __init__(self, main):
+	def __init__(self, main, onFoundSubtitle=None):
 		self.main = main
+		self.onFoundSubtitle = onFoundSubtitle
+		self.searchingSubtitle = False
 	
 	def getVideoPlayer(self):
 		raise NotImplementedError

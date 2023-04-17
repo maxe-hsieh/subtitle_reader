@@ -20,12 +20,24 @@ class Menu(wx.Menu):
 		self.switch = self.AppendCheckItem(wx.ID_ANY, _(u'閱讀器開關 (&S)'))
 		self.switch.Check(True)
 		
+		# Translators: toggle reading when video window not in foreground on the Subtitle Reader menu
+		self.backgroundReading = self.AppendCheckItem(wx.ID_ANY, _(u'背景閱讀 (&B)'))
+		self.backgroundReading.Check(True)
+		
 		self.youtube = wx.Menu()
-		self.youtubeMenuItem = self.AppendSubMenu(self.youtube, 'Youtube')
+		self.youtubeMenuItem = self.AppendSubMenu(self.youtube, _('Youtube 相關設定'))
 		
 		# Translators: toggle Youtube menu item whether to read the chat message when the new chat message already appeared
 		self.readChat = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'閱讀聊天室(&R)'))
 		self.readChat.Check(True)
+		
+		# Translators: toggle Youtube menu item whether to read the chat message sender. 
+		self.readChatSender = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'閱讀聊天室訊息發送者(&A)'))
+		self.readChatSender.Check(True)
+		
+		# Translators: toggle Youtube menu item whether to read the chat gift sponser message. 
+		self.readChatGiftSponser = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'閱讀會籍贈送(&G)'))
+		self.readChatGiftSponser.Check(True)
 		
 		# Translators: toggle Youtube menu item whether to omit graphic when reading the chats
 		self.omitChatGraphic = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'閱讀聊天室時掠過圖片名稱(&G)'))

@@ -18,17 +18,25 @@ class Youtube(SubtitleAlg):
 		self.chapter = ''
 		self.ce = str() # 資訊卡
 		self.chatContainer = None
+		self.chatObject = None
+		self.chatSender = ''
 		self.chat = ''
+		self.searchObject = None
+		self.chatSearchObject = None
 	
 	def getVideoPlayer(self):
 		'''
 		根據元件 id 找出 Youtube 影片撥放器
 		'''
 		obj = self.main.focusObject
-		return find(obj, 'parent', 'id', ['movie_player', 'c4-player', 'player-container'])
+		videoPlayer = find(obj, 'parent', 'id', ['movie_player', 'c4-player', 'player-container'])
+		if videoPlayer:
+			self.chatContainer = None
+		
+		return videoPlayer
 	
 	def getSubtitleContainer(self):
-		self.chatContainer = self.getChatContainer()
+		self.getChatContainer()
 		
 		# 由於 Youtube 的字幕容器是不停變動的，所以改為在每次取得字幕時一併取得容器，在此方法回傳 True 作為假的字幕容器。
 		return True
@@ -37,19 +45,18 @@ class Youtube(SubtitleAlg):
 		if not conf['readChat']:
 			return
 		
-		if self.chatContainer and self.chatContainer.firstChild:
-			return self.chatContainer
-		
 		try:
 			obj = next(self.main.videoPlayer.treeInterceptor._iterNodesByType('frame')).obj
 		except:
 			obj = None
 		
-		obj = search(obj, lambda obj: 'yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items')
-		if not obj:
-			log.debug('chat container not found')
+		self.chatContainer = None
+		self.chatObject = None
+		search(obj, lambda obj: 'yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items', self.onFoundChatContainer).name = 'chat container'
 		
-		return obj
+	
+	def onFoundChatContainer(self, obj):
+		self.chatContainer = obj
 	
 	def getSubtitle(self):
 		'''
@@ -59,26 +66,31 @@ class Youtube(SubtitleAlg):
 		
 		self.promptInfoCard()
 		
-		self.readChat()
+		self.get_subtitle_object()
 		
-		subtitle = str()
-		# 根據瀏覽器，分別處理取得字幕的方式。
-		browser = self.main.videoPlayer.appModule.appName
-		subtitle = getattr(self, browser + 'GetSubtitle')()
-		return subtitle
+		self.readChat()
 	
 	def get_subtitle_object(self):
 		'''
 		根據元件 id 從 Youtube 影片撥放器找出第一個字幕元件
 		'''
 		obj = self.main.videoPlayer.firstChild
-		return search(obj, lambda obj: 'caption-window-' in obj.IA2Attributes.get('id'))
-	
-	def chromeGetSubtitle(self):
-		obj = self.get_subtitle_object()
+		obj = find(obj, 'next', 'id', 'ytp-caption-window-container')
 		if not obj:
-			return ''
+			return self.onNotFoundSubtitleObject()
 		
+		self.onFoundSubtitleObject(obj)
+	
+	def onNotFoundSubtitleObject(self):
+		pass
+	
+	def onFoundSubtitleObject(self, obj):
+		subtitle = str()
+		# 根據瀏覽器，分別處理取得字幕的方式。
+		browser = obj.appModule.appName
+		subtitle = getattr(self, browser + 'GetSubtitle')(obj)
+	
+	def chromeGetSubtitle(self, obj):
 		subtitle = ''
 		
 		line = getattr(obj, 'firstChild', None)
@@ -102,13 +114,9 @@ class Youtube(SubtitleAlg):
 			
 			line = line.next
 		
-		return subtitle
+		return self.main.processSubtitle(subtitle)
 	
-	def firefoxGetSubtitle(self):
-		obj = self.get_subtitle_object()
-		if not obj:
-			return ''
-		
+	def firefoxGetSubtitle(self, obj):
 		subtitle = ''
 		obj = obj.firstChild
 		while obj is not None and 'caption-window-' in str(obj.IA2Attributes.get('id')):
@@ -127,22 +135,23 @@ class Youtube(SubtitleAlg):
 				return
 			
 		
-		return subtitle
+		return self.processSubtitle(subtitle)
 	
-	def msedgeGetSubtitle(self):
-		return self.chromeGetSubtitle()
+	def msedgeGetSubtitle(self, obj):
+		return self.chromeGetSubtitle(obj)
 	
-	def braveGetSubtitle(self):
-		return self.chromeGetSubtitle()
+	def braveGetSubtitle(self, obj):
+		return self.chromeGetSubtitle(obj)
 	
 	def promptInfoCard(self):
 		if not conf['infoCardPrompt']:
 			return
 		
+		ce = None
 		try:
 			ce = self.get_ce()
 		except Exception as e:
-			log.debug(e)
+			pass
 		
 		if ce is None:
 			return
@@ -179,7 +188,7 @@ class Youtube(SubtitleAlg):
 		try:
 			text = self.getChapter()
 		except Exception as e:
-			log.debug(e)
+			pass
 		
 		if not text:
 			return
@@ -196,19 +205,53 @@ class Youtube(SubtitleAlg):
 			return ''
 		
 		text = obj.firstChild.value
-		text = re.sub(u'\d+.+$', '', text)
+		text = re.sub(u'\\d+.+$', '', text)
 		return text
 	
 	def readChat(self):
 		if not self.chatContainer:
 			return
 		
-		text = ''
-		chat = search(self.chatContainer.lastChild, lambda obj: obj.IA2Attributes.get('id') == 'message' and 'ytd-sponsorships-live-chat-gift-redemption-announcement-renderer' not in obj.IA2Attributes.get('class'))
+		if self.chatSearchObject and not self.chatSearchObject.isStopped:
+			return
+		
+		self.chatObject = self.chatContainer.lastChild if not self.chatObject or not self.chatObject.role else self.chatObject.next
+		if self.chatObject is None:
+			return
+		
+		self.chatSender = ''
+		self.chatSearchObject = search(self.chatObject.firstChild, self.chatCondition, self.onFoundChatObject, continueOnFound=True)
+	
+	def chatCondition(self, obj):
+		if 'ytd-sponsorships-live-chat-gift-redemption-announcement-renderer' in obj.IA2Attributes.get('class'):
+			return
+		
+		matchIds = [
+			'message',
+		]
+		
+		if conf['readChatGiftSponser']:
+			matchIds.append('primary-text')
+		
+		if conf['readChatSender']:
+			matchIds.append('author-name')
+		
+		return obj.IA2Attributes.get('id') in matchIds
+	
+	def onFoundChatObject(self, chat):
+		id = chat.IA2Attributes.get('id')
+		if id == 'author-name':
+			name = chat.firstChild.name
+			self.chatSender = name if name else ''
+			return
+		
+		self.chatSearchObject.cancel()
+		
 		chat = getattr(chat, 'firstChild', None)
 		if not chat:
-			return log.debug('chat item not found')
+			return
 		
+		text = ''
 		loopingChat = chat
 		while loopingChat:
 			chat = loopingChat
@@ -219,6 +262,7 @@ class Youtube(SubtitleAlg):
 			text += chat.name if chat.name else ''
 			
 		
+		text = text.strip()
 		if not text:
 			return
 		
@@ -226,6 +270,9 @@ class Youtube(SubtitleAlg):
 			return
 		
 		self.chat = text
+		if conf['readChatSender']:
+			ui.message(self.chatSender)
+		
 		ui.message(text)
 		
 	
