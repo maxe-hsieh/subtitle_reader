@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: subtitle_reader 2.54\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
-"POT-Creation-Date: 2023-01-18 11:19+0800\n"
-"PO-Revision-Date: 2023-01-18 11:40+0800\n"
+"POT-Creation-Date: 2023-06-06 16:33+0800\n"
+"PO-Revision-Date: 2023-06-06 16:54+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -16,97 +16,146 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
+#. Translators: Script category for Subtitle Reader
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
 #. to be shown on installation and add-on information found in Add-ons Manager.
-#: addon\globalPlugins\subtitle_reader\__init__.py:36 buildVars.py:23
-#, fuzzy
+#: addon\globalPlugins\subtitle_reader\__init__.py:38 buildVars.py:23
 msgid "字幕閱讀器"
 msgstr "Subtitle Reader"
 
-#: addon\globalPlugins\subtitle_reader\__init__.py:89
-msgid "閱讀器開關"
-msgstr "Reader Switch"
-
-#: addon\globalPlugins\subtitle_reader\__init__.py:93
+#. Translators: This will be displayed when the reader switch is turned on
+#: addon\globalPlugins\subtitle_reader\__init__.py:108
 msgid "開始閱讀字幕"
 msgstr "Start reading subtitles"
 
-#: addon\globalPlugins\subtitle_reader\__init__.py:96
+#. Translators: This will be displayed when the reader switch is turned off
+#: addon\globalPlugins\subtitle_reader\__init__.py:112
 msgid "停止閱讀字幕"
 msgstr "Stop reading subtitles"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:17
+#. Translators: Reader's toggle switch
+#: addon\globalPlugins\subtitle_reader\__init__.py:117
+msgid "閱讀器開關"
+msgstr "Reader Switch"
+
+#. Translators: Subtitle Reader menu on the NVDA tools menu
+#: addon\globalPlugins\subtitle_reader\gui.py:18
 msgid "字幕閱讀器 (&R)"
 msgstr "Subtitle Reader"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:18
+#. Translators: Reader toggle switch on the Subtitle Reader menu
+#: addon\globalPlugins\subtitle_reader\gui.py:20
 msgid "閱讀器開關 (&S)"
 msgstr "Reader Switch"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:21
+#. Translators: toggle reading when video window not in foreground on the Subtitle Reader menu
+#: addon\globalPlugins\subtitle_reader\gui.py:24
+msgid "背景閱讀 (&B)"
+msgstr "Read in background"
+
+#: addon\globalPlugins\subtitle_reader\gui.py:28
+msgid "Youtube 相關設定"
+msgstr "Youtube settings"
+
+#. Translators: toggle Youtube menu item whether to read the chat message when the new chat message already appeared
+#: addon\globalPlugins\subtitle_reader\gui.py:31
+msgid "閱讀聊天室(&R)"
+msgstr "Read chat"
+
+#. Translators: toggle Youtube menu item whether to read the chat message sender.
+#: addon\globalPlugins\subtitle_reader\gui.py:35
+msgid "閱讀聊天室訊息發送者(&A)"
+msgstr "Read chat sender"
+
+#. Translators: toggle Youtube menu item whether to read the chat gift sponser message.
+#: addon\globalPlugins\subtitle_reader\gui.py:39
+msgid "閱讀會籍贈送(&G)"
+msgstr "Read gift is sent"
+
+#. Translators: toggle Youtube menu item whether to omit graphic when reading the chats
+#: addon\globalPlugins\subtitle_reader\gui.py:43
+msgid "閱讀聊天室時掠過圖片名稱(&G)"
+msgstr "Ignore graphic name on reading chat"
+
+#. Translators: toggle menu item whether to prompt wher Youtube info card is already appear
+#: addon\globalPlugins\subtitle_reader\gui.py:47
 msgid "資訊卡提示(&I)"
 msgstr "Prompt Info Cards"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:24
+#. Translators: toggle Youtube menu item whether to notify current chapter name when chapter is changed
+#: addon\globalPlugins\subtitle_reader\gui.py:51
+msgid "讀出章節(&C)"
+msgstr "Read chapter"
+
+#. Translators: This menu item performs a check for updates to the reader
+#: addon\globalPlugins\subtitle_reader\gui.py:55
 msgid "立即檢查更新(&C)"
 msgstr "Check For Updates"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:26
-#, fuzzy
-#| msgid "開啟更新日至(&O)"
+#. Translators: This is menu item that open the changelog
+#: addon\globalPlugins\subtitle_reader\gui.py:57
 msgid "開啟更新日誌(&O)"
 msgstr "Open Change Log"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:28
-#: addon\globalPlugins\subtitle_reader\update.py:61
+#. Translators: This menu item that can toggle automatic check for update when Subtitle Reader is start
+#. Translators: This is Menu item that can toggle automatic check for update on Subtitle Reader is start
+#: addon\globalPlugins\subtitle_reader\gui.py:59
+#: addon\globalPlugins\subtitle_reader\update.py:62
 msgid "自動檢查更新(&A)"
 msgstr "Automatic Check For Updates"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:34
+#: addon\globalPlugins\subtitle_reader\gui.py:65
 msgid "字幕閱讀器 V"
 msgstr "Subtitle Reader V"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:34
+#: addon\globalPlugins\subtitle_reader\gui.py:65
 msgid " 新版資訊"
 msgstr "Version Info"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:36
+#. Translators: This label means the edit box content is changelog
+#: addon\globalPlugins\subtitle_reader\gui.py:68
 msgid "更新日誌"
 msgstr "Change Log"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:39
+#. Translators: This button means now run the update process
+#: addon\globalPlugins\subtitle_reader\gui.py:72
 msgid "現在更新(&U)"
 msgstr "Update Now"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:40
+#. Translators: This button means that the automatic check for updates will skip this version
+#: addon\globalPlugins\subtitle_reader\gui.py:74
 msgid "跳過此版本(&S)"
 msgstr "Skip This Version"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:41
+#. Translators: This button means close window until next automatic or manual check for update
+#: addon\globalPlugins\subtitle_reader\gui.py:76
 msgid "晚點再說(&L)"
 msgstr "later"
 
-#: addon\globalPlugins\subtitle_reader\update.py:127
+#. Translators: This is a prompt to confirm that the reader is the latest version
+#: addon\globalPlugins\subtitle_reader\update.py:129
 msgid "您已升級到最新版本，祝您觀影愉快！"
 msgstr "You have upgrade to the latest version, Enjoy the video. "
 
-#: addon\globalPlugins\subtitle_reader\update.py:127
+#: addon\globalPlugins\subtitle_reader\update.py:129
 msgid "恭喜"
 msgstr "congratulations"
 
-#: addon\globalPlugins\subtitle_reader\update.py:131
+#. Translators: This is the prompt when checking for updates fails
+#: addon\globalPlugins\subtitle_reader\update.py:134
 msgid "檢查更新失敗"
 msgstr "Check For Updates Failed!"
 
-#: addon\globalPlugins\subtitle_reader\update.py:131
-#: addon\globalPlugins\subtitle_reader\update.py:173
+#: addon\globalPlugins\subtitle_reader\update.py:134
+#: addon\globalPlugins\subtitle_reader\update.py:177
 msgid "錯誤"
 msgstr "Error"
 
-#: addon\globalPlugins\subtitle_reader\update.py:173
+#. Translators: This is the prompt when downloading updates fails
+#: addon\globalPlugins\subtitle_reader\update.py:177
 msgid "下載更新失敗"
 msgstr "Download Updates Failed"
 
