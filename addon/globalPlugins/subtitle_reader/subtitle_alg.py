@@ -32,7 +32,7 @@ class SubtitleAlg(object):
 		pobj = obj
 		while obj:
 			if obj.name:
-				subtitle += obj.name + '\r\n'
+				subtitle += obj.name + ' | \r\n'
 			
 			pobj = obj
 			obj = obj.next

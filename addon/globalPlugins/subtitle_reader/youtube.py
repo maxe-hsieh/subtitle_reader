@@ -32,6 +32,9 @@ class Youtube(SubtitleAlg):
 		videoPlayer = find(obj, 'parent', 'id', ['movie_player', 'c4-player', 'player-container'])
 		if videoPlayer:
 			self.chatContainer = None
+			if videoPlayer.IA2Attributes.get('id') == 'player-container':
+				videoPlayer = videoPlayer.firstChild.firstChild.firstChild
+			
 		
 		return videoPlayer
 	
