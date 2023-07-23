@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: subtitle_reader 2.54\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2023-04-25 21:06+0300\n"
-"PO-Revision-Date: 2023-04-25 21:13+0300\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2023-07-23 09:48+0300\n"
+"PO-Revision-Date: 2023-07-23 09:49+0300\n"
+"Last-Translator: Heorhii <nvda.translation.uk@gmail.com>\n"
 "Language-Team: Ukrainian NVDA Community\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. Translators: Script category for Subtitle Reader
 #. Add-on summary, usually the user visible name of the addon.
@@ -73,12 +73,12 @@ msgstr "Прочитати відправника повідомлення в ч
 #. Translators: toggle Youtube menu item whether to read the chat gift sponser message.
 #: addon\globalPlugins\subtitle_reader\gui.py:39
 msgid "閱讀會籍贈送(&G)"
-msgstr "Читати розіграші членства (&G)"
+msgstr "Прочитати &Роздачу членства"
 
 #. Translators: toggle Youtube menu item whether to omit graphic when reading the chats
 #: addon\globalPlugins\subtitle_reader\gui.py:43
 msgid "閱讀聊天室時掠過圖片名稱(&G)"
-msgstr "Провести по назві зображення під час читання чату (&G)"
+msgstr "Переходити по назві зображення під час читання чату (&G)"
 
 #. Translators: toggle menu item whether to prompt wher Youtube info card is already appear
 #: addon\globalPlugins\subtitle_reader\gui.py:47
@@ -113,7 +113,7 @@ msgstr "Читач субтитрів V"
 
 #: addon\globalPlugins\subtitle_reader\gui.py:65
 msgid " 新版資訊"
-msgstr "Інформація про нову версію"
+msgstr " Інформація про нову версію"
 
 #. Translators: This label means the edit box content is changelog
 #: addon\globalPlugins\subtitle_reader\gui.py:68
