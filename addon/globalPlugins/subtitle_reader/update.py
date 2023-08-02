@@ -88,7 +88,7 @@ class Update:
 			
 			return
 		
-		if automatic and (info['version'] == conf['skipVersion'] or self.new.get('version') == info['version']):
+		if automatic and info['version'] == conf['skipVersion']:
 			return
 		
 		self.new = info

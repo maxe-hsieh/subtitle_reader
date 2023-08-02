@@ -1,5 +1,27 @@
 # 更新日誌
 
+## V2.82, 2023.8.2
+
+版本代號：魚
+
+Source:
+https://youtu.be/aQtf3gEuejE
+
+### 新增項目
+
+1. 新增義大利語，感謝 Ambrogio Riili
+2. 新增阿拉伯語，感謝 MesterPerfect
+3. 更新烏克蘭語，感謝 VovaMobile
+
+### 修正巷木
+
+1. 修正 objectFinder 導致容易出現異常的錯誤。
+2. 修正 FireFox 無法朗讀字幕的錯誤，感謝 Carlos Esteban Mart
+3. 修正無法自動檢查更新的錯誤，舊的代碼又回來了 ...
+4. 修正說明文件，他不應該帶有版本號。
+
+---
+
 ## V2.81, 2023.7.12
 
 版本代號：流星會降落在你心上

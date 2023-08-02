@@ -7,10 +7,10 @@ import core
 def find(obj, nextAttr, attrName, attrValue):
 	o = obj
 	while o:
-		value = getattr(o, attrName, None)
+		value = getattr(o, attrName, '')
 		if not value:
 			try:
-				value = o.IA2Attributes.get(attrName)
+				value = o.IA2Attributes.get(attrName, '')
 			except:
 				pass
 			
