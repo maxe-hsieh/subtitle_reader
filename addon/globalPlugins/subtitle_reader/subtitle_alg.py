@@ -28,7 +28,13 @@ class SubtitleAlg(object):
 			obj = self.main.subtitleContainer
 		
 		while obj and not obj.name:
-			obj = obj.firstChild
+			try:
+				# firstChild 有時會出現異常，需要捕捉並直接回傳 None 當作這次取得字幕失敗。
+				obj = obj.firstChild
+			except:
+				return
+			
+		
 		pobj = obj
 		while obj:
 			if obj.name:
