@@ -39,7 +39,7 @@ class GlobalPlugin(GlobalPlugin):
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
-			'.+ - YouTube': Youtube(self, onFoundSubtitle=self.processSubtitle),
+			'.+ - YouTube': Youtube(self),
 			'.+-MARUMARU': MaruMaru(self),
 			'^Disney\+ \| ': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),

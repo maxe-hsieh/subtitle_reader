@@ -5,6 +5,9 @@ from .compatible import role
 class SubtitleAlg(object):
 	def __init__(self, main, onFoundSubtitle=None):
 		self.main = main
+		if not onFoundSubtitle:
+			onFoundSubtitle = main.processSubtitle
+		
 		self.onFoundSubtitle = onFoundSubtitle
 		self.searchingSubtitle = False
 	
