@@ -142,6 +142,7 @@ class Update:
 		dlg.later.Bind(wx.EVT_BUTTON, self.later)
 		dlg.Bind(wx.EVT_CHAR_HOOK, self.onKeyDown)
 		dlg.Bind(wx.EVT_CLOSE, self.onClose)
+		#nvdaGui.runScriptModalDialog(dlg)
 		dlg.Show()
 	
 	def updateNow(self, event):

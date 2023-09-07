@@ -62,17 +62,29 @@ class Menu(wx.Menu):
 
 class UpdateDialog(wx.Dialog):
 	def __init__(self, version):
-		super(UpdateDialog, self).__init__(gui.mainFrame, title=_(u'字幕閱讀器 V') + str(version) + _(u' 新版資訊'))
+		super(UpdateDialog, self).__init__(gui.mainFrame, wx.ID_ANY, title=_(u'字幕閱讀器 V') + str(version) + _(u' 新版資訊'))
 		self.sizer = wx.BoxSizer(wx.VERTICAL)
 		# Translators: This label means the edit box content is changelog
-		self.changeLogLabel = wx.StaticText(self, label=_(u'更新日誌'))
-		self.changelogText = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2 | wx.HSCROLL, size=(700, -1))
+		self.changelogLabel = wx.StaticText(self, label=_(u'更新日誌'))
+		self.sizer.Add(self.changelogLabel)
+		self.changelogText = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2 | wx.HSCROLL, size=(1024, 768))
+		self.sizer.Add(self.changelogText, wx.SizerFlags(1).Expand())
 		self.progress = wx.Gauge(self, style=wx.GA_VERTICAL)
+		self.sizer.Add(self.progress)
+		self.buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+		self.sizer.Add(self.buttonSizer, wx.SizerFlags(0).Center())
 		# Translators: This button means now run the update process
 		self.updateNow = wx.Button(self, label=_(u'現在更新(&U)'))
+		self.buttonSizer.Add(self.updateNow, wx.SizerFlags(1).Bottom())
+		self.buttonSizer.AddStretchSpacer(1)
 		# Translators: This button means that the automatic check for updates will skip this version
 		self.skipVersion = wx.Button(self, label=_(u'跳過此版本(&S)'))
+		self.buttonSizer.Add(self.skipVersion, wx.SizerFlags(1).Bottom())
+		self.buttonSizer.AddStretchSpacer(1)
 		# Translators: This button means close window until next automatic or manual check for update
 		self.later = wx.Button(self, label=_(u'晚點再說(&L)'))
+		self.buttonSizer.Add(self.later, wx.SizerFlags(1).Bottom())
+		
 		self.SetSizerAndFit(self.sizer)
+		self.CenterOnScreen()
 	

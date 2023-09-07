@@ -35,7 +35,7 @@ class SubtitleAlg(object):
 				# firstChild 有時會出現異常，需要捕捉並直接回傳 None 當作這次取得字幕失敗。
 				obj = obj.firstChild
 			except:
-				return
+				return ''
 			
 		
 		pobj = obj
