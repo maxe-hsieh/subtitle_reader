@@ -34,6 +34,7 @@ class Update:
 		self.checkThreadObj = None
 		self.dialog = None
 		self.downloadThreadObj = None
+		self.bgmThread = None
 		self.bgm = None
 		self.lastPos = 0
 		self.readLyricsTimer = None
@@ -143,7 +144,7 @@ class Update:
 		dlg.Bind(wx.EVT_CHAR_HOOK, self.onKeyDown)
 		dlg.Bind(wx.EVT_CLOSE, self.onClose)
 		#nvdaGui.runScriptModalDialog(dlg)
-		dlg.Show()
+		dlg.ShowWithoutActivating()
 	
 	def updateNow(self, event):
 		if self.downloadThreadObj and self.downloadThreadObj.is_alive():
@@ -192,7 +193,17 @@ class Update:
 			return
 		
 		self.dialog.isVisited = True
+		self.bgmThread = Thread(target=self.startBGM)
+		self.bgmThread.start()
+	
+	def startBGM(self):
 		self.bgm = music('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.mp3')
+		# 有可能在音樂播放之前視窗已經關閉
+		if not self.dialog:
+			music()
+			self.bgm = None
+			return
+		
 		try:
 			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.ly')
 			if res.code != 200:
@@ -217,7 +228,7 @@ class Update:
 		
 		self.lyrics = lyricsObj
 		self.readLyricsTimer = nvdaGui.NonReEntrantTimer(self.readLyrics)
-		self.readLyricsTimer.Start(5, wx.TIMER_CONTINUOUS)
+		wx.CallAfter(self.readLyricsTimer.Start, 5, wx.TIMER_CONTINUOUS)
 	
 	def readLyrics(self):
 		second = round(getPos(self.bgm), 3)
@@ -233,7 +244,7 @@ class Update:
 		if not lyrics:
 			return
 		
-		
+		self.dialog.subtitleLabel.SetLabel(lyrics)
 		if conf['switch'] is False:
 			return
 		

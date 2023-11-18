@@ -11,9 +11,11 @@ import time
 import addonHandler
 addonHandler.initTranslation()
 
-from globalPluginHandler import GlobalPlugin
+import globalPluginHandler
+import api
 from globalVars import appArgs
 from logHandler import log
+from comtypes import COMError
 from . import sound
 from . import gui
 from .config import conf
@@ -24,6 +26,9 @@ from .netflix import Netflix
 from .wkMediaCommons import WKMediaCommons
 from .kktv import Kktv
 from .bilibili import Bilibili
+from .iqy import Iqy
+from .missevan import Missevan
+from .potPlayer import PotPlayer
 from .update import Update
 
 nvdaGui = gui.gui
@@ -33,9 +38,17 @@ wx = gui.wx
 
 conf.load(appArgs.configPath + r'\subtitle_reader.json')
 
-class GlobalPlugin(GlobalPlugin):
+class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	# Translators: Script category for Subtitle Reader
 	scriptCategory = _(u'字幕閱讀器')
+	def __new__(cls):
+		# 在安全桌面不執行字幕閱讀器
+		if cls.isRunningOnSecureDesktop():
+			# 傳回附加元件的基礎類別實體，表示沒有任何功能的附加元件。
+			return globalPluginHandler.GlobalPlugin()
+		
+		return super().__new__(cls)
+	
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
@@ -46,10 +59,15 @@ class GlobalPlugin(GlobalPlugin):
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
 			'.+ \| KKTV': Kktv(self),
 			'.+_哔哩哔哩_bilibili': Bilibili(self),
+			'.+愛奇藝 iQIYI': Iqy(self),
+		}
+		self.urlToSubtitleAlg = {
+			'.*missevan.com/sound/player\?id=.+': Missevan(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
 		self.focusObject = None
+		self.urlObjects = {}
 		self.videoPlayer = None
 		self.subtitleContainer = None
 		self.subtitle = str()
@@ -63,6 +81,7 @@ class GlobalPlugin(GlobalPlugin):
 		self.update = Update()
 		# 初始化選單
 		self.initMenu()
+		self.potPlayer = PotPlayer()
 	
 	def initMenu(self):
 		menu = self.menu = gui.Menu()
@@ -89,10 +108,15 @@ class GlobalPlugin(GlobalPlugin):
 	
 	def terminate(self):
 		# 關閉 NVDA 時，儲存開關狀態到使用者設定檔。
+		self.potPlayer.terminate()
 		conf.write()
 		gui.toolsMenu.DestroyItem(self.menu.menuItem.Id)
 		
 		sound.free()
+	
+	@staticmethod
+	def isRunningOnSecureDesktop():
+		return appArgs.secure
 	
 	def startReadSubtitle(self):
 		self.readSubtitleTimer.Start(0, wx.TIMER_CONTINUOUS)
@@ -116,6 +140,49 @@ class GlobalPlugin(GlobalPlugin):
 	# Translators: Reader's toggle switch
 	script_toggleSwitch.__doc__ = _(u'閱讀器開關')
 	
+	def findUrl(self):
+		window = api.getForegroundObject()
+		windowHandle = window.windowHandle
+		if windowHandle in self.urlObjects:
+			return self.urlObjects[windowHandle]
+		
+		browser = window.appModule.appName
+		inspectionObjects = [window]
+		
+		while inspectionObjects:
+			obj = inspectionObjects.pop(0)
+			found = False
+			try:
+				if browser == 'firefox':
+					found = obj.IA2Attributes.get('id') == 'urlbar-input'
+				else:
+					found = obj.IA2Attributes.get('keyshortcuts') == 'Ctrl+L'
+				
+				if found:
+					self.urlObjects[windowHandle] = obj
+					return obj
+				
+				nextObj = obj.next
+				if nextObj:
+					inspectionObjects.insert(0, nextObj)
+				
+				nextObj = obj.firstChild
+				if nextObj:
+					inspectionObjects.insert(0, nextObj)
+				
+			
+			except ComError:
+				pass
+			
+		
+	
+	def event_foreground(self, obj, nextHandler):
+		nextHandler()
+		if obj.appModule.appName not in self.supportedBrowserAppNames:
+			return
+		
+		self.urlObject = self.findUrl()
+	
 	def event_gainFocus(self, obj, call_to_skip_event):
 		'''
 		取得新焦點時，重新取得字幕演算法。
@@ -123,7 +190,11 @@ class GlobalPlugin(GlobalPlugin):
 		call_to_skip_event()
 		
 		self.focusObject = obj
-		self.executeSubtitleAlg()
+		try:
+			self.executeSubtitleAlg()
+		except (COMError, RuntimeError):
+			pass
+		
 	
 	def executeSubtitleAlg(self):
 		obj = self.focusObject
@@ -159,9 +230,15 @@ class GlobalPlugin(GlobalPlugin):
 	
 	def getSubtitleAlg(self):
 		window = self.focusObject.objectInForeground().name
+		url = getattr(self.urlObject, 'value', '')
 		for alg in self.subtitleAlgs:
 			if re.match(alg, window):
 				return self.subtitleAlgs[alg]
+			
+		
+		for alg in self.urlToSubtitleAlg:
+			if re.match(alg, url):
+				return self.urlToSubtitleAlg[alg]
 			
 		
 	
@@ -180,7 +257,11 @@ class GlobalPlugin(GlobalPlugin):
 			return
 		
 		self.startReadSubtitleTime = time.time()
-		subtitle = self.subtitleAlg.getSubtitle()
+		try:
+			subtitle = self.subtitleAlg.getSubtitle()
+		except (COMError, RuntimeError):
+			subtitle = None
+		
 		if subtitle is None:
 			return
 		

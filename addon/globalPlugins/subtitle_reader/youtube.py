@@ -92,12 +92,14 @@ class Youtube(SubtitleAlg):
 		# 根據瀏覽器，分別處理取得字幕的方式。
 		browser = obj.appModule.appName
 		subtitle = getattr(self, browser + 'GetSubtitle')(obj)
-		return self.onFoundSubtitle(subtitle)
+		if not subtitle is None:
+			return self.onFoundSubtitle(subtitle)
+		
 	
 	def chromeGetSubtitle(self, obj):
 		subtitle = ''
-		
 		line = getattr(obj, 'firstChild', None)
+		
 		# 變例每一行字幕
 		while line is not None:
 			part = line.firstChild
