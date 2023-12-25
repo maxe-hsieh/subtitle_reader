@@ -1,5 +1,28 @@
 # 更新日誌
 
+## V2.91, 2023.12.25
+
+版本代號： Santa Will Find You
+
+BGM Source:
+https://youtu.be/Wz7LJRFR_jo
+
+### 新增項目
+
+1. 新增 Line TV 字幕支援
+P.S 《葬送的芙莉蓮》為何沒有 CC 字幕啊
+測試影片：[護心](https://www.linetv.tw/drama/14667/eps/1)
+
+### 修正巷木
+
+1. 修正閱讀器在 edge 找不到網址列，並且在進入 edge 視窗會讓 NVDA 卡住的錯誤。
+
+### 不重要的內容
+
+原本打算順便重構大部分代碼，改成動態載入每個模組的，但來不及了。
+
+---
+
 ## V2.9, 2023.11.18
 
 版本代號： perfect slumbers

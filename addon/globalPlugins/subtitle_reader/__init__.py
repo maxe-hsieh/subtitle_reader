@@ -25,6 +25,7 @@ from .disney_plus import DisneyPlus
 from .netflix import Netflix
 from .wkMediaCommons import WKMediaCommons
 from .kktv import Kktv
+from .lineTV import LineTV
 from .bilibili import Bilibili
 from .iqy import Iqy
 from .missevan import Missevan
@@ -58,6 +59,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.*?Netflix': Netflix(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
 			'.+ \| KKTV': Kktv(self),
+			'.+LINE TV-': LineTV(self),
 			'.+_哔哩哔哩_bilibili': Bilibili(self),
 			'.+愛奇藝 iQIYI': Iqy(self),
 		}
@@ -148,15 +150,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		
 		browser = window.appModule.appName
 		inspectionObjects = [window]
+		timestamp = time.time()
+		timeout = 0.5
 		
 		while inspectionObjects:
+			if time.time() - timestamp >= timeout:
+				return
+			
 			obj = inspectionObjects.pop(0)
 			found = False
 			try:
 				if browser == 'firefox':
 					found = obj.IA2Attributes.get('id') == 'urlbar-input'
 				else:
-					found = obj.IA2Attributes.get('keyshortcuts') == 'Ctrl+L'
+					found = obj.keyboardShortcut == 'Ctrl+L'
 				
 				if found:
 					self.urlObjects[windowHandle] = obj
