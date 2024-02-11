@@ -1,7 +1,7 @@
 ### 字幕閱讀器
 
 #### 下載
-[按這裡下載](https://drive.google.com/open?id=1VGymtE6EE0um0Gr7PASwR1Xk6-UCS9PL&authuser=maxe%40mail.batol.net&usp=drive_fs)
+[按這裡下載](https://github.com/maxe-hsieh/subtitle_reader/releases/latest/download/subtitle_reader.nvda-addon)
 
 ---
 
