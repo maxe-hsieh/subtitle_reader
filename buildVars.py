@@ -16,7 +16,7 @@ def _(arg):
 # Add-on information variables
 addon_info = {
 	# add-on Name/identifier, internal for NVDA
-	"addon_name": "subtitle_reader",
+	"addon_name": _("字幕閱讀器"),
 	# Add-on summary, usually the user visible name of the addon.
 	# Translators: Summary for this add-on
 	# to be shown on installation and add-on information found in Add-ons Manager.
@@ -25,7 +25,7 @@ addon_info = {
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description": _("當焦點位於網頁上的影片播放器時，讓 NVDA 讀出字幕。"),
 	# version
-	"addon_version": "2.91",
+	"addon_version": "2.92",
 	# Author(s)
 	"addon_author": "福恩 <maxe@mail.batol.net>",
 	# URL for the add-on documentation support

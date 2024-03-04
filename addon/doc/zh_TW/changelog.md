@@ -1,5 +1,25 @@
 # 更新日誌
 
+## V2.92, 2024.3.5
+
+版本代號：心靈之蛋
+
+BGM Source:
+https://youtu.be/ZGozosIMkLE
+
+### 修正巷木
+
+1. 修正 Youtube 介面改版，導致閱讀器找不到字幕的問題。
+2. 修正在 Marumaru 嵌入的 Youtube 影片若有 CC 字幕，閱讀器會不斷朗讀重複歌詞的錯誤，修改為不閱讀 Youtube 字幕，畢竟 Marumaru 通常都有歌詞，需要看 Youtube 的字幕可直接點選嵌入的 Youtube 影片連結進行觀看。
+
+### 不重要的內容
+
+原本 BGM 想選《芙莉蓮》的《天晴》
+
+---
+
+
+
 ## V2.91, 2023.12.25
 
 版本代號： Santa Will Find You

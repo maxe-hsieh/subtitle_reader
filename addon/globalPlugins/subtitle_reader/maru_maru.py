@@ -23,6 +23,7 @@ class MaruMaru(YoutubeAlg):
 		return subtitleContainer
 	
 	def getSubtitle(self):
-		super(MaruMaru, self).getSubtitle()
+		super(MaruMaru, self).readChapter()
+		super(MaruMaru, self).promptInfoCard()
 		return super(YoutubeAlg, self).getSubtitle()
 	
