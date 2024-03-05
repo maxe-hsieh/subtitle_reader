@@ -295,8 +295,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return
 		
 		lastSubtitle = self.subtitle
-		lastSubtitleText = lastSubtitle.replace(' | ', '')
-		subtitleText = subtitle.replace(' | ', '')
+		lastSubtitleText = lastSubtitle.replace(' | ', ' ')
+		subtitleText = subtitle.replace(' | ', ' ')
 		self.subtitle = subtitle
 		
 		msg = subtitleText
@@ -312,7 +312,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# 使用分隔符號來忽略兩次字幕之間相同的內容
 		split = subtitle.split(' | ')
 		for part in split:
-			part = part.replace(' | ', '')
+			part = part.replace(' | ', ' ')
 			if part in lastSubtitleText:
 				msg = msg.replace(part, '')
 			
