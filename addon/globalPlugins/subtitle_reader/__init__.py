@@ -178,7 +178,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 					inspectionObjects.insert(0, nextObj)
 				
 			
-			except ComError:
+			except COMError:
 				pass
 			
 		

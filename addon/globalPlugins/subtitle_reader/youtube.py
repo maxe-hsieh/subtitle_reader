@@ -106,8 +106,11 @@ class Youtube(SubtitleAlg):
 			
 			# 處理一行當中被切成多個部分的字幕
 			while part is not None:
-				text = getattr(part, 'firstChild', '')
-				text = getattr(text, 'name', '') or str()
+				# Youtube 改版，在 chromium 有時候字幕會出現在當前物件，有時會出現在他的後代。
+				# 屬性 name 沒有文字時會回傳 None 而非空字串
+				text = getattr(part, 'name', '') or str()
+				child = getattr(part, 'firstChild', '')
+				text += getattr(child, 'name', '') or str()
 				text = text.replace(u'​', '').strip()
 				if text:
 					subtitle += text + ' | '
