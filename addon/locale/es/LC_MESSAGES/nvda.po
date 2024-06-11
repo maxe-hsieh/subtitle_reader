@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: subtitle_reader 2.54\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2023-06-06 16:33+0800\n"
-"PO-Revision-Date: 2023-07-06 18:59-0500\n"
+"PO-Revision-Date: 2024-03-28 22:08-0500\n"
 "Last-Translator: Carlos Esteban Martínez Macías <cesteban.martinez@nvda.es>\n"
 "Language-Team: Comunidad de NVDA en español\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. Translators: Script category for Subtitle Reader
 #. Add-on summary, usually the user visible name of the addon.
@@ -29,17 +29,17 @@ msgstr "Lector de subtítulos"
 #. Translators: This will be displayed when the reader switch is turned on
 #: addon\globalPlugins\subtitle_reader\__init__.py:108
 msgid "開始閱讀字幕"
-msgstr "Empezando a leer subtítulos"
+msgstr "Lectura de subtítulos activada"
 
 #. Translators: This will be displayed when the reader switch is turned off
 #: addon\globalPlugins\subtitle_reader\__init__.py:112
 msgid "停止閱讀字幕"
-msgstr "Lectura de subtítulos detenida"
+msgstr "Lectura de subtítulos desactivada"
 
 #. Translators: Reader's toggle switch
 #: addon\globalPlugins\subtitle_reader\__init__.py:117
 msgid "閱讀器開關"
-msgstr "Interruptor de lectura"
+msgstr "Leer subtítulos"
 
 #. Translators: Subtitle Reader menu on the NVDA tools menu
 #: addon\globalPlugins\subtitle_reader\gui.py:18
@@ -49,7 +49,7 @@ msgstr "Lector de subtítulos"
 #. Translators: Reader toggle switch on the Subtitle Reader menu
 #: addon\globalPlugins\subtitle_reader\gui.py:20
 msgid "閱讀器開關 (&S)"
-msgstr "Interruptor de lectura"
+msgstr "Leer subtítulos"
 
 #. Translators: toggle reading when video window not in foreground on the Subtitle Reader menu
 #: addon\globalPlugins\subtitle_reader\gui.py:24
@@ -68,7 +68,7 @@ msgstr "Leer chat"
 #. Translators: toggle Youtube menu item whether to read the chat message sender.
 #: addon\globalPlugins\subtitle_reader\gui.py:35
 msgid "閱讀聊天室訊息發送者(&A)"
-msgstr "Leer remitente de chat"
+msgstr "Leer el nombre del remitente"
 
 #. Translators: toggle Youtube menu item whether to read the chat gift sponser message.
 #: addon\globalPlugins\subtitle_reader\gui.py:39
@@ -133,7 +133,7 @@ msgstr "Saltar esta versión"
 #. Translators: This button means close window until next automatic or manual check for update
 #: addon\globalPlugins\subtitle_reader\gui.py:76
 msgid "晚點再說(&L)"
-msgstr "Más tarde"
+msgstr "Recordar más tarde"
 
 #. Translators: This is a prompt to confirm that the reader is the latest version
 #: addon\globalPlugins\subtitle_reader\update.py:129
@@ -147,7 +147,7 @@ msgstr "Felicidades"
 #. Translators: This is the prompt when checking for updates fails
 #: addon\globalPlugins\subtitle_reader\update.py:134
 msgid "檢查更新失敗"
-msgstr "¡La búsqueda de actualizaciones falló!"
+msgstr "¡La búsqueda de actualizaciones ha fallado!"
 
 #: addon\globalPlugins\subtitle_reader\update.py:134
 #: addon\globalPlugins\subtitle_reader\update.py:177
