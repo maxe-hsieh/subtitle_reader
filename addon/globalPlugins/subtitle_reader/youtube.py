@@ -13,15 +13,21 @@ from .object_finder import find, search
 from .compatible import role
 
 class Youtube(SubtitleAlg):
+	
 	def __init__(self, *args, **kwargs):
 		super(Youtube, self).__init__(*args, **kwargs)
 		self.chapter = ''
 		self.ce = str() # 資訊卡
+		self.chatRoom = None
 		self.chatContainer = None
 		self.chatObject = None
 		self.chatSender = ''
+		self.chatSenderIsOwner = False
+		self.chatSenderIsAdmin = ''
+		self.chatSenderIsVerified = ''
 		self.chat = ''
-		self.searchObject = None
+		self.voting = False
+		self.chatContainerSearchObject = None
 		self.chatSearchObject = None
 	
 	def getVideoPlayer(self):
@@ -31,7 +37,6 @@ class Youtube(SubtitleAlg):
 		obj = self.main.focusObject
 		videoPlayer = find(obj, 'parent', 'id', ['movie_player', 'c4-player', 'player-container'])
 		if videoPlayer:
-			self.chatContainer = None
 			if videoPlayer.IA2Attributes.get('id') == 'player-container':
 				videoPlayer = videoPlayer.firstChild.firstChild.firstChild
 			
@@ -53,13 +58,25 @@ class Youtube(SubtitleAlg):
 		except:
 			obj = None
 		
+		self.chatRoom = None
 		self.chatContainer = None
 		self.chatObject = None
-		search(obj, lambda obj: 'yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items', self.onFoundChatContainer).name = 'chat container'
+		if self.chatContainerSearchObject:
+			self.chatContainerSearchObject.cancel()
+		
+		self.chatContainerSearchObject = search(obj, lambda obj: ('yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items') or obj.IA2Attributes.get('id') == 'chat', self.onFoundChatContainer, continueOnFound=True)
+		
+		if self.chatSearchObject:
+			self.chatSearchObject.cancel()
 		
 	
 	def onFoundChatContainer(self, obj):
-		self.chatContainer = obj
+		if obj.IA2Attributes.get('id') == 'chat':
+			self.chatRoom = obj
+		else:
+			self.chatContainer = obj
+			self.chatContainerSearchObject.cancel()
+		
 	
 	def getSubtitle(self):
 		'''
@@ -71,6 +88,7 @@ class Youtube(SubtitleAlg):
 		
 		self.get_subtitle_object()
 		
+		self.readVoting()
 		self.readChat()
 	
 	def get_subtitle_object(self):
@@ -228,6 +246,10 @@ class Youtube(SubtitleAlg):
 			return
 		
 		self.chatSender = ''
+		self.chatSenderIsOwner = False
+		self.chatSenderIsAdmin = ''
+		self.chatSenderIsVerified = ''
+		
 		self.chatSearchObject = search(self.chatObject.firstChild, self.chatCondition, self.onFoundChatObject, continueOnFound=True)
 	
 	def chatCondition(self, obj):
@@ -236,13 +258,10 @@ class Youtube(SubtitleAlg):
 		
 		matchIds = [
 			'message',
+			'primary-text',
+			'author-name',
+			'chat-badges',
 		]
-		
-		if conf['readChatGiftSponser']:
-			matchIds.append('primary-text')
-		
-		if conf['readChatSender']:
-			matchIds.append('author-name')
 		
 		return obj.IA2Attributes.get('id') in matchIds
 	
@@ -251,6 +270,18 @@ class Youtube(SubtitleAlg):
 		if id == 'author-name':
 			name = chat.firstChild.name
 			self.chatSender = name if name else ''
+			self.chatSenderIsOwner = 'owner' in chat.IA2Attributes.get('class', '')
+			verified = chat.firstChild.next
+			if verified:
+				self.chatSenderIsVerified = verified.firstChild.name
+			
+			return
+		
+		if id == 'chat-badges':
+			if chat.childCount >= 2 or chat.firstChild.firstChild.firstChild.role != role('GRAPHIC'):
+				name = chat.firstChild.name
+				self.chatSenderIsAdmin = name if name else ''
+			
 			return
 		
 		self.chatSearchObject.cancel()
@@ -278,9 +309,34 @@ class Youtube(SubtitleAlg):
 			return
 		
 		self.chat = text
-		if conf['readChatSender']:
-			ui.message(self.chatSender)
+		
+		sender = f'{self.chatSender}\r\n{self.chatSenderIsVerified}\r\n{self.chatSenderIsAdmin}\r\n'
+		if conf['readChatSender'] or self.chatSenderIsOwner or self.chatSenderIsVerified or self.chatSenderIsAdmin:
+			text = sender + text
 		
 		ui.message(text)
+		
+	
+	def readVoting(self):
+		if not self.chatRoom:
+			return
+		
+		votingObj = self.chatRoom.firstChild.next.next
+		if bool(votingObj) != self.voting:
+			self.voting = bool(votingObj)
+			if self.voting:
+				ui.message('意見調查：')
+				search(votingObj, lambda obj: True, self.onSearchVoting, continueOnFound=True)
+			
+		
+	
+	def onSearchVoting(self, obj):
+		msg = getattr(obj, 'name', '') or ''
+		# 掠過有 id 或 name 為  • 的原件
+		if msg == ' • ' or obj.IA2Attributes.get('id'):
+			return
+		
+		if msg:
+			ui.message(msg)
 		
 	
