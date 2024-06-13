@@ -22,8 +22,8 @@ class PotPlayer:
 		speech.speech.processText = self.oldProcessText
 		winInputHook.keyDownCallback = self.oldKeyDown
 	
-	def processText(self, locale, text, symbolLevel):
-		text = self.oldProcessText(locale, text, symbolLevel)
+	def processText(self, locale, text, symbolLevel, *args, **kwargs):
+		text = self.oldProcessText(locale, text, symbolLevel, *args, **kwargs)
 		if not conf['switch']:
 			return text
 		
