@@ -12,6 +12,7 @@ class Config(dict):
 			'backgroundReading': True,
 			'readChat': True,
 			'readChatSender': False,
+			'onlyReadManagersChat': False,
 			'readChatGiftSponser': True,
 			'omitChatGraphic': True,
 			'infoCardPrompt': True,

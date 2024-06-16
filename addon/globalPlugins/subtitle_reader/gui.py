@@ -35,6 +35,10 @@ class Menu(wx.Menu):
 		self.readChatSender = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'閱讀聊天室訊息發送者(&A)'))
 		self.readChatSender.Check(True)
 		
+		# Translators: toggle Youtube menu item whether to read the manager's chat message only.
+		self.onlyReadManagersChat = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'僅閱讀管理員訊息(&M)'))
+		self.onlyReadManagersChat.Check(False)
+		
 		# Translators: toggle Youtube menu item whether to read the chat gift sponser message. 
 		self.readChatGiftSponser = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'閱讀會籍贈送(&G)'))
 		self.readChatGiftSponser.Check(True)

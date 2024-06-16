@@ -61,6 +61,7 @@ class Youtube(SubtitleAlg):
 		self.chatRoom = None
 		self.chatContainer = None
 		self.chatObject = None
+		self.voting = None
 		if self.chatContainerSearchObject:
 			self.chatContainerSearchObject.cancel()
 		
@@ -286,6 +287,9 @@ class Youtube(SubtitleAlg):
 		
 		self.chatSearchObject.cancel()
 		
+		if conf['onlyReadManagersChat'] and not self.chatSenderIsOwner and not self.chatSenderIsAdmin:
+			return
+		
 		chat = getattr(chat, 'firstChild', None)
 		if not chat:
 			return
@@ -310,7 +314,7 @@ class Youtube(SubtitleAlg):
 		
 		self.chat = text
 		
-		sender = f'{self.chatSender}\r\n{self.chatSenderIsVerified}\r\n{self.chatSenderIsAdmin}\r\n'
+		sender = f'{self.chatSender}。\r\n{self.chatSenderIsVerified}。\r\n{self.chatSenderIsAdmin}。\r\n'
 		if conf['readChatSender'] or self.chatSenderIsOwner or self.chatSenderIsVerified or self.chatSenderIsAdmin:
 			text = sender + text
 		
@@ -325,7 +329,7 @@ class Youtube(SubtitleAlg):
 		if bool(votingObj) != self.voting:
 			self.voting = bool(votingObj)
 			if self.voting:
-				ui.message('意見調查：')
+				ui.message(_('意見調查：'))
 				search(votingObj, lambda obj: True, self.onSearchVoting, continueOnFound=True)
 			
 		

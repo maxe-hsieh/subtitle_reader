@@ -91,6 +91,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleBackgroundReading, menu.backgroundReading)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChat, menu.readChat)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChatSender, menu.readChatSender)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleOnlyReadManagersChat, menu.onlyReadManagersChat)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChatGiftSponser, menu.readChatGiftSponser)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleOmitChatGraphic, menu.omitChatGraphic)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleInfoCardPrompt, menu.infoCardPrompt)
@@ -102,6 +103,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		menu.backgroundReading.Check(conf['backgroundReading'])
 		menu.readChat.Check(conf['readChat'])
 		menu.readChatSender.Check(conf['readChatSender'])
+		menu.onlyReadManagersChat.Check(conf['onlyReadManagersChat'])
 		menu.readChatGiftSponser.Check(conf['readChatGiftSponser'])
 		menu.omitChatGraphic.Check(conf['omitChatGraphic'])
 		menu.infoCardPrompt.Check(conf['infoCardPrompt'])
@@ -352,6 +354,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def toggleReadChatSender(self, evt):
 		conf['readChatSender'] = not conf['readChatSender']
 		self.menu.readChatSender.Check(conf['readChatSender'])
+	
+	def toggleOnlyReadManagersChat(self, evt):
+		conf['onlyReadManagersChat'] = not conf['onlyReadManagersChat']
+		self.menu.onlyReadManagersChat.Check(conf['onlyReadManagersChat'])
 	
 	def toggleReadChatGiftSponser(self, evt):
 		conf['readChatGiftSponser'] = not conf['readChatGiftSponser']
