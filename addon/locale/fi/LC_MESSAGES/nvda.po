@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Subtitle Reader 2.95\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-05-05 17:59+0300\n"
-"PO-Revision-Date: 2024-05-07 23:39+0300\n"
+"POT-Creation-Date: 2024-06-16 18:15+0300\n"
+"PO-Revision-Date: 2024-06-16 18:20+0300\n"
 "Last-Translator: Jani Kinnunen <janikinnunen340@gmail.com>\n"
 "Language-Team: fi_FI\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. Translators: Script category for Subtitle Reader
@@ -28,17 +28,17 @@ msgid "字幕閱讀器"
 msgstr "Tekstityksenlukija"
 
 #. Translators: This will be displayed when the reader switch is turned on
-#: addon\globalPlugins\subtitle_reader\__init__.py:134
+#: addon\globalPlugins\subtitle_reader\__init__.py:136
 msgid "開始閱讀字幕"
 msgstr "Aloita tekstitysten lukeminen"
 
 #. Translators: This will be displayed when the reader switch is turned off
-#: addon\globalPlugins\subtitle_reader\__init__.py:138
+#: addon\globalPlugins\subtitle_reader\__init__.py:140
 msgid "停止閱讀字幕"
 msgstr "Lopeta tekstitysten lukeminen"
 
 #. Translators: Reader's toggle switch
-#: addon\globalPlugins\subtitle_reader\__init__.py:143
+#: addon\globalPlugins\subtitle_reader\__init__.py:145
 msgid "閱讀器開關"
 msgstr "Ota tekstityksenlukija käyttöön"
 
@@ -71,72 +71,77 @@ msgstr "Lue &chattihuone"
 msgid "閱讀聊天室訊息發送者(&A)"
 msgstr "Lue v&iestin lähettäjä chattihuoneessa"
 
-#. Translators: toggle Youtube menu item whether to read the chat gift sponser message.
+#. Translators: toggle Youtube menu item whether to read the manager's chat message only.
 #: addon\globalPlugins\subtitle_reader\gui.py:39
+msgid "僅閱讀管理員訊息(&M)"
+msgstr "Vain &ylläpitäjän viestit"
+
+#. Translators: toggle Youtube menu item whether to read the chat gift sponser message.
+#: addon\globalPlugins\subtitle_reader\gui.py:43
 msgid "閱讀會籍贈送(&G)"
 msgstr "Lue &jäsenlahja"
 
 #. Translators: toggle Youtube menu item whether to omit graphic when reading the chats
-#: addon\globalPlugins\subtitle_reader\gui.py:43
+#: addon\globalPlugins\subtitle_reader\gui.py:47
 msgid "閱讀聊天室時掠過圖片名稱(&G)"
 msgstr "Lue k&uvat chattiviestien jälkeen"
 
 #. Translators: toggle menu item whether to prompt wher Youtube info card is already appear
-#: addon\globalPlugins\subtitle_reader\gui.py:47
+#: addon\globalPlugins\subtitle_reader\gui.py:51
 msgid "資訊卡提示(&I)"
 msgstr "Lue t&ietokortit"
 
 #. Translators: toggle Youtube menu item whether to notify current chapter name when chapter is changed
-#: addon\globalPlugins\subtitle_reader\gui.py:51
+#: addon\globalPlugins\subtitle_reader\gui.py:55
 msgid "讀出章節(&C)"
 msgstr "Lue luvun &nimi"
 
 #. Translators: This menu item performs a check for updates to the reader
-#: addon\globalPlugins\subtitle_reader\gui.py:55
+#: addon\globalPlugins\subtitle_reader\gui.py:59
 msgid "立即檢查更新(&C)"
 msgstr "Tarkista &päivitykset"
 
 #. Translators: This is menu item that open the changelog
-#: addon\globalPlugins\subtitle_reader\gui.py:57
+#: addon\globalPlugins\subtitle_reader\gui.py:61
 msgid "開啟更新日誌(&O)"
 msgstr "&Avaa muutosloki"
 
 #. Translators: This menu item that can toggle automatic check for update when Subtitle Reader is start
 #. Translators: This is Menu item that can toggle automatic check for update on Subtitle Reader is start
-#: addon\globalPlugins\subtitle_reader\gui.py:59
+#: addon\globalPlugins\subtitle_reader\gui.py:63
 #: addon\globalPlugins\subtitle_reader\update.py:63
 msgid "自動檢查更新(&A)"
 msgstr "Tarkista päivitykset &automaattisesti"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:65
+#: addon\globalPlugins\subtitle_reader\gui.py:69
 msgid "字幕閱讀器 V"
 msgstr "Tekstityksenlukija"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:65
+#: addon\globalPlugins\subtitle_reader\gui.py:69
 msgid " 新版資訊"
 msgstr "Versiotiedot"
 
 #. Translators: This label means the edit box content is changelog
-#: addon\globalPlugins\subtitle_reader\gui.py:68
+#: addon\globalPlugins\subtitle_reader\gui.py:72
 msgid "更新日誌"
 msgstr "Muutosloki"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:73
+#: addon\globalPlugins\subtitle_reader\gui.py:77
 msgid "字幕"
 msgstr "Tekstitykset"
 
 #. Translators: This button means now run the update process
-#: addon\globalPlugins\subtitle_reader\gui.py:81
+#: addon\globalPlugins\subtitle_reader\gui.py:85
 msgid "現在更新(&U)"
 msgstr "Päivitä &nyt"
 
 #. Translators: This button means that the automatic check for updates will skip this version
-#: addon\globalPlugins\subtitle_reader\gui.py:85
+#: addon\globalPlugins\subtitle_reader\gui.py:89
 msgid "跳過此版本(&S)"
 msgstr "&Ohita tämä versio"
 
 #. Translators: This button means close window until next automatic or manual check for update
-#: addon\globalPlugins\subtitle_reader\gui.py:89
+#: addon\globalPlugins\subtitle_reader\gui.py:93
 msgid "晚點再說(&L)"
 msgstr "&Myöhemmin"
 
@@ -163,6 +168,10 @@ msgstr "Virhe"
 #: addon\globalPlugins\subtitle_reader\update.py:179
 msgid "下載更新失敗"
 msgstr "Päivityksen lataus epäonnistui"
+
+#: addon\globalPlugins\subtitle_reader\youtube.py:332
+msgid "意見調查："
+msgstr "Mielipidekysely:"
 
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
