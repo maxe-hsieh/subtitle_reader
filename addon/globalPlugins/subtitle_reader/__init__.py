@@ -20,7 +20,6 @@ from . import sound
 from . import gui
 from .config import conf
 from .youtube import Youtube
-from .maru_maru import MaruMaru
 from .disney_plus import DisneyPlus
 from .netflix import Netflix
 from .wkMediaCommons import WKMediaCommons
@@ -29,6 +28,7 @@ from .lineTV import LineTV
 from .bilibili import Bilibili
 from .iqy import Iqy
 from .missevan import Missevan
+from .primeVideo import PrimeVideo
 from .potPlayer import PotPlayer
 from .update import Update
 
@@ -48,15 +48,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			# 傳回附加元件的基礎類別實體，表示沒有任何功能的附加元件。
 			return globalPluginHandler.GlobalPlugin()
 		
-		return super().__new__(cls)
+		return super(cls, cls).__new__(cls)
 	
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
 			'.+ - YouTube': Youtube(self),
-			'.+-MARUMARU': MaruMaru(self),
 			'^Disney\+ \| ': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
+			'^Prime Video: .+': PrimeVideo(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
 			'.+ \| KKTV': Kktv(self),
 			'.+LINE TV-': LineTV(self),
@@ -187,6 +187,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def event_foreground(self, obj, nextHandler):
 		nextHandler()
+		if not conf['backgroundReading']:
+			self.stopReadSubtitle()
+			self.videoPlayer = None
+		
 		if obj.appModule.appName not in self.supportedBrowserAppNames:
 			return
 		
@@ -210,10 +214,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if obj.role == 0:
 			# 嵌入的 Youtube 頁框，在開始播放約 5 秒之後，會將焦點拉到一個不明的物件上，且 NVDA 無法查看其相鄰的物件，故將他跳過。
 			return
-		
-		if not conf['backgroundReading']:
-			self.stopReadSubtitle()
-			self.videoPlayer = None
 		
 		if not conf['switch']:
 			return

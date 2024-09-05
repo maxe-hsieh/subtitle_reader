@@ -1,6 +1,7 @@
 #encoding=utf-8
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 import addonHandler
 addonHandler.initTranslation()
@@ -62,6 +63,15 @@ class Menu(wx.Menu):
 		# Translators: This menu item that can toggle automatic check for update when Subtitle Reader is start
 		self.checkUpdateAutomatic = self.AppendCheckItem(wx.ID_ANY, _(u'自動檢查更新(&A)'))
 		self.checkUpdateAutomatic.Check(True)
+		
+		self.contactDeveloper = wx.Menu()
+		self.contactDeveloperMenuItem = self.AppendSubMenu(self.contactDeveloper, _('聯絡開發者 (&C)'))
+		
+		self.useSkype = self.contactDeveloper.Append(wx.ID_ANY, 'Skype, id:p15937a')
+		self.useLine = self.contactDeveloper.Append(wx.ID_ANY, 'Line, id:Maxe0310 ' + _('點此複製到剪貼簿'))
+		self.useDiscord = self.contactDeveloper.Append(wx.ID_ANY, 'Discord, ID:maxe0310')
+		self.useFacebook = self.contactDeveloper.Append(wx.ID_ANY, _('Facebook 個人檔案'))
+		self.useX = self.contactDeveloper.Append(wx.ID_ANY, _('X, ID:Maxe0310'))
 	
 
 class UpdateDialog(wx.Dialog):
@@ -75,7 +85,7 @@ class UpdateDialog(wx.Dialog):
 		self.sizer.Add(self.changelogText, wx.SizerFlags(1).Expand())
 		
 		self.subtitleLabel = Label(self, label=_(u'字幕'))
-		self.sizer.Add(self.subtitleLabel, wx.SizerFlags(0).CenterHorizontal())
+		self.sizer.Add(self.subtitleLabel, wx.SizerFlags(0).Center())
 		
 		self.progress = wx.Gauge(self, style=wx.GA_VERTICAL + wx.ST_NO_AUTORESIZE)
 		self.sizer.Add(self.progress)
@@ -99,5 +109,8 @@ class UpdateDialog(wx.Dialog):
 
 class Label(wx.StaticText):
 	def AcceptsFocus(self):
+		return True
+	
+	def AcceptsFocusFromKeyboard(self):
 		return True
 	

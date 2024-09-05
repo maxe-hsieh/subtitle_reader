@@ -170,7 +170,7 @@ class Update:
 		
 	
 	def updateProgress(self, blockCount, blockSize, total):
-		percent = 100 * blockCount * blockSize / total
+		percent = int(100 * blockCount * blockSize / total)
 		wx.CallAfter(self.dialog.progress.SetValue, percent)
 	
 	def downloadError(self):

@@ -2,6 +2,9 @@
 
 
 import speech
+if hasattr(speech, 'speech'):
+	speech = speech.speech
+
 import difflib
 import winInputHook
 import vkCodes
@@ -13,13 +16,13 @@ from .config import conf
 class PotPlayer:
 	def __init__(self):
 		self.lastSpeechText = ''
-		self.oldProcessText = speech.speech.processText
-		speech.speech.processText = self.processText
+		self.oldProcessText = speech.processText
+		speech.processText = self.processText
 		self.oldKeyDown = winInputHook.keyDownCallback
 		winInputHook.keyDownCallback = self.keyDown
 	
 	def terminate(self):
-		speech.speech.processText = self.oldProcessText
+		speech.processText = self.oldProcessText
 		winInputHook.keyDownCallback = self.oldKeyDown
 	
 	def processText(self, locale, text, symbolLevel, *args, **kwargs):

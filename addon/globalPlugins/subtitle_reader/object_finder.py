@@ -1,3 +1,5 @@
+#coding=utf-8
+
 import time
 
 from logHandler import log
@@ -61,7 +63,8 @@ class Search:
 	
 	def cancel(self):
 		self.cancelled = True
-		self.inspectionObjects.clear()
+		# python2.7 沒有 clear 方法
+		del self.inspectionObjects[:]
 	
 	@property
 	def isStopped(self):
@@ -83,7 +86,7 @@ class Search:
 				if self.condition(obj):
 					self.onFound(obj)
 					if not self.continueOnFound:
-						self.inspectionObjects.clear()
+						del self.inspectionObjects[:]
 						return self.nextSearch()
 					
 				

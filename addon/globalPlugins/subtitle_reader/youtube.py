@@ -1,5 +1,7 @@
 #coding=utf-8
 
+from __future__ import unicode_literals
+
 import os
 import re
 
@@ -27,6 +29,7 @@ class Youtube(SubtitleAlg):
 		self.chatSenderIsVerified = ''
 		self.chat = ''
 		self.voting = False
+		self.chatBanner = ''
 		self.chatContainerSearchObject = None
 		self.chatSearchObject = None
 	
@@ -62,6 +65,7 @@ class Youtube(SubtitleAlg):
 		self.chatContainer = None
 		self.chatObject = None
 		self.voting = None
+		self.chatBanner = ''
 		if self.chatContainerSearchObject:
 			self.chatContainerSearchObject.cancel()
 		
@@ -90,6 +94,7 @@ class Youtube(SubtitleAlg):
 		self.get_subtitle_object()
 		
 		self.readVoting()
+		self.readChatBanner()
 		self.readChat()
 	
 	def get_subtitle_object(self):
@@ -314,12 +319,34 @@ class Youtube(SubtitleAlg):
 		
 		self.chat = text
 		
-		sender = f'{self.chatSender}。\r\n{self.chatSenderIsVerified}。\r\n{self.chatSenderIsAdmin}。\r\n'
+		sender = '{name}。\r\n{isVerified}。\r\n{isAdmin}。\r\n'.format(name=self.chatSender, isVerified=self.chatSenderIsVerified, isAdmin=self.chatSenderIsAdmin)
 		if conf['readChatSender'] or self.chatSenderIsOwner or self.chatSenderIsVerified or self.chatSenderIsAdmin:
 			text = sender + text
 		
 		ui.message(text)
 		
+	
+	def readChatBanner(self):
+		if not self.chatContainer:
+			return
+		
+		banner = self.chatContainer.parent.previous
+		text = ''
+		while banner:
+			obj = banner.firstChild
+			while obj:
+				if obj.name:
+					text += obj.name
+					break
+				
+				obj = obj.firstChild
+			
+			banner = banner.previous
+		
+		if text and text not in self.chatBanner:
+			ui.message(text)
+		
+		self.chatBanner = text
 	
 	def readVoting(self):
 		if not self.chatRoom:
