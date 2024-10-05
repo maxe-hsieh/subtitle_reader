@@ -16,7 +16,6 @@ class Config(dict):
 			'readChatGiftSponser': True,
 			'omitChatGraphic': True,
 			'infoCardPrompt': True,
-			'readChapter': True,
 			'checkUpdateAutomatic': True,
 			'skipVersion': '0'
 		})

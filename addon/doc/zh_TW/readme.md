@@ -15,7 +15,7 @@
 
 ##### 特色
 
-* 支援 Netflix, Disney+, Youtube, KKTV, MaruMaru 等網站
+* 支援 Netflix, Disney+, Youtube, KKTV, Prime Video 等網站
 * 支援常用瀏覽器。
 * 自動尋找網頁上的 CC 字幕。
 * 語音與點字回饋。
@@ -28,6 +28,12 @@
 
 使用瀏覽器，開啟支援的網站，並點選提供 CC 字幕的影片，接著將焦點移至影片播放器的範圍，即可聽見或在點顯器摸讀字幕。
 若想暫停字幕回饋，可關閉 NVDA 語音輸出，在播放器關閉字幕，或是按下 NVDA+y 停止回饋。
+
+---
+
+##### 選單
+
+字幕閱讀器選單位於 NVDA -> 工具 當中，可執行某些功能與設定。
 
 ---
 
@@ -70,5 +76,13 @@
 [p15937a](https://join.skype.com/invite/VnIdifjym1OR)
 * Facebook:
 [個人檔案](https://m.facebook.com/profile.php?id=100002631752665&refid=46&ref=content_filter&__xts__[0]=12.%7B%22browse_result_type%22%3A%22browse_type_user%22%2C%22click_type%22%3A%22result%22%2C%22module_result_position%22%3A0%2C%22module_role%22%3A%22ENTITY_USER%22%2C%22result_id%22%3A100002631752665%2C%22session_id%22%3A%222108b07c-e391-4921-aaa7-474a90634d73%22%2C%22unit_id%22%3A%22mtouch_bem_res%3A30287062e76b81d229366f24878df5b4%22%2C%22unit_id_click_type%22%3A%22graph_search_results_item_in_module_tapped%22%2C%22unit_id_result_id%22%3A100002631752665%7D)
+* QQ: 
+[2231691423](tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2231691423)
+* Line:ID 
+[Maxe0310](#)
+* Discord: ID 
+[maxe0310](#)
+* [X: ID 
+[Maxe0310](https://x.com/Maxe0310)
 * NVDA 台灣 討論區：
 [[分享] 字幕閱讀器 - 討論區  |   NVDA 台灣](https://www.nvda.tw/discussion/ui=2005603400tm=1964947895)

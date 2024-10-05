@@ -18,7 +18,6 @@ class Youtube(SubtitleAlg):
 	
 	def __init__(self, *args, **kwargs):
 		super(Youtube, self).__init__(*args, **kwargs)
-		self.chapter = ''
 		self.ce = str() # 資訊卡
 		self.chatRoom = None
 		self.chatContainer = None
@@ -87,7 +86,6 @@ class Youtube(SubtitleAlg):
 		'''
 		取得字幕
 		'''
-		self.readChapter()
 		
 		self.promptInfoCard()
 		
@@ -211,34 +209,6 @@ class Youtube(SubtitleAlg):
 				break
 			obj = obj.next
 		return ce
-	
-	def readChapter(self):
-		if not conf['readChapter']:
-			return
-		
-		text = ''
-		try:
-			text = self.getChapter()
-		except Exception as e:
-			pass
-		
-		if not text:
-			return
-		
-		if text == self.chapter:
-			return
-		
-		self.chapter = text
-		ui.message(text)
-	
-	def getChapter(self):
-		obj = self.main.videoPlayer.lastChild.firstChild
-		if not obj or obj.IA2Attributes.get('class') != 'ytp-progress-bar-container':
-			return ''
-		
-		text = obj.firstChild.value
-		text = re.sub(u'\\d+.+$', '', text)
-		return text
 	
 	def readChat(self):
 		if not self.chatContainer:

@@ -8,19 +8,7 @@ class Netflix(SubtitleAlg):
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		appName = obj.appModule.appName
-		videoPlayer = find(obj, 'parent', 'role', role('dialog'))
-		if not videoPlayer:
-			if appName == 'firefox':
-				videoPlayer = find(obj, 'parent', 'role', role('document'))
-				if videoPlayer:
-					videoPlayer = videoPlayer.firstChild.firstChild.next
-				
-			else:
-				videoPlayer = find(obj, 'parent', 'class', 'watch-video--player-view')
-				if videoPlayer:
-					videoPlayer = videoPlayer.firstChild.next
-				
-			
+		videoPlayer = find(obj, 'parent', 'role', role('document'))
 		
 		return videoPlayer
 	

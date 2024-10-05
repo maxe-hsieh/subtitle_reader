@@ -5,6 +5,7 @@
 
 
 import re
+import webbrowser
 import ui
 import time
 
@@ -86,7 +87,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.potPlayer = PotPlayer()
 	
 	def initMenu(self):
-		menu = self.menu = gui.Menu()
+		menu = self.menu = gui.Menu(self)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.script_toggleSwitch, menu.switch)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleBackgroundReading, menu.backgroundReading)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChat, menu.readChat)
@@ -95,10 +96,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChatGiftSponser, menu.readChatGiftSponser)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleOmitChatGraphic, menu.omitChatGraphic)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleInfoCardPrompt, menu.infoCardPrompt)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleReadChapter, menu.readChapter)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.manualCheck, menu.checkForUpdate)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openChangeLog, menu.openChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
+		# 聯絡開發者
+		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseSkype, menu.contactUseSkype)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseFacebook, menu.contactUseFacebook)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseQq, menu.contactUseQq)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseLine, menu.contactUseLine)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseDiscord, menu.contactUseDiscord)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseX, menu.contactUseX)
+		
 		menu.switch.Check(conf['switch'])
 		menu.backgroundReading.Check(conf['backgroundReading'])
 		menu.readChat.Check(conf['readChat'])
@@ -107,7 +115,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		menu.readChatGiftSponser.Check(conf['readChatGiftSponser'])
 		menu.omitChatGraphic.Check(conf['omitChatGraphic'])
 		menu.infoCardPrompt.Check(conf['infoCardPrompt'])
-		menu.readChapter.Check(conf['readChapter'])
 		menu.checkUpdateAutomatic.Check(conf['checkUpdateAutomatic'])
 	
 	def terminate(self):
@@ -371,9 +378,24 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		conf['infoCardPrompt'] = not conf['infoCardPrompt']
 		self.menu.infoCardPrompt.Check(conf['infoCardPrompt'])
 	
-	def toggleReadChapter(self, evt):
-		conf['readChapter'] = not conf['readChapter']
-		self.menu.readChapter.Check(conf['readChapter'])
+	# 聯絡開發者
+	def contactUseSkype(self, evt):
+		webbrowser.open('https://join.skype.com/invite/VnIdifjym1OR')
+	
+	def contactUseLine(self, evt):
+		api.copyToClip('Maxe0310', notify=True)
+	
+	def contactUseDiscord(self, evt):
+		api.copyToClip('maxe0310', notify=True)
+	
+	def contactUseFacebook(self, evt):
+		webbrowser.open('https://www.facebook.com/profile.php?id=100002631752665')
+	
+	def contactUseQq(self, evt):
+		webbrowser.open('tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2231691423')
+	
+	def contactUseX(self, evt):
+		webbrowser.open('https://www.x.com/Maxe0310')
 	
 	__gestures = {
 		'kb:nvda+y': 'toggleSwitch',

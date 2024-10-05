@@ -13,8 +13,9 @@ tray = gui.mainFrame.sysTrayIcon
 toolsMenu = tray.toolsMenu
 
 class Menu(wx.Menu):
-	def __init__(self):
+	def __init__(self, main):
 		super(Menu, self).__init__()
+		self.main = main
 		# Translators: Subtitle Reader menu on the NVDA tools menu
 		self.menuItem = toolsMenu.AppendSubMenu(self, _(u'字幕閱讀器 (&R)'))
 		# Translators: Reader toggle switch on the Subtitle Reader menu
@@ -52,10 +53,6 @@ class Menu(wx.Menu):
 		self.infoCardPrompt = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'資訊卡提示(&I)'))
 		self.infoCardPrompt.Check(True)
 		
-		# Translators: toggle Youtube menu item whether to notify current chapter name when chapter is changed
-		self.readChapter = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'讀出章節(&C)'))
-		self.readChapter.Check(True)
-		
 		# Translators: This menu item performs a check for updates to the reader
 		self.checkForUpdate = self.Append(wx.ID_ANY, _(u'立即檢查更新(&C)'))
 		# Translators: This is menu item that open the changelog
@@ -67,11 +64,13 @@ class Menu(wx.Menu):
 		self.contactDeveloper = wx.Menu()
 		self.contactDeveloperMenuItem = self.AppendSubMenu(self.contactDeveloper, _('聯絡開發者 (&C)'))
 		
-		self.useSkype = self.contactDeveloper.Append(wx.ID_ANY, 'Skype, id:p15937a')
-		self.useLine = self.contactDeveloper.Append(wx.ID_ANY, 'Line, id:Maxe0310 ' + _('點此複製到剪貼簿'))
-		self.useDiscord = self.contactDeveloper.Append(wx.ID_ANY, 'Discord, ID:maxe0310')
-		self.useFacebook = self.contactDeveloper.Append(wx.ID_ANY, _('Facebook 個人檔案'))
-		self.useX = self.contactDeveloper.Append(wx.ID_ANY, _('X, ID:Maxe0310'))
+		self.contactUseSkype = self.contactDeveloper.Append(wx.ID_ANY, 'Skype, id:p15937a')
+		self.contactUseFacebook = self.contactDeveloper.Append(wx.ID_ANY, _('Facebook 個人檔案'))
+		self.contactUseQq = self.contactDeveloper.Append(wx.ID_ANY, _('QQ, id:2231691423'))
+		self.contactUseLine = self.contactDeveloper.Append(wx.ID_ANY, 'Line, id:Maxe0310 ' + _('點此複製到剪貼簿'))
+		self.contactUseDiscord = self.contactDeveloper.Append(wx.ID_ANY, 'Discord, ID:maxe0310 ' + _('點此複製到剪貼簿'))
+		
+		self.contactUseX = self.contactDeveloper.Append(wx.ID_ANY, _('X, ID:Maxe0310'))
 	
 
 class UpdateDialog(wx.Dialog):
