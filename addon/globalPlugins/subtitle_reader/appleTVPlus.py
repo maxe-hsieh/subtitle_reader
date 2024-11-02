@@ -6,11 +6,10 @@ from .compatible import role
 
 from logHandler import log
 
-class Netflix(SubtitleAlg):
+class AppleTVPlus(SubtitleAlg):
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		videoPlayer = find(obj, 'parent', 'role', role('dialog'))
-		videoPlayer = videoPlayer or find(obj, 'parent', 'role', role('document'))
 		
 		return videoPlayer
 	
@@ -21,7 +20,11 @@ class Netflix(SubtitleAlg):
 	
 	def chromeGetSubtitleContainer(self):
 		obj = self.main.videoPlayer
-		obj = find(obj, 'firstChild', 'role', role('grouping'))
+		try:
+			obj = obj.firstChild.firstChild.lastChild
+		except:
+			log.debug('Subtitle container not found.')
+		
 		return obj
 	
 	def firefoxGetSubtitleContainer(self):
@@ -30,8 +33,13 @@ class Netflix(SubtitleAlg):
 		return obj
 	
 	def getSubtitle(self):
-		
 		obj = self.main.subtitleContainer
-		obj = obj.next
-		return super(Netflix, self).getSubtitle(obj)
+		appName = obj.appModule.appName
+		if appName == 'firefox':
+			obj = obj.next
+			if not obj:
+				return ''
+			
+		
+		return super(AppleTVPlus, self).getSubtitle(obj)
 	

@@ -23,6 +23,7 @@ from .config import conf
 from .youtube import Youtube
 from .disney_plus import DisneyPlus
 from .netflix import Netflix
+from .appleTVPlus import AppleTVPlus
 from .wkMediaCommons import WKMediaCommons
 from .kktv import Kktv
 from .lineTV import LineTV
@@ -58,6 +59,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'^Disney\+ \| ': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
 			'^Prime Video: .+': PrimeVideo(self),
+			'.+ Apple TV\+': AppleTVPlus(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
 			'.+ \| KKTV': Kktv(self),
 			'.+LINE TV-': LineTV(self),
