@@ -12,7 +12,7 @@ class Bilibili(SubtitleAlg):
 	
 	def getSubtitleContainer(self):
 		videoPlayer = self.main.videoPlayer
-		container = find(videoPlayer.firstChild.firstChild, 'next', 'class', 'bpx-player-subtitle-wrap')
+		container = find(videoPlayer.firstChild.firstChild, 'next', 'class', 'bpx-player-subtitle')
 		if not container:
 			return
 		
