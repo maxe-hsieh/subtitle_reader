@@ -21,11 +21,19 @@ class Netflix(SubtitleAlg):
 	
 	def chromeGetSubtitleContainer(self):
 		obj = self.main.videoPlayer
+		# 有可能出現 toast 的狀況
+		if find(obj, 'firstChild', 'id', 'toastRoot'):
+			obj = obj.firstChild.firstChild.next
+		
 		obj = find(obj, 'firstChild', 'role', role('grouping'))
 		return obj
 	
 	def firefoxGetSubtitleContainer(self):
 		obj = self.main.videoPlayer
+		# 有可能出現 toast 的狀況
+		if find(obj, 'firstChild', 'id', 'toastRoot'):
+			obj = obj.firstChild.next
+		
 		obj = find(obj, 'firstChild', 'role', role('grouping'))
 		return obj
 	

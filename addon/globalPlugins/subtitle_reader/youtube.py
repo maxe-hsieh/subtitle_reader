@@ -313,7 +313,7 @@ class Youtube(SubtitleAlg):
 			
 			banner = banner.previous
 		
-		if text and text not in self.chatBanner:
+		if text and not self.chatBanner:
 			ui.message(text)
 		
 		self.chatBanner = text
