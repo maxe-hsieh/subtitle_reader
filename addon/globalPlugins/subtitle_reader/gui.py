@@ -64,7 +64,7 @@ class Menu(wx.Menu):
 		self.contactDeveloper = wx.Menu()
 		self.contactDeveloperMenuItem = self.AppendSubMenu(self.contactDeveloper, _('聯絡開發者 (&C)'))
 		
-		self.contactUseSkype = self.contactDeveloper.Append(wx.ID_ANY, 'Skype, id:p15937a')
+		self.contactUseWhatsApp = self.contactDeveloper.Append(wx.ID_ANY, 'WhatsApp, id:+886925285060')
 		self.contactUseFacebook = self.contactDeveloper.Append(wx.ID_ANY, _('Facebook 個人檔案'))
 		self.contactUseQq = self.contactDeveloper.Append(wx.ID_ANY, _('QQ, id:2231691423'))
 		self.contactUseLine = self.contactDeveloper.Append(wx.ID_ANY, 'Line, id:Maxe0310 ' + _('點此複製到剪貼簿'))

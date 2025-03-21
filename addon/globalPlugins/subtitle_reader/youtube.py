@@ -28,8 +28,8 @@ class Youtube(SubtitleAlg):
 		self.chatSenderIsVerified = ''
 		self.chat = ''
 		self.voting = False
-		self.chatBanner = ''
 		self.chatContainerSearchObject = None
+		self.chatBannerSearchObject = None
 		self.chatSearchObject = None
 	
 	def getVideoPlayer(self):
@@ -64,35 +64,37 @@ class Youtube(SubtitleAlg):
 		self.chatContainer = None
 		self.chatObject = None
 		self.voting = None
-		self.chatBanner = ''
 		if self.chatContainerSearchObject:
 			self.chatContainerSearchObject.cancel()
 		
 		self.chatContainerSearchObject = search(obj, lambda obj: ('yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items') or obj.IA2Attributes.get('id') == 'chat', self.onFoundChatContainer, continueOnFound=True)
+		
+		if self.chatBannerSearchObject:
+			self.chatBannerSearchObject.cancel()
 		
 		if self.chatSearchObject:
 			self.chatSearchObject.cancel()
 		
 	
 	def onFoundChatContainer(self, obj):
-		if obj.IA2Attributes.get('id') == 'chat':
+		id = obj.IA2Attributes.get('id')
+		if id == 'chat':
 			self.chatRoom = obj
-		else:
+		elif id == 'items':
 			self.chatContainer = obj
 			self.chatContainerSearchObject.cancel()
+			self.readChatBanner()
 		
 	
 	def getSubtitle(self):
 		'''
 		取得字幕
 		'''
-		
 		self.promptInfoCard()
 		
 		self.get_subtitle_object()
 		
 		self.readVoting()
-		self.readChatBanner()
 		self.readChat()
 	
 	def get_subtitle_object(self):
@@ -300,29 +302,26 @@ class Youtube(SubtitleAlg):
 		if not self.chatContainer:
 			return
 		
-		banner = self.chatContainer.parent.previous
-		text = ''
-		while banner:
-			obj = banner.firstChild
-			while obj:
-				if obj.name:
-					text += obj.name
-					break
-				
-				obj = obj.firstChild
+		obj = self.chatContainer.parent.previous
+		banner = None
+		while obj:
+			banner = find(obj, 'firstChild', 'id', 'banner-container')
+			if banner:
+				break
 			
-			banner = banner.previous
+			obj = obj.previous
 		
-		if text and not self.chatBanner:
-			ui.message(text)
+		if not banner:
+			return
 		
-		self.chatBanner = text
+		self.chatBannerSearchObject = search(banner, lambda obj: bool(obj.name) and obj.role != role('LINK'), lambda banner: ui.message(banner.name if banner.role != role('BUTTON') else '聊天室橫幅'), continueOnFound=True)
 	
 	def readVoting(self):
 		if not self.chatRoom:
 			return
 		
-		votingObj = self.chatRoom.firstChild.next.next
+		votingObj = self.chatRoom.lastChild
+		votingObj = find(votingObj, 'firstChild', 'class', 'style-scope yt-live-chat-poll-renderer')
 		if bool(votingObj) != self.voting:
 			self.voting = bool(votingObj)
 			if self.voting:

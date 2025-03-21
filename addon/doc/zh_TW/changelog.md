@@ -1,5 +1,24 @@
 # 更新日誌
 
+## V3.12, 2025.3.21
+
+版本代號：Diamond City Lights
+
+Video source:
+https://youtu.be/BZzP_k3cLao
+
+### 修正項目
+
+1. 修正 Prime Video 無法閱讀字幕的錯誤（感謝 Franco Hong 提供測試帳號）。
+2. 修正 Youtube 聊天室改版，導致取得意見調查出現錯誤，連帶導致無法自動閱讀聊天室。
+3. 修正 Youtube 聊天室改版，導致閱讀聊天橫幅內容為空的錯誤。
+聊天橫幅改為移動焦點時自動朗讀一次，之後出現的橫幅不會被自動朗讀，除非再次移動焦點。
+4. 聯絡開發者：刪除 Skype 並新增 WhatsApp 聯絡方式。
+
+---
+
+
+
 ## V3.11, 2025.1.5
 
 版本代號：煦日 Apricity

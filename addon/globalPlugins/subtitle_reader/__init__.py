@@ -58,7 +58,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.+ - YouTube': Youtube(self),
 			'^Disney\+ \| ': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
-			'^Prime Video: .+': PrimeVideo(self),
+			'^Prime Video.+': PrimeVideo(self),
 			'.+ Apple TV\+': AppleTVPlus(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
 			'.+ \| KKTV': Kktv(self),
@@ -102,7 +102,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openChangeLog, menu.openChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
 		# 聯絡開發者
-		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseSkype, menu.contactUseSkype)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseWhatsApp, menu.contactUseWhatsApp)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseFacebook, menu.contactUseFacebook)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseQq, menu.contactUseQq)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseLine, menu.contactUseLine)
@@ -381,8 +381,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.menu.infoCardPrompt.Check(conf['infoCardPrompt'])
 	
 	# 聯絡開發者
-	def contactUseSkype(self, evt):
-		webbrowser.open('https://join.skype.com/invite/VnIdifjym1OR')
+	def contactUseWhatsApp(self, evt):
+		webbrowser.open('https://wa.me/+886925285060')
 	
 	def contactUseLine(self, evt):
 		api.copyToClip('Maxe0310', notify=True)
