@@ -1,6 +1,5 @@
 # Tekstityksenlukija
 
-
 ## Projektiin osallistuminen
 
 Ohjeet löytyvät [tältä sivulta. ](https://github.com/maxe-hsieh/subtitle_reader)
@@ -20,7 +19,7 @@ Kun verkkoselainta käytetään videoiden katsomiseen, NVDA löytää tämän li
 * Tukee Netflixiä, Disney+:aa, YouTubea, KKTV:tä sekä muita sivustoja
 * Yhteensopiva yleisesti käytettyjen selainten kanssa
 * Löytää automaattisesti verkkosivuilla olevan tekstityksen
-* Antaa palautteen puheena ja pistekirjoituksena
+* Antaa palautteen puheena ja pistekirjoituksella
 * Automaattinen päivitysten tarkistus
 * Nopea käyttöönotto ja käytöstä poisto
 
@@ -30,12 +29,11 @@ Kun verkkoselainta käytetään videoiden katsomiseen, NVDA löytää tämän li
 
 Mene selaimella tuetulle verkkosivustolle ja avaa tekstityksen sisältävä video. Siirrä sitten kohdistus sivuston videosoittimeen kuullaksesi tekstitykset puheena tai lukeaksesi ne pistenäytöltä.
 
-Voit keskeyttää tekstityksen lukemisen lopettamalla NVDA:n puheen, poistamalla käytöstä soittimen tekstitykset tai painamalla NVDA+Y lopettaaksesi palautteen.
+Voit lopettaa tekstityksen lukemisen poistamalla käytöstä NVDA:n puheen, soittimen tekstitykset tai keskeyttämällä tämän lisäosan palautteen näppäinkomennolla NVDA+Y.
 
 ---
 
 ### NVDA-yhteensopivuus
-
 
 Tekstityksenlukija pyrkii tukemaan kaikkia NVDA:n versioita. Vanhin testattu versio on 2019.2.1.
 
@@ -57,6 +55,7 @@ Tekstityksenlukija tukee ja on testattu toimivaksi seuraavilla selainversioilla:
 Tässä ovat oletuspikanäppäimet ja niiden toiminnot. Kaikkia pikanäppäimiä on mahdollista muuttaa NVDA:n Näppäinkomennot-valintaikkunassa.
 
 * NVDA+Y: Ota tekstityksenlukija käyttöön tai poista se käytöstä
+* Ei määritetty: Lue tekstitys manuaalisesti
 
 ---
 
