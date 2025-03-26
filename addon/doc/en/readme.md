@@ -55,6 +55,7 @@ The following lists the browsers and the latest tested version that the subtitle
 The following lists the default gestures and their corresponding functions. All gestures can be changed in the NVDA input gesture settings.
 
 * NVDA+y: Toggle Subtitle Reader
+* Undefined: Manual read subtitle
 
 ---
 

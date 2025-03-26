@@ -48,8 +48,13 @@ class Youtube(SubtitleAlg):
 	def getSubtitleContainer(self):
 		self.getChatContainer()
 		
-		# 由於 Youtube 的字幕容器是不停變動的，所以改為在每次取得字幕時一併取得容器，在此方法回傳 True 作為假的字幕容器。
-		return True
+		videoPlayer = self.main.videoPlayer
+		container = find(videoPlayer.firstChild, 'next', 'id', 'ytp-caption-window-container')
+		if not container:
+			# 為了聊天室需要不斷執行，還是回傳 True
+			return True
+		
+		return container
 	
 	def getChatContainer(self):
 		if not conf['readChat']:
@@ -92,33 +97,20 @@ class Youtube(SubtitleAlg):
 		'''
 		self.promptInfoCard()
 		
-		self.get_subtitle_object()
+		subtitle = str()
+		container = self.main.subtitleContainer
+		if container is True:
+			# 表示沒有字幕容器
+			return
 		
+		# 根據瀏覽器，分別處理取得字幕的方式。
+		browser = container.appModule.appName
+		subtitle = getattr(self, browser + 'GetSubtitle')(container)
+		return subtitle
+	
+	def onReadingSubtitle(self):
 		self.readVoting()
 		self.readChat()
-	
-	def get_subtitle_object(self):
-		'''
-		根據元件 id 從 Youtube 影片撥放器找出第一個字幕元件
-		'''
-		obj = self.main.videoPlayer.firstChild
-		obj = find(obj, 'next', 'id', 'ytp-caption-window-container')
-		if not obj:
-			return self.onNotFoundSubtitleObject()
-		
-		self.onFoundSubtitleObject(obj)
-	
-	def onNotFoundSubtitleObject(self):
-		pass
-	
-	def onFoundSubtitleObject(self, obj):
-		subtitle = str()
-		# 根據瀏覽器，分別處理取得字幕的方式。
-		browser = obj.appModule.appName
-		subtitle = getattr(self, browser + 'GetSubtitle')(obj)
-		if not subtitle is None:
-			return self.onFoundSubtitle(subtitle)
-		
 	
 	def chromeGetSubtitle(self, obj):
 		subtitle = ''
@@ -168,12 +160,6 @@ class Youtube(SubtitleAlg):
 			
 		
 		return subtitle
-	
-	def msedgeGetSubtitle(self, obj):
-		return self.chromeGetSubtitle(obj)
-	
-	def braveGetSubtitle(self, obj):
-		return self.chromeGetSubtitle(obj)
 	
 	def promptInfoCard(self):
 		if not conf['infoCardPrompt']:

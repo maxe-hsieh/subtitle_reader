@@ -25,6 +25,9 @@ class SubtitleAlg(object):
 		# Brave 取得字幕容器的方法也與 Chrome 相同。
 		return self.chromeGetSubtitleContainer()
 	
+	def onReadingSubtitle(self):
+		pass
+	
 	def msedgeGetSubtitle(self, obj):
 		return self.chromeGetSubtitle(obj)
 	

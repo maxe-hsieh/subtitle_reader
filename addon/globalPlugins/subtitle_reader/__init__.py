@@ -1,4 +1,5 @@
 #coding=utf-8
+#coding=utf-8
 
 # 字幕閱讀器
 # 作者：福恩 <maxe@mail.batol.net>
@@ -56,7 +57,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
 			'.+ - YouTube': Youtube(self),
-			'^Disney\+ \| ': DisneyPlus(self),
+			'.+ \| Disney\+': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
 			'^Prime Video.+': PrimeVideo(self),
 			'.+ Apple TV\+': AppleTVPlus(self),
@@ -152,6 +153,36 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	# Translators: Reader's toggle switch
 	script_toggleSwitch.__doc__ = _(u'閱讀器開關')
+	
+	def script_manualReadSubtitle(self, gesture):
+		def getSubtitle(self):
+			obj = self.focusObject
+			if obj.appModule.appName not in self.supportedBrowserAppNames:
+				return
+			
+			alg = self.getSubtitleAlg()
+			if not alg:
+				return
+			
+			videoPlayer = self.videoPlayer = alg.getVideoPlayer()
+			if not videoPlayer:
+				return
+			
+			container = self.subtitleContainer = alg.getSubtitleContainer()
+			if not container:
+				return
+			
+			return alg.getSubtitle()
+		try:	
+			subtitle = getSubtitle(self)
+		except (COMError, RuntimeError):
+			subtitle = None
+		
+		if not subtitle:
+			return ui.message('沒有字幕')
+		
+		return ui.message(subtitle)
+	script_manualReadSubtitle.__doc__ = '手動閱讀字幕'
 	
 	def findUrl(self):
 		window = api.getForegroundObject()
@@ -276,6 +307,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		
 		self.startReadSubtitleTime = time.time()
 		try:
+			self.subtitleAlg.onReadingSubtitle()
 			subtitle = self.subtitleAlg.getSubtitle()
 		except (COMError, RuntimeError):
 			subtitle = None
