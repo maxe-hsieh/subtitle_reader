@@ -7,15 +7,8 @@ from .compatible import role
 class DisneyPlus(SubtitleAlg):
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
-		try:
-			while obj and obj.role != role('document'):
-				obj = obj.parent
-			
-		
-		except:
-			return
-		
-		return obj
+		videoPlayer = find(obj, 'parent', 'class', 'btm-media-clients')
+		return videoPlayer
 	
 	def getSubtitleContainer(self):
 		videoPlayer = self.main.videoPlayer
@@ -24,25 +17,13 @@ class DisneyPlus(SubtitleAlg):
 	
 	def chromeGetSubtitleContainer(self):
 		obj = self.main.videoPlayer
-		o = None
-		while obj:
-			o = obj
-			obj = obj.firstChild
+		obj = find(obj, 'firstChild', 'role', role('GROUPING'))
+		if not obj:
+			return
 		
-		obj = o
-		
-		obj = obj.next
-		obj = obj.firstChild.firstChild.firstChild.firstChild
-		obj = obj.next
-		if obj.IA2Attributes.get('class') == 'dss-hls-subtitle-overlay':
-			return obj
-		
+		container = obj.next
+		return container
 	
 	def firefoxGetSubtitleContainer(self):
-		obj = self.main.videoPlayer
-		obj = find(obj, 'firstChild', 'role', 56)
-		obj = obj.next
-		if obj.IA2Attributes.get('class') == 'dss-hls-subtitle-overlay':
-			return obj
-		
+		return self.chromeGetSubtitleContainer()
 	
