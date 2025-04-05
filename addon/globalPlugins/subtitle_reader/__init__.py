@@ -28,6 +28,7 @@ from .appleTVPlus import AppleTVPlus
 from .wkMediaCommons import WKMediaCommons
 from .kktv import Kktv
 from .lineTV import LineTV
+from .meWatch import MeWatch
 from .bilibili import Bilibili
 from .iqy import Iqy
 from .missevan import Missevan
@@ -64,6 +65,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
 			'.+ \| KKTV': Kktv(self),
 			'.+LINE TV-': LineTV(self),
+			'.+ - mewatch': MeWatch(self),
 			'.+_哔哩哔哩_bilibili': Bilibili(self),
 			'.+愛奇藝 iQIYI': Iqy(self),
 		}

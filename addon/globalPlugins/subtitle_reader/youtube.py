@@ -49,7 +49,10 @@ class Youtube(SubtitleAlg):
 		self.getChatContainer()
 		
 		videoPlayer = self.main.videoPlayer
-		container = find(videoPlayer.firstChild, 'next', 'id', 'ytp-caption-window-container')
+		# 沉浸式翻譯
+		container = find(videoPlayer.firstChild, 'next', 'id', 'immersive-translate-caption-window')
+		# Youtube
+		container = container or find(videoPlayer.firstChild, 'next', 'id', 'ytp-caption-window-container')
 		if not container:
 			# 為了聊天室需要不斷執行，還是回傳 True
 			return True
