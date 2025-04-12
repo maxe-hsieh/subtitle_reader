@@ -10,6 +10,9 @@ https://youtu.be/vKDa7yfpd2M
 ### 更新項目
 
 1. 支援新版「唱歌學日語」，自動閱讀中文動態歌詞。
+測試歌曲：[Georgette Me, Georgette You - Ave Mujica]
+(https://www.marumaru-x.com/japanese-song/play-72r9mzweoz)
+測試方法，使用 Chromium 瀏覽器，點開連結，然後點擊葉面上任何一個播放按鈕即可。
 2. 字幕閱讀器選單：新增支援影音平台列表，可察看目前閱讀器支援的所有影音平台以及支援狀況，分為正常或者失效兩個狀態，以及點擊平台名稱可直接開啟網站。
 3. 新增俄語翻譯，感謝 Fatih. 
 4. 更新英語翻譯。
