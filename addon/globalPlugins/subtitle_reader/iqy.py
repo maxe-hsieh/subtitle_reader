@@ -1,10 +1,15 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg
+from .subtitle_alg import SubtitleAlg, SupportStatus
 from .object_finder import find
 from .compatible import role
 
 class Iqy(SubtitleAlg):
+	info = {
+		'name': '爱奇艺',
+		'url': 'https://www.iqiyi.com/',
+		'status': SupportStatus.supported,
+	}
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		treeInterceptor = obj.treeInterceptor

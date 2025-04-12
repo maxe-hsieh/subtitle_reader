@@ -1,10 +1,15 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg
+from .subtitle_alg import SubtitleAlg, SupportStatus
 from .object_finder import find, search
 from .compatible import role
 
 class Missevan(SubtitleAlg):
+	info = {
+		'name': '猫耳FM',
+		'url': 'https://www.missevan.com/',
+		'status': SupportStatus.supported,
+	}
 	lastCollect = set()
 	collect = set()
 	collector = None

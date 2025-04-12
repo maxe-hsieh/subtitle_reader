@@ -1,8 +1,23 @@
 #coding=utf-8
 
+from __future__ import unicode_literals
+
 from .compatible import role
 
 class SubtitleAlg(object):
+	# 未來將改為 SubtitleProvider
+	'''
+	影音平台資訊：
+		- name: 影音平台名稱
+		- url: 影音平台網址
+		- status: 影音平台狀態
+	'''
+	info = {}
+	
+	# 使用視窗標題或者網址，判斷焦點是否位於影音平台（方法二選一）。
+	windowTitle = None
+	url = None
+	
 	def __init__(self, main, onFoundSubtitle=None):
 		self.main = main
 		if not onFoundSubtitle:
@@ -55,3 +70,8 @@ class SubtitleAlg(object):
 		
 		return subtitle
 	
+
+# 平台支援狀態
+class SupportStatus(object):
+	invalid = _('失效')
+	supported = _('正常')

@@ -69,8 +69,13 @@ class Menu(wx.Menu):
 		self.contactUseQq = self.contactDeveloper.Append(wx.ID_ANY, _('QQ, id:2231691423'))
 		self.contactUseLine = self.contactDeveloper.Append(wx.ID_ANY, 'Line, id:Maxe0310 ' + _('點此複製到剪貼簿'))
 		self.contactUseDiscord = self.contactDeveloper.Append(wx.ID_ANY, 'Discord, ID:maxe0310 ' + _('點此複製到剪貼簿'))
-		
 		self.contactUseX = self.contactDeveloper.Append(wx.ID_ANY, _('X, ID:Maxe0310'))
+		
+		self.platforms = wx.Menu()
+		self.platformsMenuItem = self.AppendSubMenu(self.platforms, _('支援影音平台 (&P)'))
+		for platform in [*self.main.subtitleAlgs.values(), *self.main.urlToSubtitleAlg.values()]:
+			self.platforms.Append(wx.ID_ANY, platform.info['name'] + _(' 狀態：') + platform.info['status'], platform.info['url'])
+		
 	
 
 class UpdateDialog(wx.Dialog):

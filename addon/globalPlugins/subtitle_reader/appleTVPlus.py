@@ -1,12 +1,17 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg
+from .subtitle_alg import SubtitleAlg, SupportStatus
 from .object_finder import find
 from .compatible import role
 
 from logHandler import log
 
 class AppleTVPlus(SubtitleAlg):
+	info = {
+		'name': 'Apple TV+',
+		'url': 'https://tv.apple.com/',
+		'status': SupportStatus.supported,
+	}
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		videoPlayer = find(obj, 'parent', 'role', role('dialog'))

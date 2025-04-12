@@ -10,12 +10,16 @@ from logHandler import log
 
 from .sound import play
 from .config import conf
-from .subtitle_alg import SubtitleAlg
+from .subtitle_alg import SubtitleAlg, SupportStatus
 from .object_finder import find, search
 from .compatible import role
 
 class Youtube(SubtitleAlg):
-	
+	info = {
+		'name': 'Youtube',
+		'url': 'https://www.youtube.com/',
+		'status': SupportStatus.supported,
+	}
 	def __init__(self, *args, **kwargs):
 		super(Youtube, self).__init__(*args, **kwargs)
 		self.ce = str() # 資訊卡

@@ -1,5 +1,4 @@
 #coding=utf-8
-#coding=utf-8
 
 # 字幕閱讀器
 # 作者：福恩 <maxe@mail.batol.net>
@@ -22,6 +21,7 @@ from . import sound
 from . import gui
 from .config import conf
 from .youtube import Youtube
+from .marumaruX import MarumaruX
 from .disney_plus import DisneyPlus
 from .netflix import Netflix
 from .appleTVPlus import AppleTVPlus
@@ -58,6 +58,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
 			'.+ - YouTube': Youtube(self),
+			'.+ \| 唱歌學.+ \| marumaru': MarumaruX(self),
 			'.+ \| Disney\+': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
 			'^Prime Video.+': PrimeVideo(self),
@@ -105,12 +106,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openChangeLog, menu.openChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
 		# 聯絡開發者
-		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseWhatsApp, menu.contactUseWhatsApp)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseFacebook, menu.contactUseFacebook)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseQq, menu.contactUseQq)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseLine, menu.contactUseLine)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseDiscord, menu.contactUseDiscord)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.contactUseX, menu.contactUseX)
+		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseWhatsApp, menu.contactUseWhatsApp)
+		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseFacebook, menu.contactUseFacebook)
+		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseQq, menu.contactUseQq)
+		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseLine, menu.contactUseLine)
+		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseDiscord, menu.contactUseDiscord)
+		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseX, menu.contactUseX)
+		
+		# 支援的影音平台
+		for item in menu.platforms.GetMenuItems():
+			menu.platforms.Bind(gui.wx.EVT_MENU, self.openPlatformPage, item)
 		
 		menu.switch.Check(conf['switch'])
 		menu.backgroundReading.Check(conf['backgroundReading'])
@@ -432,6 +437,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def contactUseX(self, evt):
 		webbrowser.open('https://www.x.com/Maxe0310')
+	
+	def openPlatformPage(self, evt):
+		url = evt.GetEventObject().GetHelpString(evt.GetId())
+		webbrowser.open(url)
 	
 	__gestures = {
 		'kb:nvda+y': 'toggleSwitch',
