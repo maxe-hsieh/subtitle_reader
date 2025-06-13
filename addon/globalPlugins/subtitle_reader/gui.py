@@ -8,6 +8,7 @@ addonHandler.initTranslation()
 
 import wx
 import gui
+from gui.nvdaControls import EnhancedInputSlider
 
 tray = gui.mainFrame.sysTrayIcon
 toolsMenu = tray.toolsMenu
@@ -55,8 +56,10 @@ class Menu(wx.Menu):
 		
 		# Translators: This menu item performs a check for updates to the reader
 		self.checkForUpdate = self.Append(wx.ID_ANY, _(u'立即檢查更新(&C)'))
-		# Translators: This is menu item that open the changelog
-		self.openChangeLog = self.Append(wx.ID_ANY, _(u'開啟更新日誌(&O)'))
+		# Translators: This is menu item that open the current version's changelog
+		self.openCurrentChangeLog = self.Append(wx.ID_ANY, _(u'開啟當前版本更新日誌(&O)'))
+		# Translators: This is menu item that open the latest version's changelog
+		self.openLatestChangeLog = self.Append(wx.ID_ANY, _(u'開啟最新版本更新日誌(&L)'))
 		# Translators: This menu item that can toggle automatic check for update when Subtitle Reader is start
 		self.checkUpdateAutomatic = self.AppendCheckItem(wx.ID_ANY, _(u'自動檢查更新(&A)'))
 		self.checkUpdateAutomatic.Check(True)
@@ -90,6 +93,11 @@ class UpdateDialog(wx.Dialog):
 		
 		self.subtitleLabel = Label(self, label=_(u'字幕'))
 		self.sizer.Add(self.subtitleLabel, wx.SizerFlags(0).Center())
+		
+		self.volumeLabel = Label(self, label='音樂音量')
+		self.volumeSlider = EnhancedInputSlider(self, value=20)
+		self.sizer.Add(self.volumeLabel)
+		self.sizer.Add(self.volumeSlider)
 		
 		self.progress = wx.Gauge(self, style=wx.GA_VERTICAL + wx.ST_NO_AUTORESIZE)
 		self.sizer.Add(self.progress)

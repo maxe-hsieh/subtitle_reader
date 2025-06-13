@@ -15,7 +15,7 @@ else:
 
 from threading import Thread
 
-from .sound import play, music, getPos
+from .sound import play, music, setVolume, getPos
 
 from .version import version
 from .config import conf
@@ -53,8 +53,12 @@ class Update:
 		play(soundPath + r'\updateChecking.ogg')
 		self.execute()
 	
-	def openChangeLog(self, event):
+	def openCurrentChangeLog(self, event):
 		filePath = appArgs.configPath + r'\addons\subtitle_reader\doc\zh_TW\changelog.html'
+		os.system('start ' + filePath)
+	
+	def openLatestChangeLog(self, event):
+		filePath = 'https://github.com/maxe-hsieh/subtitle_reader/blob/main/addon/doc/zh_TW/changelog.md#%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AA%8C'
 		os.system('start ' + filePath)
 	
 	def toggleCheckAutomatic(self, event):
@@ -138,6 +142,7 @@ class Update:
 		dlg = self.dialog = UpdateDialog(self.new['version'])
 		dlg.isVisited = False
 		dlg.changelogText.SetValue(self.new['changelog'])
+		dlg.volumeSlider.Bind(wx.EVT_SCROLL, self.onVolumeChange)
 		dlg.updateNow.Bind(wx.EVT_BUTTON, self.updateNow)
 		dlg.skipVersion.Bind(wx.EVT_BUTTON, self.skipVersion)
 		dlg.later.Bind(wx.EVT_BUTTON, self.later)
@@ -145,6 +150,15 @@ class Update:
 		dlg.Bind(wx.EVT_CLOSE, self.onClose)
 		#nvdaGui.runScriptModalDialog(dlg)
 		dlg.ShowWithoutActivating()
+	
+	def onVolumeChange(self, evt):
+		volume = max(evt.Position, 10)
+		evt.EventObject.SetValue(volume)
+		evt.Skip()
+		if not self.bgm:
+			return
+		
+		setVolume(self.bgm, volume)
 	
 	def updateNow(self, event):
 		if self.downloadThreadObj and self.downloadThreadObj.is_alive():
@@ -198,6 +212,7 @@ class Update:
 	
 	def startBGM(self):
 		self.bgm = music('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.mp3')
+		
 		# 有可能在音樂播放之前視窗已經關閉
 		if not self.dialog:
 			music()
@@ -205,6 +220,7 @@ class Update:
 			return
 		
 		try:
+			setVolume(self.bgm, self.dialog.volumeSlider.Value)
 			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.ly')
 			if res.code != 200:
 				return

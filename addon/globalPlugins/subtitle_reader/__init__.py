@@ -103,7 +103,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleOmitChatGraphic, menu.omitChatGraphic)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.toggleInfoCardPrompt, menu.infoCardPrompt)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.manualCheck, menu.checkForUpdate)
-		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openChangeLog, menu.openChangeLog)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openCurrentChangeLog, menu.openCurrentChangeLog)
+		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openLatestChangeLog, menu.openLatestChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
 		# 聯絡開發者
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseWhatsApp, menu.contactUseWhatsApp)

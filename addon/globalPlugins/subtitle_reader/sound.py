@@ -45,6 +45,10 @@ def music(filename=None):
 	BASS_ChannelPlay(musicFile, True)
 	return musicFile
 
+def setVolume(sound, volume):
+	volume /= 100
+	BASS_ChannelSetAttribute(sound, BASS_ATTRIB_VOL, volume)
+
 def getPos(file):
 	return BASS_ChannelBytes2Seconds(file, BASS_ChannelGetPosition(file, BASS_POS_BYTE))
 
