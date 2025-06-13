@@ -95,7 +95,7 @@ class UpdateDialog(wx.Dialog):
 		self.sizer.Add(self.subtitleLabel, wx.SizerFlags(0).Center())
 		
 		self.volumeLabel = Label(self, label='音樂音量')
-		self.volumeSlider = EnhancedInputSlider(self, value=20)
+		self.volumeSlider = EnhancedInputSlider(self, value=70)
 		self.sizer.Add(self.volumeLabel)
 		self.sizer.Add(self.volumeSlider)
 		
