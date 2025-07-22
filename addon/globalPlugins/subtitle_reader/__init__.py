@@ -31,7 +31,7 @@ from .lineTV import LineTV
 from .meWatch import MeWatch
 from .bilibili import Bilibili
 from .iqy import Iqy
-from .adn import ADN
+from .adn import Adn
 from .missevan import Missevan
 from .primeVideo import PrimeVideo
 from .potPlayer import PotPlayer

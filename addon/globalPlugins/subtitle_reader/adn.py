@@ -5,7 +5,7 @@ from .object_finder import find
 from .compatible import role
 from logHandler import log
 
-class ADN(SubtitleAlg):
+class Adn(SubtitleAlg):
     info = {
         'name': 'Animation Digital Network',
         'url': 'https://animationdigitalnetwork.fr/',
@@ -33,4 +33,4 @@ class ADN(SubtitleAlg):
 
     def getSubtitle(self):
         obj = self.main.subtitleContainer
-        return super(ADN, self).getSubtitle(obj)
+        return super(Adn, self).getSubtitle(obj)
