@@ -31,6 +31,7 @@ from .lineTV import LineTV
 from .meWatch import MeWatch
 from .bilibili import Bilibili
 from .iqy import Iqy
+from .adn import ADN
 from .missevan import Missevan
 from .primeVideo import PrimeVideo
 from .potPlayer import PotPlayer
@@ -69,9 +70,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.+ - mewatch': MeWatch(self),
 			'.+_哔哩哔哩_bilibili': Bilibili(self),
 			'.+愛奇藝 iQIYI': Iqy(self),
+			'.+ \| ADN': Adn(self),  # Titre de l’onglet pour les vidéos ADN
 		}
 		self.urlToSubtitleAlg = {
 			'.*missevan.com/sound/player\?id=.+': Missevan(self),
+			'.*animedigitalnetwork.fr/video/.*': Adn(self),
 		}
 		self.subtitleAlg = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
