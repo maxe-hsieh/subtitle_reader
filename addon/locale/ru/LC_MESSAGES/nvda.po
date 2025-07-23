@@ -2,47 +2,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SubtitleReader\n"
 "POT-Creation-Date: 2025-04-09 15:42+0300\n"
-"PO-Revision-Date: 2025-04-09 15:42+0300\n"
+"PO-Revision-Date: 2025-07-23 06:30+0500\n"
 "Last-Translator: nvda.ru\n"
 "Language-Team: nvda.ru\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.6\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.6\n"
 "X-Poedit-Basepath: ../../../globalPlugins\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: subtitle_reader/__init__.py:48
 msgid "字幕閱讀器"
-msgstr "Читатель субтитров"
+msgstr "Чтение субтитров"
 
 #: subtitle_reader/__init__.py:148
 msgid "開始閱讀字幕"
-msgstr "Включено чтение субтитров"
+msgstr "Чтение субтитров включено"
 
 #: subtitle_reader/__init__.py:152
 msgid "停止閱讀字幕"
-msgstr "Отключено чтение субтитров"
+msgstr "Чтение субтитров отключено"
 
 #: subtitle_reader/__init__.py:157
 msgid "閱讀器開關"
-msgstr "Переключатель читателя субтитров"
+msgstr "Переключить чтение субтитров"
 
 #: subtitle_reader/gui.py:20
 msgid "字幕閱讀器 (&R)"
-msgstr "Читатель субтитров (&r)"
+msgstr "Чтение субтитров (&r)"
 
 #: subtitle_reader/gui.py:22
 msgid "閱讀器開關 (&S)"
-msgstr "Переключатель читателя субтитров (&s)"
+msgstr "Переключить чтение субтитров (&s)"
 
 #: subtitle_reader/gui.py:26
 msgid "背景閱讀 (&B)"
-msgstr "Фоновое чтение (&B)"
+msgstr "Читать субтитры в фоновом режиме (&B)"
 
 #: subtitle_reader/gui.py:30
 msgid "Youtube 相關設定"
@@ -54,11 +54,11 @@ msgstr "Читать чат (&R)"
 
 #: subtitle_reader/gui.py:37
 msgid "閱讀聊天室訊息發送者(&A)"
-msgstr "Прочитать отправителя сообщения в чате (&A)"
+msgstr "Читать отправителя сообщения в чате (&A)"
 
 #: subtitle_reader/gui.py:41
 msgid "僅閱讀管理員訊息(&M)"
-msgstr "Прочитать только сообщение администратора (&M)."
+msgstr "Читать только сообщение администратора (&M)."
 
 #: subtitle_reader/gui.py:45
 msgid "閱讀會籍贈送(&G)"
@@ -106,11 +106,11 @@ msgstr "X, ИДЕНТИФИКАТОР:Maxe0310"
 
 #: subtitle_reader/gui.py:78
 msgid "字幕閱讀器 V"
-msgstr "Читатель субтитров V"
+msgstr "Чтение субтитров V"
 
 #: subtitle_reader/gui.py:78
 msgid " 新版資訊"
-msgstr "Информация о новой версии"
+msgstr " Информация о новой версии"
 
 #: subtitle_reader/gui.py:81
 msgid "更新日誌"
@@ -130,11 +130,11 @@ msgstr "Пропустить эту версию (&s)"
 
 #: subtitle_reader/gui.py:102
 msgid "晚點再說(&L)"
-msgstr "Позже (&l)"
+msgstr "Напомнить позже (&l)"
 
 #: subtitle_reader/update.py:130
 msgid "您已升級到最新版本，祝您觀影愉快！"
-msgstr "Вы обновили дополнение до последней версии. Приятного просмотра!"
+msgstr "Вы обновили дополнение до последней версии. Приятного просмотра！"
 
 #: subtitle_reader/update.py:130
 msgid "恭喜"
@@ -142,7 +142,7 @@ msgstr "Благодарности"
 
 #: subtitle_reader/update.py:135
 msgid "檢查更新失敗"
-msgstr "Не удалось проверить наличие обновления"
+msgstr "Не удалось проверить наличие обновлений"
 
 #: subtitle_reader/update.py:135 subtitle_reader/update.py:179
 msgid "錯誤"
