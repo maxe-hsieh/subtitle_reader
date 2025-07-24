@@ -1,5 +1,31 @@
 # 更新日誌
 
+## V3.3, 2025.7.24
+
+版本代號：時間迴廊
+
+Song source:
+https://youtu.be/f78Nt2Nnj5Y
+
+### 更新項目
+
+1. Added Crunchyroll subtitle support.
+Test video:
+[SPY x FAMILY (English Dub) OPERATION STRIX](https://www.crunchyroll.com/watch/G9DUE19E9/operation-strix)
+Test steps:
+   1. Using a Chromium browser, open the link above.
+   2. Switch the NVDA to focus mode.
+   3. tab to pause button and press enter.
+   4. tab to Settings menu, then press enter.
+   5. tab to subtitle/cc button and press enter.
+   6. tab to English[CC] and press enter.
+   7. Shift+tab to play button and press enter.
+   8. If the subtitle text is not shown, try pressing F5 to reload this page.
+Thanks to the anonymous user for the proposal and assistance with testing.
+2. Updated Finnish translation, thanks to Jani.
+
+---
+
 ## V3.22, 2025.6.13
 
 版本代號：新月球計畫

@@ -25,6 +25,7 @@ from .marumaruX import MarumaruX
 from .disney_plus import DisneyPlus
 from .netflix import Netflix
 from .appleTVPlus import AppleTVPlus
+from .crunchyroll import Crunchyroll
 from .wkMediaCommons import WKMediaCommons
 from .kktv import Kktv
 from .lineTV import LineTV
@@ -61,6 +62,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.+ \| 唱歌學.+ \| marumaru': MarumaruX(self),
 			'.+ \| Disney\+': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
+			'.+ - Watch on Crunchyroll': Crunchyroll(self),
 			'^Prime Video.+': PrimeVideo(self),
 			'.+ Apple TV\+': AppleTVPlus(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
