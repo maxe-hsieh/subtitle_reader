@@ -49,6 +49,10 @@ class SubtitleAlg(object):
 	def braveGetSubtitle(self, obj):
 		return self.chromeGetSubtitle(obj)
 	
+	# Yandex 瀏覽器
+	def browserGetSubtitle(self, obj):
+		return self.chromeGetSubtitle(obj)
+	
 	def getSubtitle(self, obj=None):
 		subtitle = ''
 		if obj is None:
