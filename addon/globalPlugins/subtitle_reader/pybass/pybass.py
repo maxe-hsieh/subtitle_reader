@@ -59,7 +59,10 @@ import sys, ctypes
 #if sys.hexversion < 0x02060000:
 	#ctypes.c_bool = ctypes.c_byte
 
-bass_module = ctypes.WinDLL(os.path.dirname(__file__) + r'\bass')
+if "64 bit" in sys.version:
+	bass_module = ctypes.WinDLL(os.path.dirname(__file__) + r'\x64\bass')
+else:
+	bass_module = ctypes.WinDLL(os.path.dirname(__file__) + r'\bass')
 func_type = ctypes.WINFUNCTYPE
 
 QWORD = ctypes.c_int64
@@ -86,7 +89,7 @@ HPLUGIN = ctypes.c_ulong	# Plugin handle
 
 # Error codes returned by BASS_ErrorGetCode
 error_descriptions = {}
-BASS_OK = 0 
+BASS_OK = 0
 error_descriptions[BASS_OK] = 'all is OK'
 BASS_ERROR_MEM = 1
 error_descriptions[BASS_ERROR_MEM] = 'memory error'
@@ -502,7 +505,7 @@ EAX_PRESET_DIZZY           =(EAX_ENVIRONMENT_DIZZY,0.139,17.234,0.666)
 EAX_PRESET_PSYCHOTIC       =(EAX_ENVIRONMENT_PSYCHOTIC,0.486,7.563,0.806)
 
 #typedef DWORD (CALLBACK STREAMPROC)(HSTREAM handle, void *buffer, DWORD length, void *user);
-STREAMPROC = func_type(ctypes.c_ulong, HSTREAM, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p) 
+STREAMPROC = func_type(ctypes.c_ulong, HSTREAM, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p)
 # User stream callback function. NOTE: A stream function should obviously be as quick
 #as possible, other streams (and MOD musics) can't be mixed until it's finished.
 #handle : The stream that needs writing
@@ -537,13 +540,13 @@ STREAMFILE_BUFFERPUSH = 2
 
 # User file stream callback functions
 #typedef void (CALLBACK FILECLOSEPROC)(void *user);
-FILECLOSEPROC = func_type(None, ctypes.c_void_p) 
+FILECLOSEPROC = func_type(None, ctypes.c_void_p)
 #typedef QWORD (CALLBACK FILELENPROC)(void *user);
-FILELENPROC = func_type(QWORD, ctypes.c_void_p) 
+FILELENPROC = func_type(QWORD, ctypes.c_void_p)
 #typedef DWORD (CALLBACK FILEREADPROC)(void *buffer, DWORD length, void *user);
-FILEREADPROC = func_type(ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p) 
+FILEREADPROC = func_type(ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p)
 #typedef BOOL (CALLBACK FILESEEKPROC)(QWORD offset, void *user);
-FILESEEKPROC = func_type(ctypes.c_bool, QWORD, ctypes.c_void_p) 
+FILESEEKPROC = func_type(ctypes.c_bool, QWORD, ctypes.c_void_p)
 
 class BASS_FILEPROCS(ctypes.Structure):
 	_fields_ = [('close', FILECLOSEPROC),#FILECLOSEPROC *close;
@@ -566,7 +569,7 @@ BASS_FILEPOS_BUFFER = 5
 BASS_FILEPOS_SOCKET = 6
 
 #typedef void (CALLBACK DOWNLOADPROC)(const void *buffer, DWORD length, void *user);
-DOWNLOADPROC = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p) 
+DOWNLOADPROC = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p)
 # Internet stream download callback function.
 #buffer : Buffer containing the downloaded data... NULL=end of download
 #length : Number of bytes in the buffer
@@ -589,7 +592,7 @@ BASS_SYNC_MIXTIME = 0x40000000# FLAG: sync at mixtime, else at playtime
 BASS_SYNC_ONETIME = 0x80000000# FLAG: sync only once, else continuously
 
 #typedef void (CALLBACK SYNCPROC)(HSYNC handle, DWORD channel, DWORD data, void *user);
-SYNCPROC = func_type(None, HSYNC, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_p) 
+SYNCPROC = func_type(None, HSYNC, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_p)
 # Sync callback function. NOTE: a sync callback function should be very
 #quick as other syncs can't be processed until it has finished. If the sync
 #is a "mixtime" sync, then other streams and MOD musics can't be mixed until
@@ -600,7 +603,7 @@ SYNCPROC = func_type(None, HSYNC, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_
 #user   : The 'user' parameter given when calling BASS_ChannelSetSync
 
 #typedef void (CALLBACK DSPPROC)(HDSP handle, DWORD channel, void *buffer, DWORD length, void *user);
-DSPPROC = func_type(None, HDSP, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p) 
+DSPPROC = func_type(None, HDSP, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p)
 # DSP callback function. NOTE: A DSP function should obviously be as quick as
 #possible... other DSP functions, streams and MOD musics can not be processed
 #until it's finished.
@@ -611,7 +614,7 @@ DSPPROC = func_type(None, HDSP, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong,
 #user   : The 'user' parameter given when calling BASS_ChannelSetDSP
 
 #typedef BOOL (CALLBACK RECORDPROC)(HRECORD handle, const void *buffer, DWORD length, void *user);
-RECORDPROC = func_type(ctypes.c_bool, HRECORD, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p) 
+RECORDPROC = func_type(ctypes.c_bool, HRECORD, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p)
 # Recording callback function.
 #handle : The recording handle
 #buffer : Buffer containing the recorded sample data
@@ -701,7 +704,7 @@ class TAG_APE_BINARY(ctypes.Structure):
 
 # BWF "bext" tag structure
 class TAG_BEXT(ctypes.Structure):
-	
+
 	_pack_ = 1
 	_fields_ = [('Description', ctypes.c_char*256),#char Description[256];// description
 	('Originator', ctypes.c_char*32),#char Originator[32];// name of the originator
@@ -883,7 +886,7 @@ BASS_DX8_PHASE_180 = 4
 #typedef void (CALLBACK IOSNOTIFYPROC)(DWORD status);
 # iOS notification callback function.
 #status : The notification (BASS_IOSNOTIFY_xxx)
-IOSNOTIFYPROC = func_type(None, ctypes.c_ulong) 
+IOSNOTIFYPROC = func_type(None, ctypes.c_ulong)
 
 BASS_IOSNOTIFY_INTERRUPT = 1# interruption started
 BASS_IOSNOTIFY_INTERRUPT_END = 2# interruption ended
@@ -1095,4 +1098,3 @@ BASS_GetDSoundObject = func_type(ctypes.c_void_p, ctypes.c_ulong)(('BASS_GetDSou
 BASS_SetEAXParameters = func_type(ctypes.c_bool, ctypes.c_int, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('BASS_SetEAXParameters', bass_module))
 #BOOL BASSDEF(BASS_GetEAXParameters)(DWORD *env, float *vol, float *decay, float *damp);
 BASS_GetEAXParameters = func_type(ctypes.c_bool, ctypes.POINTER(ctypes.c_ulong), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))(('BASS_GetEAXParameters', bass_module))
-

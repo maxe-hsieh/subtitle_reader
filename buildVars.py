@@ -29,7 +29,7 @@ addon_info = {
 	# 2. 新的影音平台支援為小數點後一位，並且將小數點第二位歸零。
 	# 3. 版本號會自然進位。
 	# 4. 附加元件商店的版本號，小數點後仍是整數比較，故小數點後為 0 也不可省略。
-	"addon_version": "3.50",
+	"addon_version": "4.0",
 	# Author(s)
 	"addon_author": "福恩 <maxe@mail.batol.net>",
 	# URL for the add-on documentation support
