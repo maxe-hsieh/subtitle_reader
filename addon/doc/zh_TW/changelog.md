@@ -1,5 +1,44 @@
 # 更新日誌
 
+## V3.5, 2025.10.23
+
+版本代號：心訊 Heart Signal
+
+影片來源：
+https://youtu.be/NEC1JChA6ws
+
+### 更新項目
+
+1. 新增 HBO Max 字幕支援，感謝 TY 的提案與提供測試帳號。
+2. 新增 Yandex 瀏覽器支援，感謝 Fatih Yüksek 的提案。 (Issue #41)
+
+### 修正巷木
+
+1. Netflix: 修正偶爾出現看不見的對話框，導致找不到字幕的錯誤。
+2. Netflix: 修正全螢幕播放時找不到字幕的錯誤。
+3. Animation Digital Network: 修正無法閱讀字幕的錯誤，感謝 blal 的協作開發。
+4. 調整版本號碼規則，以避免 NVDA 附加元件商店認為舊版字幕閱讀器比較新的錯誤。
+
+---
+
+## V3.4, 2025.7.25
+
+版本代號：烏乎
+
+影片來源：
+https://youtu.be/toAZjnSIOeE
+
+### 更新項目
+
+1. 新增 Animation Digital Network 字幕支援，感謝 blal 的協作開發。
+P.S 此為法國的影音平台，我無法事先測試字幕是否可讀，若有任何問題，請向協作者反映，由協作者進行問題修正。
+協作者的 github 頁面在[這裡](https://github.com/blal1/subtitle_reader)
+2. 字幕閱讀器新增法文介面，感謝 blal. 
+3. 更新俄語翻譯，感謝 Kostenkov
+P.S 太棒了，第一次我完全不用寫代碼的更新。
+
+---
+
 ## V3.3, 2025.7.24
 
 版本代號：時間迴廊

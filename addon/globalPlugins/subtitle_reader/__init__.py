@@ -35,6 +35,7 @@ from .iqy import Iqy
 from .adn import Adn
 from .missevan import Missevan
 from .primeVideo import PrimeVideo
+from .hboMax import HboMax
 from .potPlayer import PotPlayer
 from .update import Update
 
@@ -73,13 +74,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.+_哔哩哔哩_bilibili': Bilibili(self),
 			'.+愛奇藝 iQIYI': Iqy(self),
 			'.+ \| ADN': Adn(self),  # Titre de l’onglet pour les vidéos ADN
+			'.+ • HBO Max': HboMax(self),
 		}
 		self.urlToSubtitleAlg = {
 			'.*missevan.com/sound/player\?id=.+': Missevan(self),
 			'.*animedigitalnetwork.fr/video/.*': Adn(self),
 		}
 		self.subtitleAlg = None
-		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge')
+		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge', 'browser') # browser = Yandex
 		self.focusObject = None
 		self.urlObjects = {}
 		self.videoPlayer = None
