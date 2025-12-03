@@ -1,160 +1,191 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SubtitleReader\n"
-"POT-Creation-Date: 2025-04-09 15:42+0300\n"
-"PO-Revision-Date: 2025-07-23 06:30+0500\n"
+"POT-Creation-Date: 2025-12-03 14:30+0300\n"
+"PO-Revision-Date: 2025-12-03 14:37+0300\n"
 "Last-Translator: nvda.ru\n"
-"Language-Team: nvda.ru\n"
+"Language-Team: Russian translation team <nvda.ru>, Danil Kostenkov "
+"<danilkostenkov38@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
-"X-Poedit-Basepath: ../../../globalPlugins\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: addon/globalPlugins/subtitle_reader\n"
 
-#: subtitle_reader/__init__.py:48
+#: addon/globalPlugins/subtitle_reader/__init__.py:50 buildVars.py:23
 msgid "字幕閱讀器"
 msgstr "Чтение субтитров"
 
-#: subtitle_reader/__init__.py:148
+#: addon/globalPlugins/subtitle_reader/__init__.py:159
 msgid "開始閱讀字幕"
 msgstr "Чтение субтитров включено"
 
-#: subtitle_reader/__init__.py:152
+#: addon/globalPlugins/subtitle_reader/__init__.py:163
 msgid "停止閱讀字幕"
 msgstr "Чтение субтитров отключено"
 
-#: subtitle_reader/__init__.py:157
+#: addon/globalPlugins/subtitle_reader/__init__.py:168
 msgid "閱讀器開關"
 msgstr "Переключить чтение субтитров"
 
-#: subtitle_reader/gui.py:20
+#: addon/globalPlugins/subtitle_reader/gui.py:21
 msgid "字幕閱讀器 (&R)"
 msgstr "Чтение субтитров (&r)"
 
-#: subtitle_reader/gui.py:22
+#: addon/globalPlugins/subtitle_reader/gui.py:23
 msgid "閱讀器開關 (&S)"
 msgstr "Переключить чтение субтитров (&s)"
 
-#: subtitle_reader/gui.py:26
+#: addon/globalPlugins/subtitle_reader/gui.py:27
 msgid "背景閱讀 (&B)"
 msgstr "Читать субтитры в фоновом режиме (&B)"
 
-#: subtitle_reader/gui.py:30
+#: addon/globalPlugins/subtitle_reader/gui.py:31
 msgid "Youtube 相關設定"
 msgstr "Настройки, связанные с Youtube"
 
-#: subtitle_reader/gui.py:33
+#: addon/globalPlugins/subtitle_reader/gui.py:34
 msgid "閱讀聊天室(&R)"
 msgstr "Читать чат (&R)"
 
-#: subtitle_reader/gui.py:37
+#: addon/globalPlugins/subtitle_reader/gui.py:38
 msgid "閱讀聊天室訊息發送者(&A)"
 msgstr "Читать отправителя сообщения в чате (&A)"
 
-#: subtitle_reader/gui.py:41
+#: addon/globalPlugins/subtitle_reader/gui.py:42
 msgid "僅閱讀管理員訊息(&M)"
 msgstr "Читать только сообщение администратора (&M)."
 
-#: subtitle_reader/gui.py:45
+#: addon/globalPlugins/subtitle_reader/gui.py:46
 msgid "閱讀會籍贈送(&G)"
 msgstr "Читать розыгрыши членства (&G)"
 
-#: subtitle_reader/gui.py:49
+#: addon/globalPlugins/subtitle_reader/gui.py:50
 msgid "閱讀聊天室時掠過圖片名稱(&G)"
 msgstr "Пропускать название картинки при чтении чата (&G)"
 
-#: subtitle_reader/gui.py:53
+#: addon/globalPlugins/subtitle_reader/gui.py:54
 msgid "資訊卡提示(&I)"
 msgstr "Подсказка информационной карты (&I)"
 
-#: subtitle_reader/gui.py:57
+#: addon/globalPlugins/subtitle_reader/gui.py:58
 msgid "立即檢查更新(&C)"
 msgstr "Проверить обновления (&c)"
 
-#: subtitle_reader/gui.py:59
-msgid "開啟更新日誌(&O)"
-msgstr "Открыть журнал изменений (&o)"
+#: addon/globalPlugins/subtitle_reader/gui.py:60
+msgid "開啟當前版本更新日誌(&O)"
+msgstr "Открыть журнал обновлений текущей версии (&o)"
 
-#: subtitle_reader/gui.py:61 subtitle_reader/update.py:63
+#: addon/globalPlugins/subtitle_reader/gui.py:62
+msgid "開啟最新版本更新日誌(&L)"
+msgstr "Открыть журнал обновлений последней версии (&o)"
+
+#: addon/globalPlugins/subtitle_reader/gui.py:64
+#: addon/globalPlugins/subtitle_reader/update.py:67
 msgid "自動檢查更新(&A)"
 msgstr "Автоматически проверять обновления (&a)"
 
-#: subtitle_reader/gui.py:65
+#: addon/globalPlugins/subtitle_reader/gui.py:68
 msgid "聯絡開發者 (&C)"
 msgstr "&Связаться с разработчиком"
 
-#: subtitle_reader/gui.py:68
+#: addon/globalPlugins/subtitle_reader/gui.py:71
 msgid "Facebook 個人檔案"
 msgstr "Профиль на Facebook"
 
-#: subtitle_reader/gui.py:69
+#: addon/globalPlugins/subtitle_reader/gui.py:72
 msgid "QQ, id:2231691423"
 msgstr "QQ, идентификатор: 2231691423"
 
-#: subtitle_reader/gui.py:70 subtitle_reader/gui.py:71
+#: addon/globalPlugins/subtitle_reader/gui.py:73
+#: addon/globalPlugins/subtitle_reader/gui.py:74
 msgid "點此複製到剪貼簿"
 msgstr "Нажмите здесь, чтобы скопировать в буфер обмена"
 
-#: subtitle_reader/gui.py:73
+#: addon/globalPlugins/subtitle_reader/gui.py:75
 msgid "X, ID:Maxe0310"
 msgstr "X, ИДЕНТИФИКАТОР:Maxe0310"
 
-#: subtitle_reader/gui.py:78
+#: addon/globalPlugins/subtitle_reader/gui.py:78
+msgid "支援影音平台 (&P)"
+msgstr "Поддержать разработку дополнения  (&P)"
+
+#: addon/globalPlugins/subtitle_reader/gui.py:80
+msgid " 狀態："
+msgstr " состояние："
+
+#: addon/globalPlugins/subtitle_reader/gui.py:86
 msgid "字幕閱讀器 V"
 msgstr "Чтение субтитров V"
 
-#: subtitle_reader/gui.py:78
+#: addon/globalPlugins/subtitle_reader/gui.py:86
 msgid " 新版資訊"
 msgstr " Информация о новой версии"
 
-#: subtitle_reader/gui.py:81
+#: addon/globalPlugins/subtitle_reader/gui.py:89
 msgid "更新日誌"
 msgstr "Журнал изменений"
 
-#: subtitle_reader/gui.py:86
+#: addon/globalPlugins/subtitle_reader/gui.py:94
 msgid "字幕"
 msgstr "субтитры"
 
-#: subtitle_reader/gui.py:94
+#: addon/globalPlugins/subtitle_reader/gui.py:107
 msgid "現在更新(&U)"
 msgstr "Обновить сейчас (&u)"
 
-#: subtitle_reader/gui.py:98
+#: addon/globalPlugins/subtitle_reader/gui.py:111
 msgid "跳過此版本(&S)"
 msgstr "Пропустить эту версию (&s)"
 
-#: subtitle_reader/gui.py:102
+#: addon/globalPlugins/subtitle_reader/gui.py:115
 msgid "晚點再說(&L)"
 msgstr "Напомнить позже (&l)"
 
-#: subtitle_reader/update.py:130
+#: addon/globalPlugins/subtitle_reader/subtitle_alg.py:76
+msgid "失效"
+msgstr "Ошибка"
+
+#: addon/globalPlugins/subtitle_reader/subtitle_alg.py:77
+msgid "正常"
+msgstr "успешно"
+
+#: addon/globalPlugins/subtitle_reader/update.py:134
 msgid "您已升級到最新版本，祝您觀影愉快！"
 msgstr "Вы обновили дополнение до последней версии. Приятного просмотра！"
 
-#: subtitle_reader/update.py:130
+#: addon/globalPlugins/subtitle_reader/update.py:134
 msgid "恭喜"
 msgstr "Благодарности"
 
-#: subtitle_reader/update.py:135
+#: addon/globalPlugins/subtitle_reader/update.py:139
 msgid "檢查更新失敗"
 msgstr "Не удалось проверить наличие обновлений"
 
-#: subtitle_reader/update.py:135 subtitle_reader/update.py:179
+#: addon/globalPlugins/subtitle_reader/update.py:139
+#: addon/globalPlugins/subtitle_reader/update.py:193
 msgid "錯誤"
 msgstr "ошибка"
 
-#: subtitle_reader/update.py:179
+#: addon/globalPlugins/subtitle_reader/update.py:193
 msgid "下載更新失敗"
 msgstr "Не удалось загрузить обновление"
 
-#: subtitle_reader/youtube.py:317
+#: addon/globalPlugins/subtitle_reader/youtube.py:321
 msgid "意見調查："
 msgstr "Опрос мнений："
+
+#: buildVars.py:26
+msgid "當焦點位於網頁上的影片播放器時，讓 NVDA 讀出字幕。"
+msgstr ""
+"Когда фокус находится на проигрывателе видео на веб-странице, это "
+"дополнение позволяет NVDA читать субтитры к проигрываемому видео."
 
 #~ msgid "讀出章節(&C)"
 #~ msgstr "Прочитать раздел (&C)"
