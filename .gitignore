@@ -2,6 +2,8 @@ addon/doc/*.css
 *_docHandler.py
 *.html
 manifest.ini
+# 暫時不忽略此檔案，下個版本刪除。
+!addon/manifest.ini
 *.mo
 *.pot
 *.py[co]

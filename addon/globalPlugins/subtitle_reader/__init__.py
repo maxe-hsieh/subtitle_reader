@@ -36,6 +36,7 @@ from .adn import Adn
 from .missevan import Missevan
 from .primeVideo import PrimeVideo
 from .hboMax import HboMax
+from .skyShowtime import SkyShowtime
 from .potPlayer import PotPlayer
 from .update import Update
 
@@ -75,6 +76,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.+愛奇藝 iQIYI': Iqy(self),
 			'.+ \| ADN': Adn(self),  # Titre de l’onglet pour les vidéos ADN
 			'.+ • HBO Max': HboMax(self),
+			'.+ - SkyShowtime': SkyShowtime(self),
 		}
 		self.urlToSubtitleAlg = {
 			'.*missevan.com/sound/player\?id=.+': Missevan(self),
@@ -334,7 +336,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def processSubtitle(self, subtitle):
 		# 刪除用於渲染字幕效果的符號
-		subtitle = subtitle.replace(u'​', '').replace(u' ', '')
+		subtitle = subtitle.replace(u'​', '').replace(u' ', ' ')
 		log.debug('original subtitle = ' + subtitle)
 		subtitle = self.filterSamePart(subtitle)
 		

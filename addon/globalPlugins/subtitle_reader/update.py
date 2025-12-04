@@ -24,6 +24,7 @@ from globalVars import appArgs
 import ui
 
 soundPath = os.path.dirname(__file__) + r'\sounds'
+projectUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main'
 sourceUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/addon'
 assetUrl = 'https://github.com/maxe-hsieh/subtitle_reader/releases/latest/download'
 tempDir = os.getenv('temp')
@@ -103,7 +104,7 @@ class Update:
 	def getNewVersion(self):
 		info = {'version': 0, 'changelog': '', 'error': None}
 		try:
-			res = urlopen(sourceUrl + '/manifest.ini')
+			res = urlopen(projectUrl + '/buildVars.py')
 			text = res.read().decode('utf-8')
 			res.close()
 			
@@ -111,7 +112,7 @@ class Update:
 				info['error'] = True
 				return info
 			
-			newVersion = re.findall(r'version ?= ?(.+)\r?', text)[0]
+			newVersion = re.findall(r'addon_version ?= ?"(.+)",\r?', text)[0]
 			if newVersion == version:
 				return
 			

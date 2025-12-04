@@ -29,7 +29,7 @@ addon_info = AddonInfo(
 	# 2. 新的影音平台支援為小數點後一位，並且將小數點第二位歸零。
 	# 3. 版本號會自然進位，故支援 10 個影音平台主版本號 +1. 
 	# 4. 附加元件商店的版本號，小數點後仍是整數比較，故小數點後為 0 也不可省略。
-	addon_version="3.50",
+	addon_version="3.60",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store
 	addon_changelog=_(""""""),
