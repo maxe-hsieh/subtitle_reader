@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: subtitle_reader 2.54\n"
-"POT-Creation-Date: 2025-12-03 14:30+0300\n"
-"PO-Revision-Date: 2025-12-03 14:43+0300\n"
+"POT-Creation-Date: 2026-01-11 15:19+0300\n"
+"PO-Revision-Date: 2026-01-11 15:24+0300\n"
 "Last-Translator: nvda.ru\n"
 "Language-Team: Russian translation team <nvda.ru>, Danil Kostenkov "
 "<danilkostenkov38@gmail.com>\n"
@@ -18,19 +18,19 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: addon/globalPlugins/subtitle_reader\n"
 
-#: addon/globalPlugins/subtitle_reader/__init__.py:50 buildVars.py:23
+#: addon/globalPlugins/subtitle_reader/__init__.py:52 buildVars.py:23
 msgid "字幕閱讀器"
-msgstr "Чтение субтитров"
+msgstr "Subtitle reader (Чтение субтитров)"
 
-#: addon/globalPlugins/subtitle_reader/__init__.py:159
+#: addon/globalPlugins/subtitle_reader/__init__.py:163
 msgid "開始閱讀字幕"
 msgstr "Чтение субтитров включено"
 
-#: addon/globalPlugins/subtitle_reader/__init__.py:163
+#: addon/globalPlugins/subtitle_reader/__init__.py:167
 msgid "停止閱讀字幕"
 msgstr "Чтение субтитров отключено"
 
-#: addon/globalPlugins/subtitle_reader/__init__.py:168
+#: addon/globalPlugins/subtitle_reader/__init__.py:172
 msgid "閱讀器開關"
 msgstr "Переключить чтение субтитров"
 
@@ -60,11 +60,11 @@ msgstr "Читать отправителя сообщения в чате (&A)"
 
 #: addon/globalPlugins/subtitle_reader/gui.py:42
 msgid "僅閱讀管理員訊息(&M)"
-msgstr "Читать только сообщение администратора (&M)."
+msgstr "Читать только сообщения администратора (&M)."
 
 #: addon/globalPlugins/subtitle_reader/gui.py:46
 msgid "閱讀會籍贈送(&G)"
-msgstr "Читать розыгрыши членства (&G)"
+msgstr "Читать информацию о подарках (&G)"
 
 #: addon/globalPlugins/subtitle_reader/gui.py:50
 msgid "閱讀聊天室時掠過圖片名稱(&G)"
@@ -87,7 +87,7 @@ msgid "開啟最新版本更新日誌(&L)"
 msgstr "Открыть журнал обновлений последней версии (&o)"
 
 #: addon/globalPlugins/subtitle_reader/gui.py:64
-#: addon/globalPlugins/subtitle_reader/update.py:67
+#: addon/globalPlugins/subtitle_reader/update.py:68
 msgid "自動檢查更新(&A)"
 msgstr "Автоматически проверять обновления (&a)"
 
@@ -106,7 +106,7 @@ msgstr "QQ, идентификатор: 2231691423"
 #: addon/globalPlugins/subtitle_reader/gui.py:73
 #: addon/globalPlugins/subtitle_reader/gui.py:74
 msgid "點此複製到剪貼簿"
-msgstr "Нажмите здесь, чтобы скопировать в буфер обмена"
+msgstr "Скопировать в буфер обмена"
 
 #: addon/globalPlugins/subtitle_reader/gui.py:75
 msgid "X, ID:Maxe0310"
@@ -148,32 +148,32 @@ msgstr "Пропустить эту версию (&s)"
 msgid "晚點再說(&L)"
 msgstr "Напомнить позже (&l)"
 
-#: addon/globalPlugins/subtitle_reader/subtitle_alg.py:76
+#: addon/globalPlugins/subtitle_reader/subtitle_alg.py:80
 msgid "失效"
 msgstr "Ошибка"
 
-#: addon/globalPlugins/subtitle_reader/subtitle_alg.py:77
+#: addon/globalPlugins/subtitle_reader/subtitle_alg.py:81
 msgid "正常"
 msgstr "успешно"
 
-#: addon/globalPlugins/subtitle_reader/update.py:134
+#: addon/globalPlugins/subtitle_reader/update.py:135
 msgid "您已升級到最新版本，祝您觀影愉快！"
-msgstr "Вы обновили дополнение до последней версии. Приятного просмотра！"
+msgstr "Вы обновили дополнение до последней версии. Приятного использования！"
 
-#: addon/globalPlugins/subtitle_reader/update.py:134
+#: addon/globalPlugins/subtitle_reader/update.py:135
 msgid "恭喜"
 msgstr "Благодарности"
 
-#: addon/globalPlugins/subtitle_reader/update.py:139
+#: addon/globalPlugins/subtitle_reader/update.py:140
 msgid "檢查更新失敗"
 msgstr "Не удалось проверить наличие обновлений"
 
-#: addon/globalPlugins/subtitle_reader/update.py:139
-#: addon/globalPlugins/subtitle_reader/update.py:193
+#: addon/globalPlugins/subtitle_reader/update.py:140
+#: addon/globalPlugins/subtitle_reader/update.py:194
 msgid "錯誤"
 msgstr "ошибка"
 
-#: addon/globalPlugins/subtitle_reader/update.py:193
+#: addon/globalPlugins/subtitle_reader/update.py:194
 msgid "下載更新失敗"
 msgstr "Не удалось загрузить обновление"
 
@@ -184,8 +184,8 @@ msgstr "Опрос мнений："
 #: buildVars.py:26
 msgid "當焦點位於網頁上的影片播放器時，讓 NVDA 讀出字幕。"
 msgstr ""
-"Когда фокус находится на проигрывателе видео на веб-странице, это "
-"дополнение позволяет NVDA читать субтитры к проигрываемому видео。"
+"Когда фокус находится на проигрывателе видео на веб-странице, это дополнение "
+"позволяет NVDA читать субтитры к проигрываемому видео。"
 
 #~ msgid "讀出章節(&C)"
 #~ msgstr "Прочитать раздел (&C)"
