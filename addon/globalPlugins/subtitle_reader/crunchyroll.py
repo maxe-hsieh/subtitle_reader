@@ -10,7 +10,7 @@ class Crunchyroll(SubtitleAlg):
 	info = {
 		'name': 'Crunchyroll',
 		'url': 'https://www.crunchyroll.com/',
-		'status': SupportStatus.supported,
+		'status': SupportStatus.invalid,
 	}
 	def getVideoPlayer(self):
 		obj = self.main.focusObject

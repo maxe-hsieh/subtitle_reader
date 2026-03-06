@@ -21,6 +21,7 @@ from . import sound
 from . import gui
 from .config import conf
 from .youtube import Youtube
+from .twitch import Twitch
 from .marumaruX import MarumaruX
 from .disney_plus import DisneyPlus
 from .netflix import Netflix
@@ -62,6 +63,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.subtitleAlgs = {
 			'.+ - YouTube': Youtube(self),
+			'.+ - Twitch': Twitch(self),
 			'.+ \| 唱歌學.+ \| marumaru': MarumaruX(self),
 			'.+ \| Disney\+': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),

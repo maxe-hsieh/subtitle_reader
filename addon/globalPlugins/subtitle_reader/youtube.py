@@ -307,7 +307,7 @@ class Youtube(SubtitleAlg):
 		if not banner:
 			return
 		
-		self.chatBannerSearchObject = search(banner, lambda obj: bool(obj.name) and obj.role != role('LINK'), lambda banner: ui.message(banner.name if banner.role != role('BUTTON') else '聊天室橫幅'), continueOnFound=True)
+		self.chatBannerSearchObject = search(banner, lambda obj: bool(obj.name) and obj.role != role('LINK'), lambda banner: ui.message(banner.name if banner.role != role('BUTTON') else '聊天橫幅'), continueOnFound=True)
 	
 	def readVoting(self):
 		if not self.chatRoom:
