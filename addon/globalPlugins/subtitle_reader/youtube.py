@@ -53,8 +53,10 @@ class Youtube(SubtitleAlg):
 		self.getChatContainer()
 		
 		videoPlayer = self.main.videoPlayer
+		# Movie Subtitles
+		container = find(videoPlayer.firstChild, 'next', 'id', 'npm-video-player-detector-container')
 		# 沉浸式翻譯
-		container = find(videoPlayer.firstChild, 'next', 'id', 'immersive-translate-caption-window')
+		container = container or find(videoPlayer.firstChild, 'next', 'id', 'immersive-translate-caption-window')
 		# Youtube
 		container = container or find(videoPlayer.firstChild, 'next', 'id', 'ytp-caption-window-container')
 		if not container:

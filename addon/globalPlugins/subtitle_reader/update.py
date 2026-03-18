@@ -7,10 +7,10 @@ import os
 import re
 from sys import version_info
 if version_info.major == 2:
-	from urllib import quote_plus, urlopen, urlretrieve as downloadFile
+	from urllib import quote_plus, urlopen
 	from codecs import open
 else:
-	from urllib.request import urlopen, urlretrieve as downloadFile
+	from urllib.request import urlopen
 	from urllib.parse import quote_plus
 
 from threading import Thread
@@ -81,16 +81,17 @@ class Update:
 		self.checkThreadObj.start()
 	
 	def checkThread(self, automatic=False):
-		info = self.getNewVersion()
-		if not info:
+		try:
+			info = self.getNewVersion()
+		except Exception as e:
 			if not automatic:
-				wx.CallAfter(self.isLatestVersion)
+				wx.CallAfter(self.checkError, e)
 			
 			return
 		
-		if info['error']:
+		if not info:
 			if not automatic:
-				wx.CallAfter(self.checkError)
+				wx.CallAfter(self.isLatestVersion)
 			
 			return
 		
@@ -103,41 +104,30 @@ class Update:
 	
 	def getNewVersion(self):
 		info = {'version': 0, 'changelog': '', 'error': None}
-		try:
-			res = urlopen(projectUrl + '/buildVars.py')
+		with urlopen(projectUrl + '/buildVars.py') as res:
 			text = res.read().decode('utf-8')
-			res.close()
-			
-			if res.getcode() != 200:
-				info['error'] = True
-				return info
-			
-			newVersion = re.findall(r'addon_version ?= ?"(.+)",\r?', text)[0]
-			if newVersion == version:
-				return
-			
-			info['version'] = newVersion
-			
-			res = urlopen(sourceUrl + '/doc/zh_TW/changelog.md')
-			text = res.read().decode('utf-8')
-			res.close()
-			
-			info['changelog'] = text
-			return info
-		except:
-			info['error'] = True
-			return info
 		
+		newVersion = re.findall(r'addon_version ?= ?"(.+)",\r?', text)[0]
+		if newVersion == version:
+			return
+		
+		info['version'] = newVersion
+		
+		with urlopen(sourceUrl + '/doc/zh_TW/changelog.md') as res:
+			text = res.read().decode('utf-8')
+		
+		info['changelog'] = text
+		return info
 	
 	def isLatestVersion(self):
 		play(soundPath + r'\isLatestVersion.ogg')
 		# Translators: This is a prompt to confirm that the reader is the latest version
 		wx.MessageBox(_(u'您已升級到最新版本，祝您觀影愉快！'), _(u'恭喜'), style=wx.ICON_EXCLAMATION)
 	
-	def checkError(self):
+	def checkError(self, error):
 		play(soundPath + r'\downloadError.ogg')
 		# Translators: This is the prompt when checking for updates fails
-		wx.MessageBox(_(u'檢查更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR)
+		wx.MessageBox(_(u'檢查更新失敗') + u': ' + str(error), _(u'錯誤'), style=wx.ICON_ERROR)
 	
 	def showDialog(self):
 		dlg = self.dialog = UpdateDialog(self.new['version'])
@@ -172,26 +162,46 @@ class Update:
 	
 	def downloadThread(self):
 		filename = 'subtitle_reader.nvda-addon'
-		with open(tempDir + '\\' + filename, 'w'):
-			pass
-		
 		try:
-			file = downloadFile(assetUrl + '/' + filename, tempDir + '\\' + filename, reporthook=self.updateProgress)
+			file = self.downloadFile(assetUrl + '/' + filename, tempDir + '\\' + filename, reportHook=self.updateProgress)
 			play(soundPath + r'\downloadCompleted.ogg')
 			self.dialog.Close()
 			os.system('start ' + file[0])
-		except:
-			wx.CallAfter(self.downloadError())
+		except Exception as e:
+			wx.CallAfter(self.downloadError, e)
 		
 	
-	def updateProgress(self, blockCount, blockSize, total):
-		percent = int(100 * blockCount * blockSize / total)
+	def downloadFile(self, url, filePath, reportHook=None):
+		with urlopen(url) as response:
+			total = int(response.headers.get('Content-Length', 0))
+			current = 0
+			with open(filePath, 'wb') as f:
+				while True:
+					data = response.read(8192)
+					if not data:
+						break
+					
+					f.write(data)
+					current += len(data)
+					if reportHook:
+						reportHook(current, total)
+					
+				
+			
+		
+		if current < total:
+			raise Exception('Download failed, Size mismatch. ')
+		
+		return filePath, response.headers
+	
+	def updateProgress(self, current, total):
+		percent = int(100 * current / total)
 		wx.CallAfter(self.dialog.progress.SetValue, percent)
 	
-	def downloadError(self):
+	def downloadError(self, error):
 		play(soundPath + r'\downloadError.ogg')
 		# Translators: This is the prompt when downloading updates fails
-		wx.MessageBox(_(u'下載更新失敗'), _(u'錯誤'), style=wx.ICON_ERROR, parent=self.dialog)
+		wx.MessageBox(_(u'下載更新失敗') + u': ' + str(error), _(u'錯誤'), style=wx.ICON_ERROR, parent=self.dialog)
 	
 	def skipVersion(self, event):
 		play(soundPath + r'\skipVersion.ogg')
