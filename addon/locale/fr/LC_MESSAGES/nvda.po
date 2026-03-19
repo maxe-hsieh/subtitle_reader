@@ -95,10 +95,15 @@ msgstr "Annoncer les fiches d'information (&I)"
 msgid "立即檢查更新(&C)"
 msgstr "Vérifier les mises à jour (&C)"
 
-#. Translators: This is menu item that open the changelog
+#. Translators: This is menu item that opens the current version's changelog
 #: addon\globalPlugins\subtitle_reader\gui.py:59
-msgid "開啟更新日誌(&O)"
-msgstr "Ouvrir le journal des modifications (&O)"
+msgid "開啟當前版本更新日誌(&O)"
+msgstr "Ouvrir le journal de la version actuelle (&O)"
+
+#. Translators: This is menu item that opens the latest version's changelog
+#: addon\globalPlugins\subtitle_reader\gui.py:61
+msgid "開啟最新版本更新日誌(&L)"
+msgstr "Ouvrir le journal de la dernière version (&L)"
 
 #. Translators: This menu item that can toggle automatic check for update when Subtitle Reader is start
 #. Translators: This is Menu item that can toggle automatic check for update on Subtitle Reader is start
@@ -209,6 +214,63 @@ msgstr "Sondage :"
 #: buildVars.py:26
 msgid "當焦點位於網頁上的影片播放器時，讓 NVDA 讀出字幕。"
 msgstr "Permet à NVDA de lire les sous-titres lorsque le focus est sur le lecteur vidéo d'une page web."
+
+#. Translators: Crunchyroll setup submenu
+msgid "Crunchyroll 安裝設定 (&K)"
+msgstr "Crunchyroll - Installation (&K)"
+
+#. Translators: Install Tampermonkey submenu
+msgid "安裝 Tampermonkey (&T)"
+msgstr "Installer Tampermonkey (&T)"
+
+#. Translators: Install userscript menu item
+msgid "安裝腳本 (&I)"
+msgstr "Installer le script (&I)"
+
+#. Translators: Help menu item for Crunchyroll
+msgid "使用說明 (&H)"
+msgstr "Aide (&H)"
+
+#. Translators: Crunchyroll help dialog title
+msgid "Crunchyroll 使用說明"
+msgstr "Aide - Crunchyroll"
+
+#. Translators: Crunchyroll help dialog content
+msgid ""
+"Crunchyroll 字幕支援安裝說明\n"
+"\n"
+"步驟一：安裝 Tampermonkey\n"
+"在選單中選擇您的瀏覽器（Chrome、Firefox 或 Edge），\n"
+"從開啟的頁面安裝 Tampermonkey 擴充功能。\n"
+"\n"
+"步驟二：安裝腳本\n"
+"點選「安裝腳本」，瀏覽器會開啟安裝頁面，\n"
+"Tampermonkey 會自動提示安裝。\n"
+"點選「安裝」，完成後關閉該分頁。\n"
+"\n"
+"步驟三：使用\n"
+"開啟 Crunchyroll 影片並啟用字幕，\n"
+"按 NVDA+Y 開始閱讀字幕。\n"
+"\n"
+"注意：支援 Chrome、Firefox 和 Edge。"
+msgstr ""
+"Installation du support Crunchyroll\n"
+"\n"
+"Étape 1 : Installez Tampermonkey\n"
+"Dans le menu, cliquez sur le bouton correspondant à votre navigateur\n"
+"(Chrome, Firefox ou Edge).\n"
+"Installez l'extension Tampermonkey depuis la page qui s'ouvre.\n"
+"\n"
+"Étape 2 : Installez le script\n"
+"Cliquez sur « Installer le script ». Une page s'ouvre dans votre\n"
+"navigateur et Tampermonkey propose automatiquement l'installation.\n"
+"Cliquez sur « Installer », puis fermez l'onglet.\n"
+"\n"
+"Étape 3 : Utilisez\n"
+"Ouvrez une vidéo sur Crunchyroll avec des sous-titres activés.\n"
+"Appuyez sur NVDA+Y pour démarrer la lecture des sous-titres.\n"
+"\n"
+"Note : Le script fonctionne avec Chrome, Firefox et Edge."
 
 #~ msgid "讀出章節(&C)"
 #~ msgstr "Lire le chapitre (&C)"

@@ -210,5 +210,62 @@ msgstr "Survey："
 msgid "當焦點位於網頁上的影片播放器時，讓 NVDA 讀出字幕。"
 msgstr "This add-on let NVDA read out the subtitles when the focus is on the movie player on the Web page。"
 
+#. Translators: Crunchyroll setup submenu
+msgid "Crunchyroll 安裝設定 (&K)"
+msgstr "Crunchyroll - Setup (&K)"
+
+#. Translators: Install Tampermonkey submenu
+msgid "安裝 Tampermonkey (&T)"
+msgstr "Install Tampermonkey (&T)"
+
+#. Translators: Install userscript menu item
+msgid "安裝腳本 (&I)"
+msgstr "Install script (&I)"
+
+#. Translators: Help menu item for Crunchyroll
+msgid "使用說明 (&H)"
+msgstr "Help (&H)"
+
+#. Translators: Crunchyroll help dialog title
+msgid "Crunchyroll 使用說明"
+msgstr "Crunchyroll - Help"
+
+#. Translators: Crunchyroll help dialog content
+msgid ""
+"Crunchyroll 字幕支援安裝說明\n"
+"\n"
+"步驟一：安裝 Tampermonkey\n"
+"在選單中選擇您的瀏覽器（Chrome、Firefox 或 Edge），\n"
+"從開啟的頁面安裝 Tampermonkey 擴充功能。\n"
+"\n"
+"步驟二：安裝腳本\n"
+"點選「安裝腳本」，瀏覽器會開啟安裝頁面，\n"
+"Tampermonkey 會自動提示安裝。\n"
+"點選「安裝」，完成後關閉該分頁。\n"
+"\n"
+"步驟三：使用\n"
+"開啟 Crunchyroll 影片並啟用字幕，\n"
+"按 NVDA+Y 開始閱讀字幕。\n"
+"\n"
+"注意：支援 Chrome、Firefox 和 Edge。"
+msgstr ""
+"Crunchyroll Subtitle Support Setup\n"
+"\n"
+"Step 1: Install Tampermonkey\n"
+"In the menu, click the button for your browser\n"
+"(Chrome, Firefox or Edge).\n"
+"Install the Tampermonkey extension from the page that opens.\n"
+"\n"
+"Step 2: Install the script\n"
+"Click \"Install script\". A page opens in your browser and\n"
+"Tampermonkey will automatically prompt you to install.\n"
+"Click \"Install\", then close the tab.\n"
+"\n"
+"Step 3: Use\n"
+"Open a video on Crunchyroll with subtitles enabled.\n"
+"Press NVDA+Y to start reading subtitles.\n"
+"\n"
+"Note: The script works with Chrome, Firefox and Edge."
+
 #~ msgid "讀出章節(&C)"
 #~ msgstr "Read chapter"
