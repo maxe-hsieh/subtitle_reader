@@ -54,6 +54,21 @@ class Menu(wx.Menu):
 		self.infoCardPrompt = self.youtube.AppendCheckItem(wx.ID_ANY, _(u'資訊卡提示(&I)'))
 		self.infoCardPrompt.Check(True)
 		
+		# Crunchyroll setup submenu
+		self.crunchyrollSetup = wx.Menu()
+		self.crunchyrollSetupMenuItem = self.AppendSubMenu(self.crunchyrollSetup, _(u'Crunchyroll 安裝設定 (&K)'))
+		# Tampermonkey submenu
+		self.crunchyrollTM = wx.Menu()
+		self.crunchyrollSetup.AppendSubMenu(self.crunchyrollTM, _(u'安裝 Tampermonkey (&T)'))
+		self.crunchyrollTMChrome = self.crunchyrollTM.Append(wx.ID_ANY, 'Chrome (&C)')
+		self.crunchyrollTMFirefox = self.crunchyrollTM.Append(wx.ID_ANY, 'Firefox (&F)')
+		self.crunchyrollTMEdge = self.crunchyrollTM.Append(wx.ID_ANY, 'Edge (&E)')
+		# Install userscript
+		self.crunchyrollInstallScript = self.crunchyrollSetup.Append(wx.ID_ANY, _(u'安裝腳本 (&I)'))
+		self.crunchyrollSetup.AppendSeparator()
+		# Help
+		self.crunchyrollHelp = self.crunchyrollSetup.Append(wx.ID_ANY, _(u'使用說明 (&H)'))
+		
 		# Translators: This menu item performs a check for updates to the reader
 		self.checkForUpdate = self.Append(wx.ID_ANY, _(u'立即檢查更新(&C)'))
 		# Translators: This is menu item that open the current version's changelog
@@ -75,21 +90,6 @@ class Menu(wx.Menu):
 		self.contactUseX = self.contactDeveloper.Append(wx.ID_ANY, _('X, ID:Maxe0310'))
 		
 		self.AppendSeparator()
-
-		# Crunchyroll setup submenu
-		self.crunchyrollSetup = wx.Menu()
-		self.crunchyrollSetupMenuItem = self.AppendSubMenu(self.crunchyrollSetup, _(u'Crunchyroll 安裝設定 (&K)'))
-		# Tampermonkey submenu
-		self.crunchyrollTM = wx.Menu()
-		self.crunchyrollSetup.AppendSubMenu(self.crunchyrollTM, _(u'安裝 Tampermonkey (&T)'))
-		self.crunchyrollTMChrome = self.crunchyrollTM.Append(wx.ID_ANY, 'Chrome (&C)')
-		self.crunchyrollTMFirefox = self.crunchyrollTM.Append(wx.ID_ANY, 'Firefox (&F)')
-		self.crunchyrollTMEdge = self.crunchyrollTM.Append(wx.ID_ANY, 'Edge (&E)')
-		# Install userscript
-		self.crunchyrollInstallScript = self.crunchyrollSetup.Append(wx.ID_ANY, _(u'安裝腳本 (&I)'))
-		self.crunchyrollSetup.AppendSeparator()
-		# Help
-		self.crunchyrollHelp = self.crunchyrollSetup.Append(wx.ID_ANY, _(u'使用說明 (&H)'))
 
 		self.platforms = wx.Menu()
 		self.platformsMenuItem = self.AppendSubMenu(self.platforms, _('支援影音平台 (&P)'))

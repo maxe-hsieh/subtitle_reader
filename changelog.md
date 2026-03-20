@@ -1,29 +1,21 @@
-# 更新日誌
+## V3.72, 2026.3.20
 
-## V3.7, 2026.3.6
-
-版本代號：The Story of Us
+版本代號：想要回家
 
 來源：
-https://youtu.be/D1elWWJEUO4
+https://youtu.be/wQEmu8S1sDE
 
 ### 更新項目
 
-1. 新增 Twitch 聊天室支援。
-目前僅支援保留直播檔的聊天回放，測試流程如下：
-  1. 打開測試直播檔：
-  [最愛的週五23:00芙Z蓮同步視聽](https://www.twitch.tv/videos/2690557740)
-  2. 使用瀏覽模式，直接到最下方往上一行，檢查聊天室是否展開。
-  3. 將焦點移至播放器，可使用 o 來找到它。
-P.S 圖奇並非所有表情符號都標示為圖片，有些表情符號與訂閱里程碑居然與聊天訊息一樣標示為靜態文字，並且沒有別的方法能區分出來，所以無計可施。
-目前設計僅閱讀訊息，不閱讀訊息發送者與他們附帶又多又長的徽章，下個版本再考慮是否加入閱讀這些資訊的開關。
-另外圖奇的直播聊天室，很神奇的與回放聊天室介面大不相同，且使用了 aria-live 導致除了文字訊息，連發送者、徽章、表情符號、發燒列車等等全都朗讀，導致不重要的資訊量爆炸。是否能夠不手動抓訊息，改成攔截並改變 aria-live 行為還要再研究。
-2. Youtube 聊天室的橫幅出現時，將提示改為「聊天橫幅」。
-3. 將 Crunchyroll 支援狀態改為「失效」，感謝 PlatinumTsuki 詳細的技術測試報告，建議 Crunchyroll 使用者集合起來像官方報告此問題。 Issue #55
-4. 完成 NVDA 附加元件樣板更新，在版本代號 心訊 Heart Signal 及其之前的版本已經無法再檢查更新，若需要新版字幕閱讀器，可從商店進行更新。
-5. 修正字幕閱讀器介面的英文翻譯，感謝 Kostenkov-2021
-6. 更新烏克蘭語翻譯，感謝 balaraz
-7. 更新西語翻譯，感謝 nicolas 與 Nickbryan24
+1. 再次支援 Crunchyroll, 感謝 PlatinumTsuki 找到方法並實作。  
+該方法是透過瀏覽器的 Tampermonkey 擴充功能，在播放頁面執行腳本，攔截伺服器的回應來取得字幕，故使用前需安裝擴充功能。  
+安裝方法請見字幕閱讀器選單當中的 Crunchyroll 設定與使用說明。  
+使用前請務必閱讀腳本相關聲明。  
+以下為 PlatinumTsuki 對於此腳本的聲明：  
+The userscript does NOT send data externally, modify playback, or access user credentials.  
+P.S 我似乎看到了支援動畫瘋字幕的希望啊！ 如果我能成功解析伺服器回應的話。
+2. 修正 Crunchyroll 某些語言介面抓不到字幕的錯誤（感謝 PlatinumTsuki ）
+3. 若您的版本並非 3.71 且下載更新失敗，請複製下方連結手動下載更新：  
+https://github.com/maxe-hsieh/subtitle_reader/releases/download/%E6%83%B3%E8%A6%81%E5%9B%9E%E5%AE%B6/subtitle_reader.nvda-addon
 
 ---
-
