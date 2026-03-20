@@ -67,7 +67,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			'.+ \| 唱歌學.+ \| marumaru': MarumaruX(self),
 			'.+ \| Disney\+': DisneyPlus(self),
 			'.*?Netflix': Netflix(self),
-			'.+ - Watch on Crunchyroll': Crunchyroll(self),
+			'.+ (-|–) .+ Crunchyroll': Crunchyroll(self),
 			'^Prime Video.+': PrimeVideo(self),
 			'.+ Apple TV\+': AppleTVPlus(self),
 			'.+ - Wikimedia Commons': WKMediaCommons(self),
@@ -117,6 +117,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openCurrentChangeLog, menu.openCurrentChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.openLatestChangeLog, menu.openLatestChangeLog)
 		gui.tray.Bind(gui.wx.EVT_MENU, self.update.toggleCheckAutomatic, menu.checkUpdateAutomatic)
+		menu.crunchyrollTM.Bind(gui.wx.EVT_MENU, self.onCrunchyrollTMChrome, menu.crunchyrollTMChrome)
+		menu.crunchyrollTM.Bind(gui.wx.EVT_MENU, self.onCrunchyrollTMFirefox, menu.crunchyrollTMFirefox)
+		menu.crunchyrollTM.Bind(gui.wx.EVT_MENU, self.onCrunchyrollTMEdge, menu.crunchyrollTMEdge)
+		menu.crunchyrollSetup.Bind(gui.wx.EVT_MENU, self.onCrunchyrollInstallScript, menu.crunchyrollInstallScript)
+		menu.crunchyrollSetup.Bind(gui.wx.EVT_MENU, self.onCrunchyrollHelp, menu.crunchyrollHelp)
 		# 聯絡開發者
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseWhatsApp, menu.contactUseWhatsApp)
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseFacebook, menu.contactUseFacebook)
@@ -453,7 +458,40 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def openPlatformPage(self, evt):
 		url = evt.GetEventObject().GetHelpString(evt.GetId())
 		webbrowser.open(url)
-	
+
+	def onCrunchyrollTMChrome(self, evt):
+		from .crunchyroll import Crunchyroll
+		Crunchyroll.installTampermonkey('chrome')
+
+	def onCrunchyrollTMFirefox(self, evt):
+		from .crunchyroll import Crunchyroll
+		Crunchyroll.installTampermonkey('firefox')
+
+	def onCrunchyrollTMEdge(self, evt):
+		from .crunchyroll import Crunchyroll
+		Crunchyroll.installTampermonkey('msedge')
+
+	def onCrunchyrollInstallScript(self, evt):
+		from .crunchyroll import Crunchyroll
+		Crunchyroll.installUserscript()
+
+	def onCrunchyrollHelp(self, evt):
+		ui.browseableMessage(
+			_(u'Crunchyroll 字幕支援安裝說明\n\n'
+			u'步驟一：安裝 Tampermonkey\n'
+			u'在選單中選擇您的瀏覽器（Chrome、Firefox 或 Edge），\n'
+			u'從開啟的頁面安裝 Tampermonkey 擴充功能。\n\n'
+			u'步驟二：安裝腳本\n'
+			u'點選「安裝腳本」，瀏覽器會開啟安裝頁面，\n'
+			u'Tampermonkey 會自動提示安裝。\n'
+			u'點選「安裝」，完成後關閉該分頁。\n\n'
+			u'步驟三：使用\n'
+			u'開啟 Crunchyroll 影片並啟用字幕，\n'
+			u'按 NVDA+Y 開始閱讀字幕。\n\n'
+			u'注意：支援 Chrome、Firefox 和 Edge。'),
+			_(u'Crunchyroll 使用說明')
+		)
+
 	__gestures = {
 		'kb:nvda+y': 'toggleSwitch',
 	}

@@ -74,6 +74,23 @@ class Menu(wx.Menu):
 		self.contactUseDiscord = self.contactDeveloper.Append(wx.ID_ANY, 'Discord, ID:maxe0310 ' + _('點此複製到剪貼簿'))
 		self.contactUseX = self.contactDeveloper.Append(wx.ID_ANY, _('X, ID:Maxe0310'))
 		
+		self.AppendSeparator()
+
+		# Crunchyroll setup submenu
+		self.crunchyrollSetup = wx.Menu()
+		self.crunchyrollSetupMenuItem = self.AppendSubMenu(self.crunchyrollSetup, _(u'Crunchyroll 安裝設定 (&K)'))
+		# Tampermonkey submenu
+		self.crunchyrollTM = wx.Menu()
+		self.crunchyrollSetup.AppendSubMenu(self.crunchyrollTM, _(u'安裝 Tampermonkey (&T)'))
+		self.crunchyrollTMChrome = self.crunchyrollTM.Append(wx.ID_ANY, 'Chrome (&C)')
+		self.crunchyrollTMFirefox = self.crunchyrollTM.Append(wx.ID_ANY, 'Firefox (&F)')
+		self.crunchyrollTMEdge = self.crunchyrollTM.Append(wx.ID_ANY, 'Edge (&E)')
+		# Install userscript
+		self.crunchyrollInstallScript = self.crunchyrollSetup.Append(wx.ID_ANY, _(u'安裝腳本 (&I)'))
+		self.crunchyrollSetup.AppendSeparator()
+		# Help
+		self.crunchyrollHelp = self.crunchyrollSetup.Append(wx.ID_ANY, _(u'使用說明 (&H)'))
+
 		self.platforms = wx.Menu()
 		self.platformsMenuItem = self.AppendSubMenu(self.platforms, _('支援影音平台 (&P)'))
 		for platform in [*self.main.subtitleAlgs.values(), *self.main.urlToSubtitleAlg.values()]:
