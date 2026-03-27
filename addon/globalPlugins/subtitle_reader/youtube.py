@@ -185,7 +185,7 @@ class Youtube(SubtitleAlg):
 		
 		if ce != self.ce and self.ce in ce:
 			# 當資訊卡內容增加時才播放音效
-			play(os.path.dirname(__file__) + r'\sounds\ce.ogg')
+			play(os.path.dirname(__file__) + r'\assets\sounds\ce.ogg')
 		
 		self.ce = ce
 	

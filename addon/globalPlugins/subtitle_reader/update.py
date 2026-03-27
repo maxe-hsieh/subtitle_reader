@@ -13,6 +13,7 @@ else:
 	from urllib.request import urlopen
 	from urllib.parse import quote_plus
 
+import ssl
 from threading import Thread
 
 from .sound import play, music, setVolume, getPos
@@ -23,7 +24,7 @@ from .gui import UpdateDialog, wx, gui as nvdaGui
 from globalVars import appArgs
 import ui
 
-soundPath = os.path.dirname(__file__) + r'\sounds'
+soundPath = os.path.dirname(__file__) + r'\assets\sounds'
 projectUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main'
 sourceUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/addon'
 assetUrl = 'https://github.com/maxe-hsieh/subtitle_reader/releases/latest/download'
@@ -172,7 +173,9 @@ class Update:
 		
 	
 	def downloadFile(self, url, filePath, reportHook=None):
-		with urlopen(url) as response:
+		# 下載 release 再學校或辦公室出現憑證無效的問題，所以我們自備憑證。
+		ctx = ssl.create_default_context(cafile=os.path.dirname(__file__) + r'\assets\cacert.pem')
+		with urlopen(url, context=ctx) as response:
 			total = int(response.headers.get('Content-Length', 0))
 			current = 0
 			with open(filePath, 'wb') as f:
