@@ -16,12 +16,12 @@ Kun verkkoselainta käytetään videoiden katsomiseen, NVDA löytää tämän li
 
 ### Ominaisuudet
 
-* Tukee Netflixiä, Disney+:aa, YouTubea, KKTV:tä sekä muita sivustoja
-* Yhteensopiva yleisesti käytettyjen selainten kanssa
-* Löytää automaattisesti verkkosivuilla olevan tekstityksen
-* Antaa palautteen puheena ja pistekirjoituksella
-* Automaattinen päivitysten tarkistus
-* Nopea käyttöönotto ja käytöstä poisto
+* Tukee Netflixiä, Disney+:aa, YouTubea, KKTV:tä sekä muita sivustoja.
+* Yhteensopiva yleisesti käytettyjen selainten kanssa.
+* Löytää automaattisesti verkkosivuilla olevan tekstityksen.
+* Antaa palautteen puheena ja pistekirjoituksella.
+* Automaattinen päivitysten tarkistus.
+* Nopea käyttöönotto ja käytöstä poisto.
 
 ---
 

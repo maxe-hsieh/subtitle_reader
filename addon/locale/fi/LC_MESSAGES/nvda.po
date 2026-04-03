@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Subtitle Reader 2.95\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2025-06-13 17:11+0800\n"
-"PO-Revision-Date: 2025-06-13 18:10+0300\n"
+"POT-Creation-Date: 2026-03-31 00:46+0300\n"
+"PO-Revision-Date: 2026-03-31 15:41+0300\n"
 "Last-Translator: Jani Kinnunen <janikinnunen340@gmail.com>\n"
 "Language-Team: fi_FI\n"
 "Language: fi\n"
@@ -16,31 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-
-#. Translators: Script category for Subtitle Reader
-#. Add-on summary, usually the user visible name of the addon.
-#. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
-#: addon\globalPlugins\subtitle_reader\__init__.py:48 buildVars.py:23
-msgid "字幕閱讀器"
-msgstr "Tekstityksenlukija"
-
-#. Translators: This will be displayed when the reader switch is turned on
-#: addon\globalPlugins\subtitle_reader\__init__.py:154
-msgid "開始閱讀字幕"
-msgstr "Aloita tekstitysten lukeminen"
-
-#. Translators: This will be displayed when the reader switch is turned off
-#: addon\globalPlugins\subtitle_reader\__init__.py:158
-msgid "停止閱讀字幕"
-msgstr "Lopeta tekstitysten lukeminen"
-
-#. Translators: Reader's toggle switch
-#: addon\globalPlugins\subtitle_reader\__init__.py:163
-msgid "閱讀器開關"
-msgstr "Ota tekstityksenlukija käyttöön"
 
 #. Translators: Subtitle Reader menu on the NVDA tools menu
 #: addon\globalPlugins\subtitle_reader\gui.py:21
@@ -91,127 +68,209 @@ msgstr "Lue k&uvat chattiviestien jälkeen"
 msgid "資訊卡提示(&I)"
 msgstr "Lue t&ietokortit"
 
+#: addon\globalPlugins\subtitle_reader\gui.py:59
+msgid "Crunchyroll 安裝設定 (&K)"
+msgstr "&Crunchyroll-asetukset"
+
+#: addon\globalPlugins\subtitle_reader\gui.py:62
+msgid "安裝 Tampermonkey (&T)"
+msgstr "Asenna &Tampermonkey"
+
+#. Install userscript
+#: addon\globalPlugins\subtitle_reader\gui.py:67
+msgid "安裝腳本 (&I)"
+msgstr "Asenna skr&ipti"
+
+#. Help
+#: addon\globalPlugins\subtitle_reader\gui.py:70
+msgid "使用說明 (&H)"
+msgstr "Käyttöo&hje"
+
 #. Translators: This menu item performs a check for updates to the reader
-#: addon\globalPlugins\subtitle_reader\gui.py:58
+#: addon\globalPlugins\subtitle_reader\gui.py:73
 msgid "立即檢查更新(&C)"
 msgstr "Tarkista &päivitykset"
 
 #. Translators: This is menu item that open the current version's changelog
-#: addon\globalPlugins\subtitle_reader\gui.py:60
+#: addon\globalPlugins\subtitle_reader\gui.py:75
 msgid "開啟當前版本更新日誌(&O)"
 msgstr "Avaa &nykyisen version muutosloki"
 
 #. Translators: This is menu item that open the latest version's changelog
-#: addon\globalPlugins\subtitle_reader\gui.py:62
+#: addon\globalPlugins\subtitle_reader\gui.py:77
 msgid "開啟最新版本更新日誌(&L)"
 msgstr "Avaa &uusimman version muutosloki"
 
 #. Translators: This menu item that can toggle automatic check for update when Subtitle Reader is start
 #. Translators: This is Menu item that can toggle automatic check for update on Subtitle Reader is start
-#: addon\globalPlugins\subtitle_reader\gui.py:64
-#: addon\globalPlugins\subtitle_reader\update.py:67
+#: addon\globalPlugins\subtitle_reader\gui.py:79
+#: addon\globalPlugins\subtitle_reader\update.py:69
 msgid "自動檢查更新(&A)"
 msgstr "Tarkista päivitykset &automaattisesti"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:68
+#: addon\globalPlugins\subtitle_reader\gui.py:83
 msgid "聯絡開發者 (&C)"
 msgstr "Ota &yhteyttä kehittäjään"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:71
+#: addon\globalPlugins\subtitle_reader\gui.py:86
 msgid "Facebook 個人檔案"
 msgstr "Facebook-profiili"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:72
+#: addon\globalPlugins\subtitle_reader\gui.py:87
 msgid "QQ, id:2231691423"
 msgstr "QQ: 2231691423"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:73
-#: addon\globalPlugins\subtitle_reader\gui.py:74
+#: addon\globalPlugins\subtitle_reader\gui.py:88
+#: addon\globalPlugins\subtitle_reader\gui.py:89
 msgid "點此複製到剪貼簿"
 msgstr "Kopioi leikepöydälle"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:75
+#: addon\globalPlugins\subtitle_reader\gui.py:90
 msgid "X, ID:Maxe0310"
 msgstr "X: Maxe0310"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:78
+#: addon\globalPlugins\subtitle_reader\gui.py:95
 msgid "支援影音平台 (&P)"
 msgstr "Tuetut v&ideoalustat"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:80
+#: addon\globalPlugins\subtitle_reader\gui.py:97
 msgid " 狀態："
 msgstr "Tila:"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:86
+#: addon\globalPlugins\subtitle_reader\gui.py:103
 msgid "字幕閱讀器 V"
 msgstr "Tekstityksenlukija"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:86
+#: addon\globalPlugins\subtitle_reader\gui.py:103
 msgid " 新版資訊"
 msgstr "Versiotiedot"
 
 #. Translators: This label means the edit box content is changelog
-#: addon\globalPlugins\subtitle_reader\gui.py:89
+#: addon\globalPlugins\subtitle_reader\gui.py:106
 msgid "更新日誌"
 msgstr "Muutosloki"
 
-#: addon\globalPlugins\subtitle_reader\gui.py:94
+#: addon\globalPlugins\subtitle_reader\gui.py:111
 msgid "字幕"
 msgstr "Tekstitykset"
 
 #. Translators: This button means now run the update process
-#: addon\globalPlugins\subtitle_reader\gui.py:107
+#: addon\globalPlugins\subtitle_reader\gui.py:124
 msgid "現在更新(&U)"
 msgstr "Päivitä &nyt"
 
 #. Translators: This button means that the automatic check for updates will skip this version
-#: addon\globalPlugins\subtitle_reader\gui.py:111
+#: addon\globalPlugins\subtitle_reader\gui.py:128
 msgid "跳過此版本(&S)"
 msgstr "&Ohita tämä versio"
 
 #. Translators: This button means close window until next automatic or manual check for update
-#: addon\globalPlugins\subtitle_reader\gui.py:115
+#: addon\globalPlugins\subtitle_reader\gui.py:132
 msgid "晚點再說(&L)"
 msgstr "&Myöhemmin"
 
-#: addon\globalPlugins\subtitle_reader\subtitle_alg.py:76
+#: addon\globalPlugins\subtitle_reader\subtitle_alg.py:80
 msgid "失效"
 msgstr "Virheellinen"
 
-#: addon\globalPlugins\subtitle_reader\subtitle_alg.py:77
+#: addon\globalPlugins\subtitle_reader\subtitle_alg.py:81
 msgid "正常"
 msgstr "Tuettu"
 
+#: addon\globalPlugins\subtitle_reader\twitch.py:201
+#: addon\globalPlugins\subtitle_reader\youtube.py:323
+msgid "意見調查："
+msgstr "Mielipidekysely:"
+
 #. Translators: This is a prompt to confirm that the reader is the latest version
-#: addon\globalPlugins\subtitle_reader\update.py:134
+#: addon\globalPlugins\subtitle_reader\update.py:126
 msgid "您已升級到最新版本，祝您觀影愉快！"
 msgstr "Olet päivittänyt viimeisimpään versioon."
 
-#: addon\globalPlugins\subtitle_reader\update.py:134
+#: addon\globalPlugins\subtitle_reader\update.py:126
 msgid "恭喜"
 msgstr "Onnittelut"
 
 #. Translators: This is the prompt when checking for updates fails
-#: addon\globalPlugins\subtitle_reader\update.py:139
+#: addon\globalPlugins\subtitle_reader\update.py:131
 msgid "檢查更新失敗"
 msgstr "Päivitysten tarkistus epäonnistui."
 
-#: addon\globalPlugins\subtitle_reader\update.py:139
-#: addon\globalPlugins\subtitle_reader\update.py:193
+#: addon\globalPlugins\subtitle_reader\update.py:131
+#: addon\globalPlugins\subtitle_reader\update.py:207
 msgid "錯誤"
 msgstr "Virhe"
 
 #. Translators: This is the prompt when downloading updates fails
-#: addon\globalPlugins\subtitle_reader\update.py:193
+#: addon\globalPlugins\subtitle_reader\update.py:207
 msgid "下載更新失敗"
 msgstr "Päivityksen lataus epäonnistui"
 
-#: addon\globalPlugins\subtitle_reader\youtube.py:321
-msgid "意見調查："
-msgstr "Mielipidekysely:"
+#. Translators: Script category for Subtitle Reader
+#. Add-on summary/title, usually the user visible name of the add-on
+#. Translators: Summary/title for this add-on
+#. to be shown on installation and add-on information found in add-on store
+#: addon\globalPlugins\subtitle_reader\__init__.py:53 buildVars.py:23
+msgid "字幕閱讀器"
+msgstr "Tekstityksenlukija"
+
+#. Translators: This will be displayed when the reader switch is turned on
+#: addon\globalPlugins\subtitle_reader\__init__.py:170
+msgid "開始閱讀字幕"
+msgstr "Aloita tekstitysten lukeminen"
+
+#. Translators: This will be displayed when the reader switch is turned off
+#: addon\globalPlugins\subtitle_reader\__init__.py:174
+msgid "停止閱讀字幕"
+msgstr "Lopeta tekstitysten lukeminen"
+
+#. Translators: Reader's toggle switch
+#: addon\globalPlugins\subtitle_reader\__init__.py:179
+msgid "閱讀器開關"
+msgstr "Ota tekstityksenlukija käyttöön"
+
+#: addon\globalPlugins\subtitle_reader\__init__.py:480
+msgid ""
+"Crunchyroll 字幕支援安裝說明\n"
+"\n"
+"步驟一：安裝 Tampermonkey\n"
+"在選單中選擇您的瀏覽器（Chrome、Firefox 或 Edge），\n"
+"從開啟的頁面安裝 Tampermonkey 擴充功能。\n"
+"\n"
+"步驟二：安裝腳本\n"
+"點選「安裝腳本」，瀏覽器會開啟安裝頁面，\n"
+"Tampermonkey 會自動提示安裝。\n"
+"點選「安裝」，完成後關閉該分頁。\n"
+"\n"
+"步驟三：使用\n"
+"開啟 Crunchyroll 影片並啟用字幕，\n"
+"按 NVDA+Y 開始閱讀字幕。\n"
+"\n"
+"注意：支援 Chrome、Firefox 和 Edge。"
+msgstr ""
+"Crunchyrollin tekstitystuen käyttöönotto\n"
+"\n"
+"Vaihe 1: Asenna Tampermonkey\n"
+"Valitse valikosta selaimesi (Chrome, Firefox tai Edge)\n"
+"ja asenna Tampermonkey-lisäosa avautuvalta sivulta.\n"
+"\n"
+"Vaihe 2: Asenna skripti\n"
+"Valitse \"Asenna skripti\", jolloin selain avaa asennussivun.\n"
+"Tampermonkey kehottaa asentamaan skriptin automaattisesti.\n"
+"Valitse \"Asenna\" ja sulje välilehti, kun asennus on valmis.\n"
+"\n"
+"Vaihe 3: Käyttö\n"
+"Avaa Crunchyroll-video ja ota tekstitys käyttöön.\n"
+"Aloita tekstityksen lukeminen painamalla NVDA+Y.\n"
+"\n"
+"Huom: Tukee Chromea, Firefoxia ja Edgeä."
+
+#: addon\globalPlugins\subtitle_reader\__init__.py:492
+msgid "Crunchyroll 使用說明"
+msgstr "Crunchyrollin käyttöohje"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on information from add-on store
 #: buildVars.py:26
 msgid "當焦點位於網頁上的影片播放器時，讓 NVDA 讀出字幕。"
 msgstr "Lukee tekstitykset, kun kohdistus on verkkopohjaisessa videosoittimessa."
