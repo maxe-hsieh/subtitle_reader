@@ -2,18 +2,19 @@
 
 from __future__ import unicode_literals
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find
+from ..compatible import role
 
 from logHandler import log
 
-class MarumaruX(SubtitleAlg):
+class MarumaruX(SubtitleExtractor):
 	info = {
 		'name': '唱歌學日語',
 		'url': 'https://www.marumaru-x.com/japanese-song',
 		'status': SupportStatus.supported,
 	}
+	windowTitle = r'.+ \| 唱歌學.+ \| marumaru'
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		videoPlayer = find(obj, 'parent', 'id', 'player')

@@ -1,15 +1,16 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find
+from ..compatible import role
 
-class WKMediaCommons(SubtitleAlg):
+class WKMediaCommons(SubtitleExtractor):
 	info = {
 		'name': 'WKMediaCommons',
 		'url': 'https://commons.wikimedia.org/',
 		'status': SupportStatus.supported,
 	}
+	windowTitle = '.+ - Wikimedia Commons'
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		return find(obj, 'parent', 'id', 'mwe_player_0')

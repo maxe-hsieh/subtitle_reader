@@ -1,15 +1,16 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find
+from ..compatible import role
 
-class Kktv(SubtitleAlg):
+class Kktv(SubtitleExtractor):
 	info = {
 		'name': 'KKTV',
 		'url': 'https://www.kktv.me/',
 		'status': SupportStatus.supported,
 	}
+	windowTitle = r'.+ \| KKTV'
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		videoPlayer = find(obj, 'parent', 'role', role('document'))

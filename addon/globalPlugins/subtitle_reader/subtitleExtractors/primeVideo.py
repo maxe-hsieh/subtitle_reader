@@ -1,15 +1,16 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find
+from ..compatible import role
 
-class PrimeVideo(SubtitleAlg):
+class PrimeVideo(SubtitleExtractor):
 	info = {
 		'name': 'Prime Video',
 		'url': 'https://www.primevideo.com/',
 		'status': SupportStatus.supported,
 	}
+	windowTitle = '^Prime Video.+'
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		appName = obj.appModule.appName

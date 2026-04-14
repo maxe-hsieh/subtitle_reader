@@ -20,24 +20,10 @@ from comtypes import COMError
 from . import sound
 from . import gui
 from .config import conf
-from .youtube import Youtube
-from .twitch import Twitch
-from .marumaruX import MarumaruX
-from .disney_plus import DisneyPlus
-from .netflix import Netflix
-from .appleTVPlus import AppleTVPlus
-from .crunchyroll import Crunchyroll
-from .wkMediaCommons import WKMediaCommons
-from .kktv import Kktv
-from .lineTV import LineTV
-from .meWatch import MeWatch
-from .bilibili import Bilibili
-from .iqy import Iqy
-from .adn import Adn
-from .missevan import Missevan
-from .primeVideo import PrimeVideo
-from .hboMax import HboMax
-from .skyShowtime import SkyShowtime
+
+from .subtitleExtractors import SubtitleExtractor
+SubtitleExtractor.initialize()
+
 from .potPlayer import PotPlayer
 from .update import Update
 
@@ -61,30 +47,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
-		self.subtitleAlgs = {
-			'.+ - YouTube': Youtube(self),
-			'.+ - Twitch': Twitch(self),
-			'.+ \| 唱歌學.+ \| marumaru': MarumaruX(self),
-			'.+ \| Disney\+': DisneyPlus(self),
-			'.*?Netflix': Netflix(self),
-			'.+ (-|–) .+ Crunchyroll': Crunchyroll(self),
-			'^Prime Video.+': PrimeVideo(self),
-			'.+ Apple TV\+': AppleTVPlus(self),
-			'.+ - Wikimedia Commons': WKMediaCommons(self),
-			'.+ \| KKTV': Kktv(self),
-			'.+LINE TV-': LineTV(self),
-			'.+ - mewatch': MeWatch(self),
-			'.+_哔哩哔哩_bilibili': Bilibili(self),
-			'.+愛奇藝 iQIYI': Iqy(self),
-			'.+ \| ADN': Adn(self),  # Titre de l’onglet pour les vidéos ADN
-			'.+ • HBO Max': HboMax(self),
-			'.+ - SkyShowtime': SkyShowtime(self),
-		}
-		self.urlToSubtitleAlg = {
-			'.*missevan.com/sound/player\?id=.+': Missevan(self),
-			'.*animedigitalnetwork.fr/video/.*': Adn(self),
-		}
-		self.subtitleAlg = None
+		
+		self.subtitleExtractor = None
 		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge', 'browser') # browser = Yandex
 		self.focusObject = None
 		self.urlObjects = {}
@@ -165,7 +129,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def script_toggleSwitch(self, gesture):
 		switch = conf['switch'] = not conf['switch']
 		if switch:
-			self.executeSubtitleAlg()
+			self.executeSubtitleExtractor()
 			# Translators: This will be displayed when the reader switch is turned on
 			ui.message(_(u'開始閱讀字幕'))
 		else:
@@ -184,19 +148,21 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			if obj.appModule.appName not in self.supportedBrowserAppNames:
 				return
 			
-			alg = self.getSubtitleAlg()
-			if not alg:
+			extractor = self.getSubtitleExtractor()
+			if not extractor:
 				return
 			
-			videoPlayer = self.videoPlayer = alg.getVideoPlayer()
+			extractor = extractor(self)
+			videoPlayer = self.videoPlayer = extractor.getVideoPlayer()
 			if not videoPlayer:
 				return
 			
-			container = self.subtitleContainer = alg.getSubtitleContainer()
+			container = self.subtitleContainer = extractor.getSubtitleContainer()
 			if not container:
 				return
 			
-			return alg.getSubtitle()
+			return extractor.getSubtitle()
+		
 		try:	
 			subtitle = getSubtitle(self)
 		except (COMError, RuntimeError):
@@ -268,12 +234,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		
 		self.focusObject = obj
 		try:
-			self.executeSubtitleAlg()
+			self.executeSubtitleExtractor()
 		except (COMError, RuntimeError):
 			pass
 		
 	
-	def executeSubtitleAlg(self):
+	def executeSubtitleExtractor(self):
 		obj = self.focusObject
 		if obj.role == 0:
 			# 嵌入的 Youtube 頁框，在開始播放約 5 秒之後，會將焦點拉到一個不明的物件上，且 NVDA 無法查看其相鄰的物件，故將他跳過。
@@ -285,33 +251,31 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if obj.appModule.appName not in self.supportedBrowserAppNames:
 			return
 		
-		alg = self.getSubtitleAlg()
-		if not alg:
+		extractor = self.getSubtitleExtractor()
+		if not extractor:
 			return
 		
-		self.subtitleAlg = alg
+		self.subtitleExtractor = extractor = extractor(self)
 		
-		videoPlayer = self.videoPlayer = alg.getVideoPlayer()
+		videoPlayer = self.videoPlayer = extractor.getVideoPlayer()
 		if not videoPlayer:
 			return
 		
-		container = self.subtitleContainer = alg.getSubtitleContainer()
+		container = self.subtitleContainer = extractor.getSubtitleContainer()
 		if not container:
 			return
 		
 		self.startReadSubtitle()
 	
-	def getSubtitleAlg(self):
+	def getSubtitleExtractor(self):
 		window = self.focusObject.objectInForeground().name
 		url = getattr(self.urlObject, 'value', '')
-		for alg in self.subtitleAlgs:
-			if re.match(alg, window):
-				return self.subtitleAlgs[alg]
+		for extractor in SubtitleExtractor.extractors:
+			if extractor.windowTitle and re.match(extractor.windowTitle, window):
+				return extractor
 			
-		
-		for alg in self.urlToSubtitleAlg:
-			if re.match(alg, url):
-				return self.urlToSubtitleAlg[alg]
+			if extractor.url and re.match(extractor.url, url):
+				return extractor
 			
 		
 	
@@ -331,8 +295,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		
 		self.startReadSubtitleTime = time.time()
 		try:
-			self.subtitleAlg.onReadingSubtitle()
-			subtitle = self.subtitleAlg.getSubtitle()
+			self.subtitleExtractor.onReadingSubtitle()
+			subtitle = self.subtitleExtractor.getSubtitle()
 		except (COMError, RuntimeError):
 			subtitle = None
 		
@@ -460,19 +424,19 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		webbrowser.open(url)
 
 	def onCrunchyrollTMChrome(self, evt):
-		from .crunchyroll import Crunchyroll
+		from .subtitleExtractors.crunchyroll import Crunchyroll
 		Crunchyroll.installTampermonkey('chrome')
 
 	def onCrunchyrollTMFirefox(self, evt):
-		from .crunchyroll import Crunchyroll
+		from .subtitleExtractors.crunchyroll import Crunchyroll
 		Crunchyroll.installTampermonkey('firefox')
 
 	def onCrunchyrollTMEdge(self, evt):
-		from .crunchyroll import Crunchyroll
+		from .subtitleExtractors.crunchyroll import Crunchyroll
 		Crunchyroll.installTampermonkey('msedge')
 
 	def onCrunchyrollInstallScript(self, evt):
-		from .crunchyroll import Crunchyroll
+		from .subtitleExtractors.crunchyroll import Crunchyroll
 		Crunchyroll.installUserscript()
 
 	def onCrunchyrollHelp(self, evt):

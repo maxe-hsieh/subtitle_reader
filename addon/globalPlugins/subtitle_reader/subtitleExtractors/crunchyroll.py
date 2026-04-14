@@ -8,9 +8,9 @@ import shutil
 import api
 import ui
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find
+from ..compatible import role
 
 from logHandler import log
 
@@ -21,13 +21,13 @@ TAMPERMONKEY_URLS = {
 	'msedge': 'https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd',
 }
 
-class Crunchyroll(SubtitleAlg):
+class Crunchyroll(SubtitleExtractor):
 	info = {
 		'name': 'Crunchyroll',
 		'url': 'https://www.crunchyroll.com/',
 		'status': SupportStatus.supported,
 	}
-
+	windowTitle = '.+ (-|–) .+ Crunchyroll'
 	@staticmethod
 	def getUserscriptPath():
 		return os.path.join(os.path.dirname(__file__), 'crunchyroll_subtitles.user.js')

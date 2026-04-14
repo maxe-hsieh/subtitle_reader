@@ -68,7 +68,6 @@ jobs:
       uses: softprops/action-gh-release@v3
       with:
         files: |
-          *.nvda-addon
           *.pot
         body_path: changelog.md
         fail_on_unmatched_files: true

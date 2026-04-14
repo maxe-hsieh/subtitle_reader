@@ -1,11 +1,10 @@
-#coding=utf-8
+import importlib
+import pkgutil
 
-from __future__ import unicode_literals
+from ..compatible import role
 
-from .compatible import role
 
-class SubtitleAlg(object):
-	# 未來將改為 SubtitleProvider
+class SubtitleExtractor(object):
 	'''
 	影音平台資訊：
 		- name: 影音平台名稱
@@ -14,9 +13,23 @@ class SubtitleAlg(object):
 	'''
 	info = {}
 	
-	# 使用視窗標題或者網址，判斷焦點是否位於影音平台（方法二選一）。
-	windowTitle = None
-	url = None
+	# 正規表達式，使用視窗標題或者網址，判斷焦點是否位於影音平台（方法二選一）。
+	windowTitle = ''
+	url = ''
+	
+	extractors = []
+	
+	@classmethod
+	def initialize(cls):
+		# 發現並載入所有 SubtitleExtractor 類別
+		for _, module_name, _ in pkgutil.iter_modules(__path__):
+			module = importlib.import_module(f"{__name__}.{module_name}")
+		
+	
+	def __init_subclass__(cls) -> None:
+		# 當有新的 SubtitleExtractor 子類別被定義時，將其加入 extractors 列表
+		super().__init_subclass__()
+		cls.extractors.append(cls)
 	
 	def __init__(self, main, onFoundSubtitle=None):
 		self.main = main
@@ -79,3 +92,4 @@ class SubtitleAlg(object):
 class SupportStatus(object):
 	invalid = _('失效')
 	supported = _('正常')
+

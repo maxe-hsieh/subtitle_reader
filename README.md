@@ -1,7 +1,13 @@
 ### 字幕閱讀器
 
 #### 下載
+
 [按這裡下載](https://github.com/maxe-hsieh/subtitle_reader/releases/latest/download/subtitle_reader.nvda-addon)
+
+#### 協作此專案 collaborate on this project
+
+可參考[開發指南](https://github.com/maxe-hsieh/subtitle_reader/blob/main/addon/doc/zh_TW/developer-guide.md)
+Please read this [developer guide](https://github.com/maxe-hsieh/subtitle_reader/blob/main/addon/doc/en/developer-guide.md)
 
 ---
 
@@ -39,7 +45,7 @@
 
 ##### NVDA 相容性
 
-字幕閱讀器正在嘗試支援所有版本的 NVDA, 目前測試的最舊版本為 2019.2.1. 
+字幕閱讀器不再主動維護舊版 NVDA, 目前測試的最低版本為 2024.4.2
 
 ---
 
@@ -57,6 +63,7 @@
 以下列出預設的快速鍵及其對應功能，所有快速鍵皆可在 NVDA 的輸入手勢設定當中更改。
 
 * NVDA+y: 開關字幕閱讀器
+* 無預設快速鍵：手動閱讀字幕
 
 ---
 
@@ -70,19 +77,7 @@
 ---
 
 #### 聯絡資訊
-若您在使用上有任何問題或建議，歡迎從下方清單中選擇聯絡方式與我聯絡。
 
-* Skype:
-[p15937a](https://join.skype.com/invite/VnIdifjym1OR)
-* Facebook:
-[個人檔案](https://m.facebook.com/profile.php?id=100002631752665&refid=46&ref=content_filter&__xts__[0]=12.%7B%22browse_result_type%22%3A%22browse_type_user%22%2C%22click_type%22%3A%22result%22%2C%22module_result_position%22%3A0%2C%22module_role%22%3A%22ENTITY_USER%22%2C%22result_id%22%3A100002631752665%2C%22session_id%22%3A%222108b07c-e391-4921-aaa7-474a90634d73%22%2C%22unit_id%22%3A%22mtouch_bem_res%3A30287062e76b81d229366f24878df5b4%22%2C%22unit_id_click_type%22%3A%22graph_search_results_item_in_module_tapped%22%2C%22unit_id_result_id%22%3A100002631752665%7D)
-* QQ: 
-[2231691423](tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2231691423)
-* Line:ID 
-[Maxe0310](#)
-* Discord: ID 
-[maxe0310](#)
-* [X: ID 
-[Maxe0310](https://x.com/Maxe0310)
-* NVDA 台灣 討論區：
-[[分享] 字幕閱讀器 - 討論區  |   NVDA 台灣](https://www.nvda.tw/discussion/ui=2005603400tm=1964947895)
+若您在使用上有任何問題或建議，歡迎從字幕閱讀器選單當中的聯絡開發者，選擇您熟悉的連絡方式與我聯絡。
+
+---

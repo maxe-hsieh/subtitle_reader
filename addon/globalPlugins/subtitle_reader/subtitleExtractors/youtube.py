@@ -8,18 +8,20 @@ import re
 import ui
 from logHandler import log
 
-from .sound import play
-from .config import conf
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find, search
-from .compatible import role
+from ..sound import play
+from ..config import conf
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find, search
+from ..compatible import role
 
-class Youtube(SubtitleAlg):
+class Youtube(SubtitleExtractor):
 	info = {
 		'name': 'Youtube',
 		'url': 'https://www.youtube.com/',
 		'status': SupportStatus.supported,
 	}
+	windowTitle = '.+ - YouTube'
+	
 	def __init__(self, *args, **kwargs):
 		super(Youtube, self).__init__(*args, **kwargs)
 		self.ce = str() # 資訊卡
@@ -185,7 +187,7 @@ class Youtube(SubtitleAlg):
 		
 		if ce != self.ce and self.ce in ce:
 			# 當資訊卡內容增加時才播放音效
-			play(os.path.dirname(__file__) + r'\assets\sounds\ce.ogg')
+			play(os.path.dirname(__file__) + r'\..\assets\sounds\ce.ogg')
 		
 		self.ce = ce
 	

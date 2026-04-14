@@ -1,17 +1,18 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find
+from ..compatible import role
 from logHandler import log
 
-class Adn(SubtitleAlg):
+class Adn(SubtitleExtractor):
     info = {
         'name': 'Animation Digital Network',
         'url': 'https://animationdigitalnetwork.fr/',
         'status': SupportStatus.supported,
     }
-
+    windowTitle = r'.+ \| ADN'
+    url = '.*animedigitalnetwork.fr/video/.*'
     def getVideoPlayer(self):
         obj = self.main.focusObject
         # remonter jusqu'à l'élément avec la classe ADN contenant la vidéo

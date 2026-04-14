@@ -29,7 +29,7 @@ addon_info = AddonInfo(
 	# 2. 新的影音平台支援為小數點後一位，並且將小數點第二位歸零。
 	# 3. 版本號會自然進位，故支援 10 個影音平台主版本號 +1. 
 	# 4. 附加元件商店的版本號，小數點後仍是整數比較，故小數點後為 0 也不可省略。
-	addon_version="3.73",
+	addon_version="3.74",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store
 	addon_changelog="",
@@ -42,7 +42,7 @@ addon_info = AddonInfo(
 	# Documentation file name
 	addon_docFileName="readme.html",
 	# Minimum NVDA version supported (e.g. "2019.3.0", minor version is optional)
-	addon_minimumNVDAVersion="2019.2.1",
+	addon_minimumNVDAVersion="2020.1",
 	# Last NVDA version supported/tested (e.g. "2024.4.0", ideally more recent than minimum version)
 	addon_lastTestedNVDAVersion="2025.1",
 	# Add-on update channel (default is None, denoting stable releases,

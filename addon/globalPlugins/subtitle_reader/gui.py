@@ -10,6 +10,8 @@ import wx
 import gui
 from gui.nvdaControls import EnhancedInputSlider
 
+from .subtitleExtractors import SubtitleExtractor
+
 tray = gui.mainFrame.sysTrayIcon
 toolsMenu = tray.toolsMenu
 
@@ -93,7 +95,7 @@ class Menu(wx.Menu):
 
 		self.platforms = wx.Menu()
 		self.platformsMenuItem = self.AppendSubMenu(self.platforms, _('支援影音平台 (&P)'))
-		for platform in [*self.main.subtitleAlgs.values(), *self.main.urlToSubtitleAlg.values()]:
+		for platform in SubtitleExtractor.extractors:
 			self.platforms.Append(wx.ID_ANY, platform.info['name'] + _(' 狀態：') + platform.info['status'], platform.info['url'])
 		
 	
@@ -111,7 +113,7 @@ class UpdateDialog(wx.Dialog):
 		self.subtitleLabel = Label(self, label=_(u'字幕'))
 		self.sizer.Add(self.subtitleLabel, wx.SizerFlags(0).Center())
 		
-		self.volumeLabel = Label(self, label='音樂音量')
+		self.volumeLabel = wx.StaticText(self, label='音樂音量')
 		self.volumeSlider = EnhancedInputSlider(self, value=70)
 		self.sizer.Add(self.volumeLabel)
 		self.sizer.Add(self.volumeSlider)

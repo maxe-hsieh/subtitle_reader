@@ -1,15 +1,16 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find
+from ..compatible import role
 
-class LineTV(SubtitleAlg):
+class LineTV(SubtitleExtractor):
 	info = {
 		'name': 'LINE TV',
 		'url': 'https://www.linetv.tw/',
 		'status': SupportStatus.supported,
 	}
+	windowTitle = '.+LINE TV-'
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
 		videoPlayer = find(obj, 'parent', 'id', 'player')

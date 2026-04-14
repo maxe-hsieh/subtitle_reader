@@ -8,18 +8,19 @@ import re
 import ui
 from logHandler import log
 
-from .sound import play
-from .config import conf
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find, search
-from .compatible import role
+from ..sound import play
+from ..config import conf
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find, search
+from ..compatible import role
 
-class Twitch(SubtitleAlg):
+class Twitch(SubtitleExtractor):
 	info = {
 		'name': 'Twitch',
 		'url': 'https://www.twitch.tv/',
 		'status': SupportStatus.supported,
 	}
+	windowTitle = '.+ - Twitch'
 	def __init__(self, *args, **kwargs):
 		super(Twitch, self).__init__(*args, **kwargs)
 		self.chatRoom = None

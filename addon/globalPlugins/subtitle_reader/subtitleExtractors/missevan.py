@@ -1,15 +1,16 @@
 #coding=utf-8
 
-from .subtitle_alg import SubtitleAlg, SupportStatus
-from .object_finder import find, search
-from .compatible import role
+from . import SubtitleExtractor, SupportStatus
+from ..object_finder import find, search
+from ..compatible import role
 
-class Missevan(SubtitleAlg):
+class Missevan(SubtitleExtractor):
 	info = {
 		'name': '猫耳FM',
 		'url': 'https://www.missevan.com/',
 		'status': SupportStatus.supported,
 	}
+	url = r'.*missevan.com/sound/player\?id=.+'
 	lastCollect = set()
 	collect = set()
 	collector = None
