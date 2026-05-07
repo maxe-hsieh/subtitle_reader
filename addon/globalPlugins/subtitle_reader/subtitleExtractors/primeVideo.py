@@ -13,17 +13,14 @@ class PrimeVideo(SubtitleExtractor):
 	windowTitle = '^Prime Video.+'
 	def getVideoPlayer(self):
 		obj = self.main.focusObject
-		appName = obj.appModule.appName
-		videoPlayer = find(obj, 'parent', 'role', role('document'))
-		videoPlayer = videoPlayer.firstChild
-		if videoPlayer.IA2Attributes.get('class') != 'webPlayerSDKContainer':
-			videoPlayer = videoPlayer.lastChild.firstChild
-		
-		return videoPlayer if videoPlayer.IA2Attributes.get('class') == 'webPlayerSDKContainer' else None
+		videoPlayer = find(obj, 'parent', 'id', 'dv-web-player')
+		videoPlayer = videoPlayer.firstChild.firstChild.next
+		return videoPlayer if 'player-container' in videoPlayer.IA2Attributes.get('class') else None
 	
 	def getSubtitleContainer(self):
 		videoPlayer = self.main.videoPlayer
-		container = videoPlayer.lastChild.firstChild.firstChild.lastChild.previous.previous.firstChild.firstChild.firstChild
+		container = videoPlayer.firstChild.firstChild.next.next
+		container = find(container, 'firstChild', 'class', 'atvwebplayersdk-persistent-component-container')
 		return container
 	
 	def getSubtitle(self):
