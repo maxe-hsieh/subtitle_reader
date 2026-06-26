@@ -17,6 +17,12 @@ class SubtitleExtractor(object):
 	windowTitle = ''
 	url = ''
 	
+	# 自訂判斷平台方法，建議確定視窗標題與網址皆無法使用時才使用此法。
+	@staticmethod
+	def customMatchPlatform() -> bool:
+		return False
+	
+	
 	extractors = []
 	
 	@classmethod
@@ -38,6 +44,10 @@ class SubtitleExtractor(object):
 		
 		self.onFoundSubtitle = onFoundSubtitle
 		self.searchingSubtitle = False
+	
+	# 中指方法，當焦點改變，重新取得字幕平台前會被呼叫。
+	def terminate(self):
+		pass
 	
 	def getVideoPlayer(self):
 		raise NotImplementedError

@@ -38,6 +38,17 @@ class Youtube(SubtitleExtractor):
 		self.chatBannerSearchObject = None
 		self.chatSearchObject = None
 	
+	def terminate(self):
+		if self.chatContainerSearchObject:
+			self.chatContainerSearchObject.cancel()
+		
+		if self.chatBannerSearchObject:
+			self.chatBannerSearchObject.cancel()
+		
+		if self.chatSearchObject:
+			self.chatSearchObject.cancel()
+		
+	
 	def getVideoPlayer(self):
 		'''
 		根據元件 id 找出 Youtube 影片撥放器
@@ -76,20 +87,7 @@ class Youtube(SubtitleExtractor):
 		except:
 			obj = None
 		
-		self.chatRoom = None
-		self.chatContainer = None
-		self.chatObject = None
-		self.voting = None
-		if self.chatContainerSearchObject:
-			self.chatContainerSearchObject.cancel()
-		
 		self.chatContainerSearchObject = search(obj, lambda obj: ('yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items') or obj.IA2Attributes.get('id') == 'chat', self.onFoundChatContainer, continueOnFound=True)
-		
-		if self.chatBannerSearchObject:
-			self.chatBannerSearchObject.cancel()
-		
-		if self.chatSearchObject:
-			self.chatSearchObject.cancel()
 		
 	
 	def onFoundChatContainer(self, obj):

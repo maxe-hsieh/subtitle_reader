@@ -49,7 +49,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		
 		self.subtitleExtractor = None
-		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge', 'browser') # browser = Yandex
+		self.supportedBrowserAppNames = ('chrome', 'brave', 'firefox', 'msedge', 'microsoftedge', 'edge', 'browser') # browser = Yandex
 		self.focusObject = None
 		self.urlObjects = {}
 		self.videoPlayer = None
@@ -110,8 +110,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def terminate(self):
 		# 關閉 NVDA 時，儲存開關狀態到使用者設定檔。
-		self.potPlayer.terminate()
 		conf.write()
+		self.potPlayer.terminate()
 		gui.toolsMenu.DestroyItem(self.menu.menuItem.Id)
 		
 		sound.free()
@@ -178,7 +178,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		window = api.getForegroundObject()
 		windowHandle = window.windowHandle
 		if windowHandle in self.urlObjects:
-			return self.urlObjects[windowHandle]
+			obj = self.urlObjects[windowHandle]
+			try:
+				if obj.value:
+					return obj
+			except (COMError, RuntimeError):
+				pass
+			del self.urlObjects[windowHandle]
 		
 		browser = window.appModule.appName
 		inspectionObjects = [window]
@@ -195,7 +201,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				if browser == 'firefox':
 					found = obj.IA2Attributes.get('id') == 'urlbar-input'
 				else:
-					found = obj.keyboardShortcut == 'Ctrl+L'
+					shortcut = (obj.keyboardShortcut or '').replace(' ', '').lower()
+					value = obj.value or ''
+					name = (obj.name or '').lower()
+					hasUrlValue = value.startswith(('http://', 'https://'))
+					found = (
+						'ctrl+l' in shortcut or
+						'alt+d' in shortcut or
+						hasUrlValue 
+					)
 				
 				if found:
 					self.urlObjects[windowHandle] = obj
@@ -241,9 +255,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def executeSubtitleExtractor(self):
 		obj = self.focusObject
-		if obj.role == 0:
-			# 嵌入的 Youtube 頁框，在開始播放約 5 秒之後，會將焦點拉到一個不明的物件上，且 NVDA 無法查看其相鄰的物件，故將他跳過。
-			return
 		
 		if not conf['switch']:
 			return
@@ -269,7 +280,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def getSubtitleExtractor(self):
 		window = self.focusObject.objectInForeground().name
-		url = getattr(self.urlObject, 'value', '')
+		urlObject = getattr(self, 'urlObject', None)
+		url = getattr(urlObject, 'value', '') or ''
+		log.debug('Subtitle extractor lookup: window = {window}, url = {url}'.format(window=window, url=url))
 		for extractor in SubtitleExtractor.extractors:
 			if extractor.windowTitle and re.match(extractor.windowTitle, window):
 				return extractor
