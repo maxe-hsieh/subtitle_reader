@@ -57,11 +57,11 @@ class Update:
 	
 	def openCurrentChangeLog(self, event):
 		filePath = appArgs.configPath + r'\addons\subtitle_reader\doc\zh_TW\changelog.html'
-		os.system('start ' + filePath)
+		os.startfile(filePath)
 	
 	def openLatestChangeLog(self, event):
 		filePath = 'https://github.com/maxe-hsieh/subtitle_reader/blob/main/addon/doc/zh_TW/changelog.md#%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AA%8C'
-		os.system('start ' + filePath)
+		os.startfile(filePath)
 	
 	def toggleCheckAutomatic(self, event):
 		menu = event.GetEventObject()
@@ -167,7 +167,7 @@ class Update:
 			file = self.downloadFile(assetUrl + '/' + filename, tempDir + '\\' + filename, reportHook=self.updateProgress)
 			play(soundPath + r'\downloadCompleted.ogg')
 			self.dialog.Close()
-			os.system('start ' + file[0])
+			os.startfile(file[0])
 		except Exception as e:
 			wx.CallAfter(self.downloadError, e)
 		
