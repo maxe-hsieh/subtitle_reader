@@ -82,6 +82,13 @@ class Youtube(SubtitleExtractor):
 		if not conf['readChat']:
 			return
 		
+		# 重用 extractor 實體時會再次呼叫，已找到且仍有效、或搜尋進行中，就不重啟。
+		if self.chatContainer and self.chatContainer.role:
+			return
+		
+		if self.chatContainerSearchObject and not self.chatContainerSearchObject.isStopped:
+			return
+		
 		try:
 			obj = next(self.main.videoPlayer.treeInterceptor._iterNodesByType('frame')).obj
 		except:
@@ -315,7 +322,7 @@ class Youtube(SubtitleExtractor):
 		if not self.chatRoom:
 			return
 		
-		votingObj = self.chatRoom.lastChild
+		votingObj = self.chatRoom.firstChild.next
 		votingObj = find(votingObj, 'firstChild', 'class', 'style-scope yt-live-chat-poll-renderer')
 		if bool(votingObj) != self.voting:
 			self.voting = bool(votingObj)

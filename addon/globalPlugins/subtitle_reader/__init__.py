@@ -143,16 +143,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	script_toggleSwitch.__doc__ = _(u'閱讀器開關')
 	
 	def script_manualReadSubtitle(self, gesture):
-		def getSubtitle(self):
-			obj = self.focusObject
-			if obj.appModule.appName not in self.supportedBrowserAppNames:
-				return
-			
-			extractor = self.getSubtitleExtractor()
-			if not extractor:
-				return
-			
-			extractor = extractor(self)
+		def getSubtitle(self, extractor):
+			# extractor 會從 main 讀取 videoPlayer 與 subtitleContainer，故必須先寫入。
 			videoPlayer = self.videoPlayer = extractor.getVideoPlayer()
 			if not videoPlayer:
 				return
@@ -163,10 +155,23 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			
 			return extractor.getSubtitle()
 		
-		try:	
-			subtitle = getSubtitle(self)
-		except (COMError, RuntimeError):
-			subtitle = None
+		obj = self.focusObject
+		extractorClass = None
+		if obj.appModule.appName in self.supportedBrowserAppNames:
+			extractorClass = self.getSubtitleExtractor()
+		
+		subtitle = None
+		if extractorClass:
+			# 手動閱讀是一次性動作，不應接管正在進行的工作階段，故用後即還原。
+			previousSession = (self.subtitleExtractor, self.videoPlayer, self.subtitleContainer)
+			extractor = extractorClass(self)
+			try:
+				subtitle = getSubtitle(self, extractor)
+			except (COMError, RuntimeError):
+				subtitle = None
+			finally:
+				self.discardSubtitleExtractor(extractor, previousSession)
+			
 		
 		if not subtitle:
 			return ui.message('沒有字幕')
@@ -232,8 +237,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def event_foreground(self, obj, nextHandler):
 		nextHandler()
 		if not conf['backgroundReading']:
+			# 只暫停不摧毀工作階段，切回來時可以直接重用，不必重新取得。
 			self.stopReadSubtitle()
-			self.videoPlayer = None
 		
 		if obj.appModule.appName not in self.supportedBrowserAppNames:
 			return
@@ -262,21 +267,124 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if obj.appModule.appName not in self.supportedBrowserAppNames:
 			return
 		
-		extractor = self.getSubtitleExtractor()
-		if not extractor:
+		# 工作階段可能已經失效（例如頁面切到下一部影片），先收拾乾淨再判斷。
+		self.dropDeadSession()
+		
+		extractorClass = self.getSubtitleExtractor()
+		if not extractorClass:
 			return
 		
-		self.subtitleExtractor = extractor = extractor(self)
+		extractor = self.subtitleExtractor
+		if not extractor or type(extractor) is not extractorClass:
+			# 換了平台或還沒有工作階段，建立新的 extractor。
+			return self.acquireSubtitleExtractor(extractorClass)
 		
-		videoPlayer = self.videoPlayer = extractor.getVideoPlayer()
+		# 同一個平台：用現有實體探測播放器，判斷是否仍是同一個工作階段。
+		# getVideoPlayer 沒有副作用，可以在確定接管前安全呼叫。
+		try:
+			videoPlayer = extractor.getVideoPlayer()
+		except (COMError, RuntimeError):
+			videoPlayer = None
+		
 		if not videoPlayer:
+			# 焦點不在播放器內，維持現有工作階段，繼續閱讀。
 			return
 		
-		container = self.subtitleContainer = extractor.getSubtitleContainer()
-		if not container:
-			return
+		if not self.isSameVideoPlayer(videoPlayer, self.videoPlayer):
+			# 換了另一個播放器，交給新的 extractor 接管。
+			return self.acquireSubtitleExtractor(extractorClass)
+		
+		# 同一個播放器：重用實體，保留去重記憶與聊天室狀態，
+		# 但仍重新探測字幕容器，讓中途才開啟的 CC 能被找到。
+		self.videoPlayer = videoPlayer
+		try:
+			container = extractor.getSubtitleContainer()
+		except (COMError, RuntimeError):
+			container = None
+		
+		if container:
+			self.subtitleContainer = container
+		
+		if self.subtitleContainer:
+			self.startReadSubtitle()
+	
+	def acquireSubtitleExtractor(self, extractorClass):
+		'''
+		建立新的 extractor 並取得工作階段，任一步驟失敗就還原前一個工作階段。
+		'''
+		# extractor 會從 main 讀取 videoPlayer 與 subtitleContainer，
+		# 故取得過程必須先寫入這些欄位，但只要任一步驟失敗就還原，
+		# 避免一次失敗的取得流程中斷正在進行的背景閱讀。
+		previousExtractor = self.subtitleExtractor
+		previousSession = (previousExtractor, self.videoPlayer, self.subtitleContainer)
+		extractor = extractorClass(self)
+		try:
+			self.subtitleExtractor = extractor
+			
+			videoPlayer = self.videoPlayer = extractor.getVideoPlayer()
+			if not videoPlayer:
+				return self.discardSubtitleExtractor(extractor, previousSession)
+			
+			container = self.subtitleContainer = extractor.getSubtitleContainer()
+			if not container:
+				return self.discardSubtitleExtractor(extractor, previousSession)
+			
+		except (COMError, RuntimeError):
+			return self.discardSubtitleExtractor(extractor, previousSession)
+		
+		# 確定能讀到字幕才正式接管，並結束前一個 extractor。
+		if previousExtractor:
+			previousExtractor.terminate()
+		
+		# 換了工作階段，重置去重記憶，避免拿前一個播放器的字幕做比對。
+		self.subtitle = str()
+		self.emptySubtitleTime = 0
 		
 		self.startReadSubtitle()
+	
+	def discardSubtitleExtractor(self, extractor, previousSession):
+		'''
+		放棄本次建立的 extractor，並還原前一個工作階段。
+		'''
+		extractor.terminate()
+		self.subtitleExtractor, self.videoPlayer, self.subtitleContainer = previousSession
+	
+	def dropDeadSession(self):
+		'''
+		檢查現有工作階段是否還活著，已失效就結束並清除，傳回是否清除了工作階段。
+		NVDAObject 失效時 role 會變成 unknown, 其值為 0.
+		'''
+		if not self.subtitleExtractor:
+			return False
+		
+		try:
+			if self.videoPlayer and self.videoPlayer.role:
+				return False
+			
+		except (COMError, RuntimeError):
+			pass
+		
+		self.stopReadSubtitle()
+		self.subtitleExtractor.terminate()
+		self.subtitleExtractor = None
+		self.videoPlayer = None
+		self.subtitleContainer = None
+		self.subtitle = str()
+		self.emptySubtitleTime = 0
+		return True
+	
+	def isSameVideoPlayer(self, videoPlayer, otherVideoPlayer):
+		'''
+		比較兩個播放器是否為同一個物件，無法比較時一律視為不同，
+		退回重新取得工作階段的流程。
+		'''
+		if not videoPlayer or not otherVideoPlayer:
+			return False
+		
+		try:
+			return videoPlayer == otherVideoPlayer
+		except (COMError, RuntimeError):
+			return False
 	
 	def getSubtitleExtractor(self):
 		window = self.focusObject.objectInForeground().name
@@ -299,7 +407,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if not conf['switch'] or not self.subtitleContainer:
 			return
 		
-		if not self.videoPlayer or not self.videoPlayer.role:
+		if not self.subtitleExtractor or not self.videoPlayer:
+			return
+		
+		# 播放器可能已經失效（例如頁面切到下一部影片），失效就結束工作階段。
+		if self.dropDeadSession():
 			return
 		
 		elapsedTime = time.time() - self.startReadSubtitleTime

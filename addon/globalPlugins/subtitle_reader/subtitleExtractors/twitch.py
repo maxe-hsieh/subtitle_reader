@@ -44,6 +44,13 @@ class Twitch(SubtitleExtractor):
 		return True
 	
 	def getChatContainer(self):
+		# 重用 extractor 實體時會再次呼叫，已找到且仍有效、或搜尋進行中，就不重啟。
+		if self.chatContainer and self.chatContainer.role:
+			return
+		
+		if self.chatContainerSearchObject and not self.chatContainerSearchObject.isStopped:
+			return
+		
 		obj = self.main.videoPlayer.next
 		
 		self.chatRoom = None
