@@ -88,6 +88,8 @@ class Menu(wx.Menu):
 		self.contactUseFacebook = self.contactDeveloper.Append(wx.ID_ANY, _('Facebook 個人檔案'))
 		self.contactUseQq = self.contactDeveloper.Append(wx.ID_ANY, _('QQ, id:2231691423'))
 		self.contactUseLine = self.contactDeveloper.Append(wx.ID_ANY, 'Line, id:Maxe0310 ' + _('點此複製到剪貼簿'))
+		# Translators: This menu item opens the invitation link of the Subtitle Reader discussion group on Line
+		self.contactUseLineGroup = self.contactDeveloper.Append(wx.ID_ANY, _('Line 字幕閱讀器交流群'))
 		self.contactUseDiscord = self.contactDeveloper.Append(wx.ID_ANY, 'Discord, ID:maxe0310 ' + _('點此複製到剪貼簿'))
 		self.contactUseX = self.contactDeveloper.Append(wx.ID_ANY, _('X, ID:Maxe0310'))
 		

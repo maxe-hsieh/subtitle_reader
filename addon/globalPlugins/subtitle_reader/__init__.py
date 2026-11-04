@@ -91,6 +91,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseFacebook, menu.contactUseFacebook)
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseQq, menu.contactUseQq)
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseLine, menu.contactUseLine)
+		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseLineGroup, menu.contactUseLineGroup)
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseDiscord, menu.contactUseDiscord)
 		menu.contactDeveloper.Bind(gui.wx.EVT_MENU, self.contactUseX, menu.contactUseX)
 		
@@ -286,13 +287,22 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		except (COMError, RuntimeError):
 			videoPlayer = None
 		
+		if videoPlayer and not self.isSameVideoPlayer(videoPlayer, self.videoPlayer):
+			# 換了另一個播放器，交給新的 extractor 接管。
+			return self.acquireSubtitleExtractor(extractorClass)
+		
+		# 確定仍是同一個工作階段，且焦點還在工作階段所在的頁面（例如聊天輸入框），
+		# 才讓 extractor 重播可能被按鍵蓋掉的提示；其他分頁即使是同一個平台也不重播。
+		if self.isFocusInSessionPage():
+			try:
+				extractor.onFocusChanged()
+			except (COMError, RuntimeError):
+				pass
+			
+		
 		if not videoPlayer:
 			# 焦點不在播放器內，維持現有工作階段，繼續閱讀。
 			return
-		
-		if not self.isSameVideoPlayer(videoPlayer, self.videoPlayer):
-			# 換了另一個播放器，交給新的 extractor 接管。
-			return self.acquireSubtitleExtractor(extractorClass)
 		
 		# 同一個播放器：重用實體，保留去重記憶與聊天室狀態，
 		# 但仍重新探測字幕容器，讓中途才開啟的 CC 能被找到。
@@ -384,6 +394,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		try:
 			return videoPlayer == otherVideoPlayer
 		except (COMError, RuntimeError):
+			return False
+	
+	def isFocusInSessionPage(self):
+		'''
+		焦點是否位於目前工作階段的播放器所在的頁面。
+		同一個頁面（含聊天室等 iframe）共用同一個瀏覽模式 treeInterceptor，以此判斷。
+		'''
+		try:
+			treeInterceptor = self.videoPlayer.treeInterceptor
+			return bool(treeInterceptor) and treeInterceptor is self.focusObject.treeInterceptor
+		except (AttributeError, COMError, RuntimeError):
 			return False
 	
 	def getSubtitleExtractor(self):
@@ -531,6 +552,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def contactUseLine(self, evt):
 		api.copyToClip('Maxe0310', notify=True)
+	
+	def contactUseLineGroup(self, evt):
+		webbrowser.open('https://line.me/ti/g/RL5e8D_9R7')
 	
 	def contactUseDiscord(self, evt):
 		api.copyToClip('maxe0310', notify=True)

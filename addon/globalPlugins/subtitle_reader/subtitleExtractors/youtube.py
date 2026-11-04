@@ -7,6 +7,7 @@ import re
 
 import ui
 from logHandler import log
+from comtypes import COMError
 
 from ..sound import play
 from ..config import conf
@@ -37,6 +38,12 @@ class Youtube(SubtitleExtractor):
 		self.chatContainerSearchObject = None
 		self.chatBannerSearchObject = None
 		self.chatSearchObject = None
+		self.votingSearchObject = None
+		# 快取聊天橫幅、意見調查目前的內容，讓 onFocusChanged() 能低成本重播，
+		# 不必每次焦點改變都重新搜尋一次物件樹。
+		self.chatBannerObj = None
+		self.chatBannerTextParts = []
+		self.votingTextParts = []
 	
 	def terminate(self):
 		if self.chatContainerSearchObject:
@@ -47,6 +54,9 @@ class Youtube(SubtitleExtractor):
 		
 		if self.chatSearchObject:
 			self.chatSearchObject.cancel()
+		
+		if self.votingSearchObject:
+			self.votingSearchObject.cancel()
 		
 	
 	def getVideoPlayer(self):
@@ -94,12 +104,13 @@ class Youtube(SubtitleExtractor):
 		except:
 			obj = None
 		
-		self.chatContainerSearchObject = search(obj, lambda obj: ('yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items') or obj.IA2Attributes.get('id') == 'chat', self.onFoundChatContainer, continueOnFound=True)
+		self.chatContainerSearchObject = search(obj, lambda obj: ('yt-live-chat-item-list-renderer' in obj.IA2Attributes.get('class') and obj.IA2Attributes.get('id') == 'items') or (obj.IA2Attributes.get('id') == 'contents' and obj.previous.role == role('HEADING')), self.onFoundChatContainer, continueOnFound=True)
 		
 	
 	def onFoundChatContainer(self, obj):
 		id = obj.IA2Attributes.get('id')
-		if id == 'chat':
+		
+		if id == 'contents':
 			self.chatRoom = obj
 		elif id == 'items':
 			self.chatContainer = obj
@@ -127,6 +138,32 @@ class Youtube(SubtitleExtractor):
 	def onReadingSubtitle(self):
 		self.readVoting()
 		self.readChat()
+	
+	def onFocusChanged(self):
+		'''
+		焦點改變時重播已快取的聊天橫幅與意見調查，不需要重新搜尋物件樹。
+		重播一定比當次焦點語音晚送出，會排在其後唸出，不會蓋掉焦點資訊。
+		'''
+		if not conf['readChat']:
+			return
+		
+		if self.chatBannerTextParts:
+			# 橫幅只在剛找到聊天室容器時搜尋過一次，之後沒有持續追蹤內容是否還在，
+			# 重播前先確認橫幅元件是否還存在，避免主播已經移除橫幅後仍重播過期內容。
+			try:
+				bannerStillThere = bool(self.chatBannerObj and self.chatBannerObj.role)
+			except (COMError, RuntimeError):
+				bannerStillThere = False
+			
+			if bannerStillThere:
+				ui.message('\r\n'.join(self.chatBannerTextParts))
+			else:
+				self.chatBannerTextParts = []
+			
+		
+		if self.voting and self.votingTextParts:
+			ui.message(_('意見調查：') + '\r\n' + '\r\n'.join(self.votingTextParts))
+		
 	
 	def chromeGetSubtitle(self, obj):
 		subtitle = ''
@@ -301,22 +338,35 @@ class Youtube(SubtitleExtractor):
 		
 	
 	def readChatBanner(self):
-		if not self.chatContainer:
+		if not self.chatRoom:
 			return
 		
-		obj = self.chatContainer.parent.previous
-		banner = None
-		while obj:
-			banner = find(obj, 'firstChild', 'id', 'banner-container')
-			if banner:
-				break
-			
-			obj = obj.previous
+		obj = self.chatRoom.firstChild
+		
+		banner = find(obj, 'next', 'id', 'live-chat-banner')
 		
 		if not banner:
 			return
 		
-		self.chatBannerSearchObject = search(banner, lambda obj: bool(obj.name) and obj.role != role('LINK'), lambda banner: ui.message(banner.name if banner.role != role('BUTTON') else '聊天橫幅'), continueOnFound=True)
+		if self.chatBannerSearchObject:
+			self.chatBannerSearchObject.cancel()
+		
+		self.chatBannerObj = banner
+		self.chatBannerTextParts = []
+		self.chatBannerSearchObject = search(banner.firstChild, lambda obj: bool(obj.name) and obj.role != role('LINK'), self.onFoundChatBanner, continueOnFound=True)
+		
+	
+	def onFoundChatBanner(self, obj):
+		text = ''
+		if obj.role == role('BUTTON') and not self.chatBannerTextParts:
+			# Translators: The name used for the live chat banner when the banner itself has no text (e.g. an icon-only button)
+			text = _('聊天橫幅')
+			self.chatBannerTextParts.append(text)
+		elif self.chatBannerTextParts:
+			text = obj.name
+			self.chatBannerTextParts.append(text)
+		
+		ui.message(text)
 	
 	def readVoting(self):
 		if not self.chatRoom:
@@ -326,9 +376,14 @@ class Youtube(SubtitleExtractor):
 		votingObj = find(votingObj, 'firstChild', 'class', 'style-scope yt-live-chat-poll-renderer')
 		if bool(votingObj) != self.voting:
 			self.voting = bool(votingObj)
+			# 意見調查出現或消失都先停掉前一次的搜尋，避免舊結果混進新的內容。
+			if self.votingSearchObject:
+				self.votingSearchObject.cancel()
+			
+			self.votingTextParts = []
 			if self.voting:
 				ui.message(_('意見調查：'))
-				search(votingObj, lambda obj: True, self.onSearchVoting, continueOnFound=True)
+				self.votingSearchObject = search(votingObj, lambda obj: True, self.onSearchVoting, continueOnFound=True)
 			
 		
 	
@@ -339,6 +394,7 @@ class Youtube(SubtitleExtractor):
 			return
 		
 		if msg:
+			self.votingTextParts.append(msg)
 			ui.message(msg)
 		
 	

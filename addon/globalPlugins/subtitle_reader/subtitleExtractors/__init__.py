@@ -66,6 +66,11 @@ class SubtitleExtractor(object):
 	def onReadingSubtitle(self):
 		pass
 	
+	# 焦點在工作階段所在的同一個頁面內改變時（例如 tab 到聊天輸入框）會被呼叫，
+	# 用來重播已快取的提示內容（如聊天橫幅、意見調查），不應在此進行昂貴的物件樹搜尋。
+	def onFocusChanged(self):
+		pass
+	
 	def msedgeGetSubtitle(self, obj):
 		return self.chromeGetSubtitle(obj)
 	

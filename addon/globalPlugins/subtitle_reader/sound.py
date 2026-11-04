@@ -3,10 +3,20 @@ from .pybass import *
 musicFile = None
 musicFilename = ''
 sound = None
+# 預先載入到記憶體的音效，以本機檔案路徑作為索引。
+memorySounds = {}
 
 def init():
 	return BASS_Init(-1, -1, 0, 0, 0)
 
+# 只能在主執行緒呼叫，背景執行緒請使用 wx.CallAfter。
+def replaceSounds(sounds):
+	# BASS 播放時會直接讀取這塊記憶體，所以必須先釋放串流，才能替換資料。
+	play()
+	memorySounds.update(sounds)
+
+# 只能在主執行緒呼叫，背景執行緒請使用 wx.CallAfter。
+# 同時從多個執行緒呼叫會留下未釋放的舊串流，之後替換資料時它會讀到已被丟棄的記憶體。
 def play(filename=None):
 	global sound
 	if sound:
@@ -16,10 +26,17 @@ def play(filename=None):
 	if not filename:
 		return
 	
-	if filename.find('http') == 0:
-		sound = BASS_StreamCreateURL(filename.encode('utf-8'), 0, BASS_STREAM_AUTOFREE, None, None)
-	else:
-		sound = BASS_StreamCreateFile(False, filename.encode('utf-8'), 0, 0, BASS_STREAM_AUTOFREE)
+	data = memorySounds.get(filename)
+	if data:
+		sound = BASS_StreamCreateFile(True, data, 0, len(data), BASS_STREAM_AUTOFREE)
+	
+	# 沒有預先載入，或載入的資料無法解碼時，改用原本的來源。
+	if not sound:
+		if filename.find('http') == 0:
+			sound = BASS_StreamCreateURL(filename.encode('utf-8'), 0, BASS_STREAM_AUTOFREE, None, None)
+		else:
+			sound = BASS_StreamCreateFile(False, filename.encode('utf-8'), 0, 0, BASS_STREAM_AUTOFREE)
+		
 	
 	BASS_ChannelPlay(sound, True)
 

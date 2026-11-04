@@ -8,7 +8,7 @@ class DisneyPlus(SubtitleExtractor):
 	info = {
 		'name': 'Disney+',
 		'url': 'https://www.disneyplus.com/',
-		'status': SupportStatus.supported,
+		'status': SupportStatus.invalid,
 	}
 	windowTitle = r'.+ \| Disney\+'
 	def getVideoPlayer(self):

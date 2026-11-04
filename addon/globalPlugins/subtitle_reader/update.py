@@ -15,20 +15,31 @@ else:
 
 import ssl
 from threading import Thread
+from time import time
 
-from .sound import play, music, setVolume, getPos
+from .sound import play, music, setVolume, getPos, replaceSounds
 
 from .version import version
 from .config import conf
 from .gui import UpdateDialog, wx, gui as nvdaGui
 from globalVars import appArgs
+from logHandler import log
 import ui
 
 soundPath = os.path.dirname(__file__) + r'\assets\sounds'
+cacertPath = os.path.dirname(__file__) + r'\assets\cacert.pem'
 projectUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main'
 sourceUrl = 'https://raw.githubusercontent.com/maxe-hsieh/subtitle_reader/main/addon'
+soundUrl = sourceUrl + '/globalPlugins/subtitle_reader/assets/sounds'
 assetUrl = 'https://github.com/maxe-hsieh/subtitle_reader/releases/latest/download'
 tempDir = os.getenv('temp')
+# 連線卡住時不要讓執行緒永遠等待，單位是秒。
+networkTimeout = 10
+# 預先載入音效最多等待的秒數，超過就使用附加元件內的音效，避免更新視窗遲遲不出現。
+preloadTimeout = 5
+# 每次發現新版本都要重新下載並替換的音效。
+# updateChecking、isLatestVersion 與 downloadError 一律使用附加元件內的檔案。
+updateSounds = ('newVersionFound', 'updating', 'downloadCompleted', 'skipVersion', 'closeDialog')
 
 class Update:
 	def __init__(self):
@@ -100,12 +111,42 @@ class Update:
 			return
 		
 		self.new = info
+		sounds = self.downloadSounds(updateSounds)
+		wx.CallAfter(self.onNewVersionFound, sounds)
+	
+	def onNewVersionFound(self, sounds):
+		replaceSounds(sounds)
 		play(soundPath + r'\newVersionFound.ogg')
-		wx.CallAfter(self.showDialog)
+		self.showDialog()
+	
+	def downloadSounds(self, names):
+		# 同時下載，總等待時間才會接近最慢的一個檔案，而不是全部相加。
+		sounds = {}
+		threads = [Thread(target=self.downloadSound, args=(name, sounds), daemon=True) for name in names]
+		for thread in threads:
+			thread.start()
+		
+		deadline = time() + preloadTimeout
+		for thread in threads:
+			thread.join(max(deadline - time(), 0))
+		
+		# 回傳複本，逾時才完成的下載不會影響交給主執行緒的資料。
+		return dict(sounds)
+	
+	def downloadSound(self, name, sounds):
+		filename = name + '.ogg'
+		try:
+			ctx = ssl.create_default_context(cafile=cacertPath)
+			with urlopen(soundUrl + '/' + filename, context=ctx, timeout=preloadTimeout) as res:
+				sounds[soundPath + '\\' + filename] = res.read()
+			
+		except Exception as e:
+			log.debug('Failed to download sound %s: %s' % (filename, e))
+		
 	
 	def getNewVersion(self):
 		info = {'version': 0, 'changelog': '', 'error': None}
-		with urlopen(projectUrl + '/buildVars.py') as res:
+		with urlopen(projectUrl + '/buildVars.py', timeout=networkTimeout) as res:
 			text = res.read().decode('utf-8')
 		
 		newVersion = re.findall(r'addon_version ?= ?"(.+)",\r?', text)[0]
@@ -114,7 +155,7 @@ class Update:
 		
 		info['version'] = newVersion
 		
-		with urlopen(sourceUrl + '/doc/zh_TW/changelog.md') as res:
+		with urlopen(sourceUrl + '/doc/zh_TW/changelog.md', timeout=networkTimeout) as res:
 			text = res.read().decode('utf-8')
 		
 		info['changelog'] = text
@@ -165,17 +206,26 @@ class Update:
 		filename = 'subtitle_reader.nvda-addon'
 		try:
 			file = self.downloadFile(assetUrl + '/' + filename, tempDir + '\\' + filename, reportHook=self.updateProgress)
-			play(soundPath + r'\downloadCompleted.ogg')
-			self.dialog.Close()
-			os.startfile(file[0])
+			wx.CallAfter(self.finishDownload, file[0])
 		except Exception as e:
 			wx.CallAfter(self.downloadError, e)
 		
 	
+	def finishDownload(self, filePath):
+		play(soundPath + r'\downloadCompleted.ogg')
+		if self.dialog:
+			self.dialog.Close()
+		
+		try:
+			os.startfile(filePath)
+		except Exception as e:
+			self.downloadError(e)
+		
+	
 	def downloadFile(self, url, filePath, reportHook=None):
 		# 下載 release 再學校或辦公室出現憑證無效的問題，所以我們自備憑證。
-		ctx = ssl.create_default_context(cafile=os.path.dirname(__file__) + r'\assets\cacert.pem')
-		with urlopen(url, context=ctx) as response:
+		ctx = ssl.create_default_context(cafile=cacertPath)
+		with urlopen(url, context=ctx, timeout=networkTimeout) as response:
 			total = int(response.headers.get('Content-Length', 0))
 			current = 0
 			with open(filePath, 'wb') as f:
@@ -235,7 +285,7 @@ class Update:
 		
 		try:
 			setVolume(self.bgm, self.dialog.volumeSlider.Value)
-			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.ly')
+			res = urlopen('https://raw.githubusercontent.com/maxe-hsieh/bgm/main/subtitle_reader/updating.ly', timeout=networkTimeout)
 			if res.code != 200:
 				return
 			
